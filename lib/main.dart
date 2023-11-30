@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: false,
         getPages: AppPages.pages,
-        title: 'Property Panda',
+        title: '建物測量器',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),

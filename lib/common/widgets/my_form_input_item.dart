@@ -263,8 +263,8 @@ class MyFormWorkingHours extends StatelessWidget {
                     thickness: 1,
                     color: Colors.grey.shade400,
                   ),
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       Expanded(
                         flex: 3,
                         child: MyText('Is Open?'),
@@ -283,8 +283,8 @@ class MyFormWorkingHours extends StatelessWidget {
                     thickness: 1,
                     color: Colors.grey.shade300,
                   ),
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       Expanded(flex: 3, child: MyText('Hours')),
                       Expanded(flex: 6, child: MyFormTextField(title: '')),
                     ],

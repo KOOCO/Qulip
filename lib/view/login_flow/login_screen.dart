@@ -19,104 +19,108 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Center(
-            child: MyImage(
-              image: AssetImages.splashLogo,
-              height: 65.h,
-            ),
-          ).paddingOnly(top: Get.height * 0.10),
-          SizedBox(
-            height: Get.height * 0.06,
-          ),
-          MyTextField(
-            fullBorder: true,
-            hasFloatingLabel: false,
-            controller: controller.txtPhone,
-            maxLength: 10,
-            keyboard: TextInputType.text,
-            labelText: WordStrings.mobileLbl,
-            hintText: WordStrings.mobileLbl,
-          ).paddingOnly(top: 10.h).paddingSymmetric(horizontal: 20.w),
-          MyTextField(
-            fullBorder: true,
-            hasFloatingLabel: false,
-            controller: controller.txtPassword,
-            maxLength: 16,
-            keyboard: TextInputType.text,
-            labelText: WordStrings.passwordLbl,
-            hintText: WordStrings.passwordLbl,
-          ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 20.w),
-          Row(
-            children: [
-              Obx(
-                () => Checkbox(
-                  activeColor: yasRed,
-                  value: controller.isRemember.value,
-                  onChanged: (value) {
-                    controller.isRemember.value = value!;
-                  },
-                ),
+      backgroundColor: stdwhite,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Center(
+              child: MyImage(
+                image: AssetImages.splashLogo,
+                height: 65.h,
               ),
-              const MyText(
-                WordStrings.remmeberLbl,
-                fontStyle: TextStyle(
-                  fontFamily: FontFamilyConstant.sinkinSans,
-                  color: stdDarkGray,
+            ).paddingOnly(top: Get.height * 0.10),
+            SizedBox(
+              height: Get.height * 0.06,
+            ),
+            MyTextField(
+              fullBorder: true,
+              hasFloatingLabel: false,
+              controller: controller.txtPhone,
+              maxLength: 10,
+              keyboard: TextInputType.text,
+              labelText: WordStrings.mobileLbl,
+              hintText: WordStrings.mobileLbl,
+            ).paddingOnly(top: 10.h).paddingSymmetric(horizontal: 20.w),
+            MyTextField(
+              fullBorder: true,
+              hasFloatingLabel: false,
+              controller: controller.txtPassword,
+              maxLength: 16,
+              keyboard: TextInputType.text,
+              labelText: WordStrings.passwordLbl,
+              hintText: WordStrings.passwordLbl,
+            ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 20.w),
+            Row(
+              children: [
+                Obx(
+                  () => Checkbox(
+                    activeColor: yasRed,
+                    value: controller.isRemember.value,
+                    onChanged: (value) {
+                      controller.isRemember.value = value!;
+                    },
+                  ),
                 ),
-              )
-            ],
-          ).paddingSymmetric(horizontal: 10.w),
-          MyButton(
-            label: WordStrings.loginLbl,
-            style: const TextStyle(
-              color: whiteTxt,
-              fontWeight: FontWeight.bold,
-            ),
-            decoration: const BoxDecoration(
-              color: yasRed,
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 6,
-                  color: Colors.black54,
+                const MyText(
+                  WordStrings.remmeberLbl,
+                  fontStyle: TextStyle(
+                    fontFamily: FontFamilyConstant.sinkinSans,
+                    color: stdDarkGray,
+                  ),
                 )
               ],
-            ),
-            height: Get.height * 0.05,
-            borderRadius: 2,
-            onTap: () async {
-              controller.loginMobile();
-            },
-          )
-              .paddingOnly(top: Get.height * 0.04)
-              .paddingSymmetric(horizontal: 20),
-          MyButton(
-            label: WordStrings.signupLbl,
-            style: const TextStyle(
-              color: whiteTxt,
-              fontWeight: FontWeight.bold,
-            ),
-            decoration: const BoxDecoration(
-              color: yasRed,
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 6,
-                  color: Colors.black54,
-                )
-              ],
-            ),
-            height: Get.height * 0.05,
-            borderRadius: 2,
-            onTap: () async {
-              Get.toNamed(AppRoutes.signupScreen);
-            },
-          ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 20),
-        ],
+            ).paddingSymmetric(horizontal: 10.w),
+            MyButton(
+              label: WordStrings.loginLbl,
+              style: const TextStyle(
+                color: whiteTxt,
+                fontWeight: FontWeight.bold,
+              ),
+              decoration: const BoxDecoration(
+                color: yasRed,
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 6,
+                    color: Colors.black54,
+                  )
+                ],
+              ),
+              height: Get.height * 0.05,
+              borderRadius: 2,
+              onTap: () async {
+                Get.toNamed(AppRoutes.homeScreen);
+                // controller.loginMobile();
+              },
+            )
+                .paddingOnly(top: Get.height * 0.04)
+                .paddingSymmetric(horizontal: 20),
+            MyButton(
+              label: WordStrings.signupLbl,
+              style: const TextStyle(
+                color: whiteTxt,
+                fontWeight: FontWeight.bold,
+              ),
+              decoration: const BoxDecoration(
+                color: yasRed,
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 6,
+                    color: Colors.black54,
+                  )
+                ],
+              ),
+              height: Get.height * 0.05,
+              borderRadius: 2,
+              onTap: () async {
+                Get.toNamed(AppRoutes.signupScreen);
+              },
+            ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 20),
+          ],
+        ),
       ),
     );
   }

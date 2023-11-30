@@ -6,6 +6,7 @@ import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/controller/base_controller.dart';
 import 'package:qulip/models/login_model.dart';
+import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/storage_helper.dart';
 
 class LoginController extends BaseController {
@@ -44,6 +45,11 @@ class LoginController extends BaseController {
     });
   }
 
+  Future<void> setRemembered() async {
+    txtPhone.text = await StorageHelper.read(StorageKeys.phoneNumber);
+    txtPassword.text = await StorageHelper.read(StorageKeys.password);
+  }
+
   void loginMobile() async {
     if (txtPhone.text.isEmpty) {
       MySnackBar.errorSnackbar(WordStrings.errorMobileLbl);
@@ -77,6 +83,7 @@ class LoginController extends BaseController {
         setLoading(false);
         if (success) {
           userData.value.mobile = response['data']['mobile'];
+          Get.toNamed(AppRoutes.homeScreen);
         } else {}
       },
     );
