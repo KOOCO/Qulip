@@ -124,7 +124,9 @@ class HomeScreen extends StatelessWidget {
               ),
               height: Get.height * 0.06,
               borderRadius: 2,
-              onTap: () async {},
+              onTap: () async {
+                Get.toNamed(AppRoutes.caseListScreen);
+              },
             ).paddingSymmetric(horizontal: 20, vertical: 10),
             MyButtonWithIcon(
               image: AssetImages.listLogo,

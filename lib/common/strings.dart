@@ -20,7 +20,7 @@ class WordStrings {
   static const String pointLblHome = "Points";
   static const String profileLblHome = "Member Profile";
   static const String caseNoLblHome = "Establish a case number";
-  static const String archivesLblHome = "Archives have been established";
+  static const String archivesLblHome = "Archives case number";
   static const String systemLblHome = "System Program";
 
   //Profile
@@ -42,6 +42,12 @@ class WordStrings {
   static const String specSizeLbl = "Tablet size";
   static const String specCapacityLbl = "Memory capacity";
   static const String checkUpdateLbl = "Check for update ↑";
+
+  //Case List
+  static const String allLbl = "All";
+  static const String sixMonthLbl = "6 Months";
+  static const String threeMonthLbl = "3 Months";
+  static const String caseDetailLbl = "Case Detail";
 
   static const String accessToken = "Access Token";
   static const String lblStorage = 'Storage';
