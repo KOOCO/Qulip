@@ -22,12 +22,12 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: false,
         getPages: AppPages.pages,
-        title: 'Property Panda',
+        title: '建物測量器',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
         builder: (context, child) {
-          SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+          SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
           ScreenUtil.init(context);
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),

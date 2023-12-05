@@ -58,31 +58,4 @@ class ApiRepo {
       onComplete?.call(false, null);
     }
   }
-
-  // Future<bool> logout({required String userid}) async {
-  //   final String url = Api.urlBuilder(endPoint: ApiEndPoints.logout);
-
-  //   final Map<String, dynamic> data = {
-  //     'user_id': userid,
-  //   };
-
-  //   final response = await DioHelper().post(
-  //     url: url,
-  //     data: data,
-  //   );
-
-  //   if (response != null) {
-  //     if (response['success']) {
-  //       MySnackBar.successSnackbar(response['message']);
-  //       await StorageHelper.erase();
-  //       return true;
-  //     } else {
-  //       MySnackBar.errorSnackbar(response['message']);
-
-  //       throw Exception('invalid otp');
-  //     }
-  //   }
-
-  //   return false;
-  // }
 }

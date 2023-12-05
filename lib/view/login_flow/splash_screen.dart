@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:qulip/view/login_flow/login_screen.dart';
+import 'package:get/get.dart';
+import 'package:qulip/routes/app_routes.dart';
+import 'package:qulip/view/home_flow/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,8 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> nextScreen() async {
     Timer(
         const Duration(seconds: 3),
-        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => LoginScreen())));
+        () => Get.toNamed(AppRoutes.loginScreen) );
 
     // final userID = await StorageHelper.read(StorageKeys.userId);
     // Future.delayed(const Duration(seconds: 1), () {

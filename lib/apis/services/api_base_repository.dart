@@ -56,7 +56,8 @@ class DioHelper<T> {
         url: url,
         data: data,
         queryParameters: queryParameters,
-        options: Options(headers: {'V-ID': WordStrings.apiKey,'V-Sign': getVSignIn(data)}),
+        options: Options(
+            headers: {'V-ID': WordStrings.apiKey, 'V-Sign': getVSignIn(data)}),
       );
       if (response.data['code'] != codeSucces) {
         MySnackBar.errorSnackbar(response.data['message']);
@@ -79,9 +80,9 @@ class DioHelper<T> {
     var hmacSha256 = Hmac(sha256, key); // HMAC-SHA256
     var digest = hmacSha256.convert(bytes);
 
-    print("HMAC digest data: ${dataF}");
-    print("HMAC digest as bytes: ${digest.bytes}");
-    print("HMAC digest as hex string: $digest");
+    // print("HMAC digest data: ${dataF}");
+    // print("HMAC digest as bytes: ${digest.bytes}");
+    // print("HMAC digest as hex string: $digest");
 
     return digest.toString();
   }

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
 import 'package:qulip/common/widgets/my_animation_button.dart';
+import 'package:qulip/common/widgets/my_image.dart';
 
-class MyButton extends StatelessWidget {
-  const MyButton({
+class MyButtonWithIcon extends StatelessWidget {
+  const MyButtonWithIcon({
     Key? key,
     required this.label,
     required this.onTap,
@@ -14,6 +18,7 @@ class MyButton extends StatelessWidget {
     this.borderRadius = 10,
     this.style,
     this.decoration,
+    this.image,
   }) : super(key: key);
   final VoidCallback onTap;
   final double? height;
@@ -24,6 +29,7 @@ class MyButton extends StatelessWidget {
   final double borderRadius;
   final TextStyle? style;
   final BoxDecoration? decoration;
+  final String? image;
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +51,23 @@ class MyButton extends StatelessWidget {
   }
 
   Widget buildChild() {
-    return Text(
-      label,
-      style: style,
+    return Row(
+      children: [
+        MyImage(
+          image: image ?? AssetImages.userLogo,
+          width: 25.w,
+          height: 25.h,
+          color: bgColor,
+        ).paddingAll(8),
+        Expanded(
+          child: Center(
+            child: Text(
+              label,
+              style: style,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
