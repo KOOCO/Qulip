@@ -88,11 +88,10 @@ class LoginScreen extends StatelessWidget {
                   )
                 ],
               ),
-              height: Get.height * 0.05,
+              height: Get.height * 0.10,
               borderRadius: 2,
               onTap: () async {
-                Get.toNamed(AppRoutes.homeScreen);
-                // controller.loginMobile();
+                controller.loginMobile();
               },
             )
                 .paddingOnly(top: Get.height * 0.04)
@@ -113,12 +112,13 @@ class LoginScreen extends StatelessWidget {
                   )
                 ],
               ),
-              height: Get.height * 0.05,
+              height: Get.height * 0.10,
               borderRadius: 2,
               onTap: () async {
                 Get.toNamed(AppRoutes.signupScreen);
               },
-            ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 20),
+            ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 20)
+            .marginOnly(bottom: 50),
           ],
         ),
       ),
