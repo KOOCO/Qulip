@@ -3,16 +3,16 @@ class WordStrings {
   static const apiSecret = "94bd22c3369f4a5fbaede97a0b59e2c1";
 
   //Login
-  static const String mobileLbl = '电话号码';
-  static const String passwordLbl = '密码';
-  static const String loginLbl = '登入';
-  static const String signupLbl = '立即註冊';
+  static const String mobileLbl = 'Please enter your phone number';
+  static const String passwordLbl = 'Please enter your password';
+  static const String loginLbl = 'login';
+  static const String signupLbl = 'register';
   static const String errorMobileLbl = 'Please enter phone number';
   static const String errorValidMobileLbl = 'Please enter valid phone number';
   static const String errorPasswordLbl = 'Please enter password';
   static const String errorValidPasswordLbl =
       'Password not valid. Password should contain minimux 8 character and maximum 16 character';
-  static const String remmeberLbl = '記住帳號密碼';
+  static const String remmeberLbl = 'Remember me';
   static const String signupSuccess = "User created successfully";
 
   //Home
