@@ -5,4 +5,6 @@ class AppRoutes {
   static const homeScreen = '/homeScreen';
   static const profileScreen = '/profileScreen';
   static const sysInfoScreen = '/sysInfoScreen';
+  static const caseListScreen = '/caseListScreen';
+  static const caseDetailsScreen = '/caseDetailsScreen';
 }
