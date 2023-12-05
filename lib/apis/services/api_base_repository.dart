@@ -69,7 +69,6 @@ class DioHelper<T> {
         paramMessage: apiUtils.handleError(e),
       } as T;
     }
-    // test
   }
 
   String getVSignIn(params) {
