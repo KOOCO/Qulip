@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         builder: (context, child) {
-          SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
+          SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
           ScreenUtil.init(context);
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),

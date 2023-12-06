@@ -49,6 +49,15 @@ class WordStrings {
   static const String threeMonthLbl = "3 Months";
   static const String caseDetailLbl = "Case Detail";
 
+  //Case Create
+  static const String caseCreatelLbl = "Establish a new case number";
+  static const String caseNamelLbl = "*Case Name";
+  static const String caseAddresslLbl = "*address";
+  static const String caseDatelLbl = "*date";
+  static const String caseEquipmentNamelLbl = "*equipment Name";
+  static const String caseWeatherlLbl = "*weather";
+  static const String establishLbl = 'Establish';
+
   static const String accessToken = "Access Token";
   static const String lblStorage = 'Storage';
   static const String bottomHome = 'Home';
@@ -56,4 +65,5 @@ class WordStrings {
   static const String bottomproperty = 'Property';
   static const String bottomHistory = 'History';
   static const String bottomFav = 'Favourites';
+
 }

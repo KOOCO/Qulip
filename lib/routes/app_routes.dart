@@ -7,4 +7,5 @@ class AppRoutes {
   static const sysInfoScreen = '/sysInfoScreen';
   static const caseListScreen = '/caseListScreen';
   static const caseDetailsScreen = '/caseDetailsScreen';
+  static const caseCreateScreen = '/caseCreateScreen';
 }

@@ -82,7 +82,7 @@ class LoginController extends BaseController {
       onComplete: (success, response) async {
         setLoading(false);
         if (success) {
-          userData.value.mobile = response['data']['mobile'];
+          userData.value.points = response['points'];
           Get.toNamed(AppRoutes.homeScreen);
         } else {}
       },

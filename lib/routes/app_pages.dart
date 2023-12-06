@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:qulip/routes/app_routes.dart';
+import 'package:qulip/view/create_flow/establish_case.dart';
 import 'package:qulip/view/home_flow/case_list/case_detail_screen.dart';
 import 'package:qulip/view/home_flow/case_list/case_list_screen.dart';
 import 'package:qulip/view/home_flow/home_screen.dart';
@@ -43,6 +44,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.caseDetailsScreen,
       page: () => CaseDetailScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.caseCreateScreen,
+      page: () => EstablishCaseScreen(),
     ),
   ];
 }

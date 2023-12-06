@@ -71,7 +71,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                 )
               ],
-            ).paddingSymmetric(horizontal: 10.w),
+            ).paddingOnly(top: 5.h).paddingSymmetric(horizontal: 15.w),
             MyButton(
               label: WordStrings.loginLbl,
               style: const TextStyle(
@@ -88,7 +88,7 @@ class LoginScreen extends StatelessWidget {
                   )
                 ],
               ),
-              height: Get.height * 0.10,
+              height: Get.height * 0.05,
               borderRadius: 2,
               onTap: () async {
                 controller.loginMobile();
@@ -112,7 +112,7 @@ class LoginScreen extends StatelessWidget {
                   )
                 ],
               ),
-              height: Get.height * 0.10,
+              height: Get.height * 0.05,
               borderRadius: 2,
               onTap: () async {
                 Get.toNamed(AppRoutes.signupScreen);

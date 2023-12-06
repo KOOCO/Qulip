@@ -16,19 +16,6 @@ class StorageHelper {
     return await box.write(key, value);
   }
 
-  static Future<void> updateUserInfo(User user) async {
-    Log.logs(
-      WordStrings.lblStorage,
-      '${StorageKeys.userData} stored with ${user.toJson().toString()} successfully',
-    );
-
-    return await box.write(StorageKeys.userData, jsonEncode(user.toJson()));
-  }
-
-  static Future<User> getUserInfo() async {
-    return User.fromJson(jsonDecode(await box.read(StorageKeys.userData)));
-  }
-
   static Future<void> erase() async {
     Log.logs(
       WordStrings.lblStorage,

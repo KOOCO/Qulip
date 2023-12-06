@@ -57,7 +57,7 @@ class DioHelper<T> {
         data: data,
         queryParameters: queryParameters,
         options: Options(
-            headers: {'V-ID': WordStrings.apiKey, 'V-Sign': getVSignIn(data)}),
+            headers: {'V-ID': WordStrings.apiKey, 'V-Sign': getDigest(data)}),
       );
       if (response.data['code'] != codeSucces) {
         MySnackBar.errorSnackbar(response.data['message']);
@@ -86,4 +86,17 @@ class DioHelper<T> {
 
     return digest.toString();
   }
+
+  String getDigest(Map<String, dynamic>? params) {
+  String jsonString = json.encode(params, toEncodable: (value) => value.toString());
+  String concatenatedString = jsonString + WordStrings.apiKey;
+
+  List<int> secretKeyBytes = utf8.encode(WordStrings.apiSecret);
+  List<int> paramsBytes = utf8.encode(concatenatedString);
+
+  Hmac hmacSha256 = Hmac(sha256, secretKeyBytes);
+  Digest digest = hmacSha256.convert(paramsBytes);
+
+  return digest.toString();
+}
 }

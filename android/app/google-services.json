@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "645999511395",
+    "project_id": "qulip-6cd34",
+    "storage_bucket": "qulip-6cd34.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:645999511395:android:e6e4ae5d162bf362b67556",
+        "android_client_info": {
+          "package_name": "com.qulipconstruct01.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwoYoNtJQPTO7b12i-pHNM6it9CEfz0iU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
