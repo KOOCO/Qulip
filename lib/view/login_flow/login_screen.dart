@@ -34,22 +34,49 @@ class LoginScreen extends StatelessWidget {
             SizedBox(
               height: Get.height * 0.06,
             ),
-            MyTextField(
-              fullBorder: true,
-              hasFloatingLabel: false,
-              controller: controller.txtPhone,
-              maxLength: 10,
-              keyboard: TextInputType.text,
-              labelText: WordStrings.mobileLbl,
-              hintText: WordStrings.mobileLbl,
-            ).paddingOnly(top: 10.h).paddingSymmetric(horizontal: 20.w),
+            Container(
+              alignment: Alignment.center,
+              height: 60,
+              margin: const EdgeInsets.only(
+                left: 45,
+                right: 45,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                border: Border.all(
+                  width: 1,
+                  color: yasRed,
+                ),
+              ),
+              child: Row(children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  child: const MyText(
+                    WordStrings.countryCodeLbl,
+                    fontColor: stdgrey,
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: MyTextField(
+                    fullBorder: false,
+                    hasBorder: false,
+                    hasFloatingLabel: false,
+                    controller: controller.txtPhone,
+                    maxLength: 10,
+                    keyboard: TextInputType.text,
+                    hintText: WordStrings.mobileLbl,
+                  ),
+                ),
+              ]),
+            ),
             MyTextField(
               fullBorder: true,
               hasFloatingLabel: false,
               controller: controller.txtPassword,
+              obscureText: true,
               maxLength: 16,
               keyboard: TextInputType.text,
-              labelText: WordStrings.passwordLbl,
               hintText: WordStrings.passwordLbl,
             ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 20.w),
             Row(
@@ -117,8 +144,10 @@ class LoginScreen extends StatelessWidget {
               onTap: () async {
                 Get.toNamed(AppRoutes.signupScreen);
               },
-            ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 20)
-            .marginOnly(bottom: 50),
+            )
+                .paddingOnly(top: 20.h)
+                .paddingSymmetric(horizontal: 20)
+                .marginOnly(bottom: 50),
           ],
         ),
       ),

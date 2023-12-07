@@ -5,7 +5,7 @@ class EstablishCaseController extends BaseController {
 
   final txtCaseName = TextEditingController();
   final txtCaseAddress = TextEditingController();
-  final txtCaseDate = TextEditingController();
+  TextEditingController txtCaseDate = TextEditingController();
   final txtCaseEquipmentName = TextEditingController();
   final txtCaseWeather = TextEditingController();
 }

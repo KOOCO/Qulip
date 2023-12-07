@@ -8,4 +8,6 @@ class AppRoutes {
   static const caseListScreen = '/caseListScreen';
   static const caseDetailsScreen = '/caseDetailsScreen';
   static const caseCreateScreen = '/caseCreateScreen';
+  static const surveyForm1CreateScreen = '/surveyForm1CreateScreen';
+  static const surveyForm2CreateScreen = '/surveyForm2CreateScreen';
 }

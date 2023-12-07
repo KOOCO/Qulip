@@ -3,6 +3,7 @@ class WordStrings {
   static const apiSecret = "94bd22c3369f4a5fbaede97a0b59e2c1";
 
   //Login
+  static const String countryCodeLbl = '+886';
   static const String mobileLbl = 'Please enter your phone number';
   static const String passwordLbl = 'Please enter your password';
   static const String loginLbl = 'login';
@@ -57,6 +58,61 @@ class WordStrings {
   static const String caseEquipmentNamelLbl = "*equipment Name";
   static const String caseWeatherlLbl = "*weather";
   static const String establishLbl = 'Establish';
+
+  //Survey Form Create
+  static const String surveyFormCreatelLbl = "Weential Survey Form";
+  static const String sfStructurelLbl = "Please select the structure";
+  static const String sfUselLbl = "Please choose use";
+  static const String sfWalllLbl = "Please select the wall";
+  static const String sfFlatTopMateriallLbl = "Please choose flat top material(pingding)";
+  static const String sfFloorMateriallLbl = "Please choose the floor";
+  static const String sfSupDirectionlLbl = "Please enter the supplementary description";
+
+  static const String structureRc = "RC";
+  static const String structureSrc = "SRC";
+  static const String structureSc = "SC";
+  static const String structureBrick = "Brick";
+  static const String structureMadeOfWood = "Made of wood";
+  static const String structureTeppel = "Teppel";
+  static const String structureOther = "Other";
+
+  static const String useResidence = "Residence";
+  static const String useBusiness = "Business";
+  static const String useIndustry = "Industry";
+  static const String useReligion = "Religion";
+  static const String useMedicalTreatment = "Medical treatment";
+  static const String useSocialWelfare = "Social Welfare";
+  static const String useTheOffice = "The office";
+  static const String useTheWarehouse = "The warehouse";
+  static const String useShopfront = "Shop front";
+  static const String useOther = "Other";
+
+  static const String wallCementPowder = "Cement powder";
+  static const String wallPaint = "Paint";
+  static const String wallWallpapers = "Wallpapers";
+  static const String wallMagnaticTile = "Magnetic tile";
+  static const String wallMarble = "Marble";
+  static const String wallPlank = "Plank";
+  static const String wallOther = "Other";
+
+  static const String fTopCementPowder = "Cement powder";
+  static const String fTopPaint = "Paint";
+  static const String fTopWallpapers = "Wallpapers";
+  static const String fTopMagnaticTile = "Magnetic tile";
+  static const String fTopLightSteelFrame = "Light Steel Frame";
+  static const String fTopWoodenFrame = "Wooden frame";
+  static const String fTopOther = "Other";
+
+  static const String floorCementPowder = "Cement powder";
+  static const String floorPaint = "Paint";
+  static const String floorGrindingStone = "Grinding stone";
+  static const String floorWashStones = "Wash the stones";
+  static const String floorMagnaticTile = "Magnetic tile";
+  static const String floorCarpet = "Carpet";
+  static const String floorPlank = "Plank";
+  static const String floorStoneMaterial = "Stone material";
+  static const String floorPlasticFloorTiles = "Plastic floor tiles";
+  static const String floorOther = "Other";
 
   static const String accessToken = "Access Token";
   static const String lblStorage = 'Storage';
