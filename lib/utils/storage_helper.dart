@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:get_storage/get_storage.dart';
 import 'package:qulip/common/strings.dart';
-import 'package:qulip/models/login_model.dart';
 import 'package:qulip/utils/log_utils.dart';
 
 class StorageHelper {
@@ -34,6 +33,7 @@ class StorageHelper {
 }
 
 class StorageKeys {
+  static const String isLogin = "isLogin";
   static const String phoneNumber = "Phone Number";
   static const String password = "Password";
 

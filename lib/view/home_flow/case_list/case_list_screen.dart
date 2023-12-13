@@ -5,15 +5,14 @@ import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_text.dart';
-import 'package:qulip/controller/profile_controller.dart';
-import 'package:qulip/routes/app_pages.dart';
+import 'package:qulip/controller/login_controller.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class CaseListScreen extends StatelessWidget {
   CaseListScreen({super.key});
 
-  final controller = Get.put(ProfileController());
+  final controller = Get.put(LoginController());
   // List<String> list = ["Himadri", "Viral", "Sunny", "Ruhi", "Ridham"];
 
   @override

@@ -5,11 +5,13 @@ import 'package:qulip/apis/api_repository.dart';
 import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/controller/base_controller.dart';
-import 'package:qulip/models/login_model.dart';
+import 'package:qulip/models/login/login_model.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/storage_helper.dart';
 
 class LoginController extends BaseController {
+  static LoginController get instance => Get.find();
+
   final txtPhone = TextEditingController();
   final txtPassword = TextEditingController();
   String otpController = '';
@@ -17,6 +19,13 @@ class LoginController extends BaseController {
   final isRemember = false.obs;
   final counter = 30.obs;
   late Timer timer;
+
+  final txtProfileAccount = TextEditingController();
+  final txtProfilePassword = TextEditingController();
+  final txtProfileName = TextEditingController();
+  final txtProfileEmail = TextEditingController();
+  final txtProfileAddress = TextEditingController();
+  final txtProfileAffiUId = TextEditingController();
 
   String formatHHMMSS(int seconds) {
     final int hours = (seconds / 3600).truncate();
@@ -83,6 +92,8 @@ class LoginController extends BaseController {
         setLoading(false);
         if (success) {
           userData.value.points = response['points'];
+          StorageHelper.write(StorageKeys.isLogin, true);
+          StorageHelper.write(StorageKeys.userData, userData);
           Get.toNamed(AppRoutes.homeScreen);
         } else {}
       },

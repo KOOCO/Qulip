@@ -15,6 +15,8 @@ class WordStrings {
       'Password not valid. Password should contain minimux 8 character and maximum 16 character';
   static const String remmeberLbl = 'Remember me';
   static const String signupSuccess = "User created successfully";
+  static const String somethingwentWrong =
+      "Oops..!! Something went wrong. Please try again later";
 
   //Home
   static const String userLblHome = "User";
@@ -23,8 +25,13 @@ class WordStrings {
   static const String caseNoLblHome = "Establish a case number";
   static const String archivesLblHome = "Archives case number";
   static const String systemLblHome = "System Program";
+  static const String exitAppTitle = "Exit App!!";
+  static const String exitAppMsg = "Are you sure you want to exit app?";
+  static const String btnNo = "No";
+  static const String btnYes = "Yes";
 
   //Profile
+  static const String profileUpdateSuccess = "Profile updated successfully";
   static const String profileAccountNoLbl = "Account number";
   static const String profilePasswordLbl = "Password";
   static const String profileNameLbl = "Name";
@@ -52,22 +59,38 @@ class WordStrings {
 
   //Case Create
   static const String caseCreatelLbl = "Establish a new case number";
-  static const String caseNamelLbl = "*Case Name";
-  static const String caseAddresslLbl = "*address";
-  static const String caseDatelLbl = "*date";
-  static const String caseEquipmentNamelLbl = "*equipment Name";
-  static const String caseWeatherlLbl = "*weather";
+  static const String caseNamelLbl = "Case Name";
+  static const String caseAddresslLbl = "Address";
+  static const String caseDatelLbl = "Date";
+  static const String caseEquipmentNamelLbl = "Equipment Name";
+  static const String caseWeatherlLbl = "Weather";
+  static const String errCaseName = "Please enter case name";
+  static const String errCaseAddress = "Please enter address";
+  static const String errCaseDate = "Please enter date";
+  static const String errCaseEquipmentName = "Please enter equipment Name";
+  static const String errCaseWeather = "Please enter weather";
   static const String establishLbl = 'Establish';
+  static const String nextLbl = 'Next';
 
   //Survey Form Create
   static const String surveyFormCreatelLbl = "Weential Survey Form";
-  static const String sfStructurelLbl = "Please select the structure";
-  static const String sfUselLbl = "Please choose use";
-  static const String sfWalllLbl = "Please select the wall";
-  static const String sfFlatTopMateriallLbl = "Please choose flat top material(pingding)";
-  static const String sfFloorMateriallLbl = "Please choose the floor";
-  static const String sfSupDirectionlLbl = "Please enter the supplementary description";
+  static const String sfStructurelLbl = "Structure";
+  static const String sfUseLbl = "Use";
+  static const String sfWallLbl = "Wall";
+  static const String sfFlatTopMaterialLbl = "Flat top material";
+  static const String sfFloorMaterialLbl = "Floor material";
+  static const String sfDescriptionLbl = "Technician description";
+  static const String sfDescriptionHint = "Supplementary description";
+  static const String sfStructurelErr = "Please select the structure";
+  static const String sfUselErr = "Please choose use";
+  static const String sfWalllErr = "Please select the wall";
+  static const String sfFlatTopMateriallErr =
+      "Please choose flat top material(pingding)";
+  static const String sfFloorMateriallErr = "Please choose the floor";
+  static const String sfSupDirectionlErr =
+      "Please enter the supplementary description";
 
+  //Structure drop down
   static const String structureRc = "RC";
   static const String structureSrc = "SRC";
   static const String structureSc = "SC";
@@ -76,6 +99,7 @@ class WordStrings {
   static const String structureTeppel = "Teppel";
   static const String structureOther = "Other";
 
+  //Use drop down
   static const String useResidence = "Residence";
   static const String useBusiness = "Business";
   static const String useIndustry = "Industry";
@@ -87,6 +111,7 @@ class WordStrings {
   static const String useShopfront = "Shop front";
   static const String useOther = "Other";
 
+  //Wall drop down
   static const String wallCementPowder = "Cement powder";
   static const String wallPaint = "Paint";
   static const String wallWallpapers = "Wallpapers";
@@ -95,6 +120,7 @@ class WordStrings {
   static const String wallPlank = "Plank";
   static const String wallOther = "Other";
 
+  //Flat top drop down
   static const String fTopCementPowder = "Cement powder";
   static const String fTopPaint = "Paint";
   static const String fTopWallpapers = "Wallpapers";
@@ -103,6 +129,7 @@ class WordStrings {
   static const String fTopWoodenFrame = "Wooden frame";
   static const String fTopOther = "Other";
 
+  //Floor material drop down
   static const String floorCementPowder = "Cement powder";
   static const String floorPaint = "Paint";
   static const String floorGrindingStone = "Grinding stone";
@@ -121,5 +148,4 @@ class WordStrings {
   static const String bottomproperty = 'Property';
   static const String bottomHistory = 'History';
   static const String bottomFav = 'Favourites';
-
 }
