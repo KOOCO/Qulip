@@ -13,6 +13,7 @@ import 'package:qulip/controller/establish_case_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/datetime_helper.dart';
+import 'package:qulip/utils/storage_helper.dart';
 import 'package:qulip/utils/string_helper.dart';
 
 class CreateCaseScreen extends StatelessWidget {
@@ -125,6 +126,7 @@ class CreateCaseScreen extends StatelessWidget {
               onTap: () async {
                 final caseModel = EstablishCaseModel(
                     id: "${controller.txtCaseName.value.text}_${getCaseNumber()}",
+                    userId: StorageHelper.read(StorageKeys.userId).toString(),
                     caseName: controller.txtCaseName.value.text,
                     caseAddress: controller.txtCaseAddress.value.text,
                     caseDate: controller.txtCaseDate.value.text,

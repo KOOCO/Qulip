@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
 import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
-import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_text.dart';
-import 'package:qulip/controller/login_controller.dart';
 import 'package:qulip/routes/app_routes.dart';
+import 'package:qulip/utils/storage_helper.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
 
-  final controller = Get.put(LoginController());
-
+  // final controller = Get.put(LoginController());
+  String link = "";
   @override
   Widget build(BuildContext context) {
+    StorageHelper.read(StorageKeys.userData)
+        .then((value) => {link = value['link']});
     return Scaffold(
       appBar: AppBar(
         backgroundColor: stdwhite,
@@ -55,8 +55,7 @@ class ProfileScreen extends StatelessWidget {
                 },
               ),
             )
-            ..loadRequest(
-                Uri.parse("https://civiltw-c0bb2554960c.herokuapp.com/"))),
+            ..loadRequest(Uri.parse(link))),
       // body: SingleChildScrollView(
       //   child: Column(
       //     crossAxisAlignment: CrossAxisAlignment.start,

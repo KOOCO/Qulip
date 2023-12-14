@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 class EstablishCaseModel {
   EstablishCaseModel({
     required this.id,
+    required this.userId,
     required this.caseName,
     required this.caseAddress,
     required this.caseDate,
@@ -13,6 +14,7 @@ class EstablishCaseModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['UserId'] = userId;
     data['CaseName'] = caseName;
     data['CaseAddress'] = caseAddress;
     data['CaseCreatedDate'] = caseDate;
@@ -22,6 +24,7 @@ class EstablishCaseModel {
   }
 
   String? id;
+  String? userId;
   String? caseName;
   String? caseAddress;
   String? caseDate;

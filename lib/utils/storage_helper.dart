@@ -36,18 +36,8 @@ class StorageKeys {
   static const String isLogin = "isLogin";
   static const String phoneNumber = "Phone Number";
   static const String password = "Password";
+  static const String userId = "userId";
 
   static const String authToken = 'Authorization';
   static const String userData = 'userData';
-  static const String intro = 'intro';
-  static const String isVerified = 'verified';
-  static const String profilePic = 'profilePic';
-  static const String userId = 'userId';
-  static const String dateFormat = 'dateFormat';
-  static const String selectedCategory = 'selectedCategory';
-
-  static const String searchType = 'searchType';
-  static const String searchState = 'searchState';
-  static const String searchCity = 'searchCity';
-  static const String searchSubCity = 'searchSubCity';
 }

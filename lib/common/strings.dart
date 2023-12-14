@@ -64,6 +64,8 @@ class WordStrings {
   static const String caseDatelLbl = "Date";
   static const String caseEquipmentNamelLbl = "Equipment Name";
   static const String caseWeatherlLbl = "Weather";
+
+  //Error Message
   static const String errCaseName = "Please enter case name";
   static const String errCaseAddress = "Please enter address";
   static const String errCaseDate = "Please enter date";
@@ -71,6 +73,11 @@ class WordStrings {
   static const String errCaseWeather = "Please enter weather";
   static const String establishLbl = 'Establish';
   static const String nextLbl = 'Next';
+  static const String errStructure = "Please select structure";
+  static const String errUse = "Please select use";
+  static const String errWall = "Please select wall";
+  static const String errFTop = "Please select flat top";
+  static const String errFloor = "Please select floor material";
 
   //Survey Form Create
   static const String surveyFormCreatelLbl = "Weential Survey Form";
@@ -91,6 +98,7 @@ class WordStrings {
       "Please enter the supplementary description";
 
   //Structure drop down
+  static const String selectStructure = "Select structure";
   static const String structureRc = "RC";
   static const String structureSrc = "SRC";
   static const String structureSc = "SC";
@@ -100,6 +108,7 @@ class WordStrings {
   static const String structureOther = "Other";
 
   //Use drop down
+  static const String selectUse = "Select use";
   static const String useResidence = "Residence";
   static const String useBusiness = "Business";
   static const String useIndustry = "Industry";
@@ -112,6 +121,7 @@ class WordStrings {
   static const String useOther = "Other";
 
   //Wall drop down
+  static const String selectWall = "Select wall";
   static const String wallCementPowder = "Cement powder";
   static const String wallPaint = "Paint";
   static const String wallWallpapers = "Wallpapers";
@@ -121,6 +131,7 @@ class WordStrings {
   static const String wallOther = "Other";
 
   //Flat top drop down
+  static const String selectFTop = "Select Flat Top";
   static const String fTopCementPowder = "Cement powder";
   static const String fTopPaint = "Paint";
   static const String fTopWallpapers = "Wallpapers";
@@ -130,6 +141,7 @@ class WordStrings {
   static const String fTopOther = "Other";
 
   //Floor material drop down
+  static const String selectFloor = "Select Floor Material";
   static const String floorCementPowder = "Cement powder";
   static const String floorPaint = "Paint";
   static const String floorGrindingStone = "Grinding stone";

@@ -21,13 +21,14 @@ class EstablishCaseController extends BaseController {
   final txtSupplimentryDesc = TextEditingController();
 
   //Step - 1 list//
-  final selectedStructure = WordStrings.structureRc.toString().obs;
-  final selectedUse = WordStrings.useResidence.toString().obs;
-  final selectedWall = WordStrings.wallCementPowder.toString().obs;
-  final selectedFlatTopMaterial = WordStrings.fTopCementPowder.toString().obs;
-  final selectedFloor = WordStrings.floorCementPowder.toString().obs;
+  final selectedStructure = WordStrings.selectStructure.toString().obs;
+  final selectedUse = WordStrings.selectUse.toString().obs;
+  final selectedWall = WordStrings.selectWall.toString().obs;
+  final selectedFlatTopMaterial = WordStrings.selectFTop.toString().obs;
+  final selectedFloor = WordStrings.selectFloor.toString().obs;
 
   final List<String> structureList = [
+    WordStrings.selectStructure,
     WordStrings.structureRc,
     WordStrings.structureSrc,
     WordStrings.structureSc,
@@ -37,6 +38,7 @@ class EstablishCaseController extends BaseController {
     WordStrings.structureOther
   ];
   final List<String> useList = [
+    WordStrings.selectUse,
     WordStrings.useResidence,
     WordStrings.useBusiness,
     WordStrings.useIndustry,
@@ -49,6 +51,7 @@ class EstablishCaseController extends BaseController {
     WordStrings.useOther
   ];
   final List<String> wallList = [
+    WordStrings.selectWall,
     WordStrings.wallCementPowder,
     WordStrings.wallPaint,
     WordStrings.wallWallpapers,
@@ -58,6 +61,7 @@ class EstablishCaseController extends BaseController {
     WordStrings.wallOther
   ];
   final List<String> flatTopMaterialList = [
+    WordStrings.selectFTop,
     WordStrings.fTopCementPowder,
     WordStrings.fTopPaint,
     WordStrings.fTopWallpapers,
@@ -67,6 +71,7 @@ class EstablishCaseController extends BaseController {
     WordStrings.fTopOther
   ];
   final List<String> floorList = [
+    WordStrings.selectFloor,
     WordStrings.floorCementPowder,
     WordStrings.floorPaint,
     WordStrings.floorGrindingStone,
@@ -83,7 +88,12 @@ class EstablishCaseController extends BaseController {
 
   //FireStore method
   createCase(EstablishCaseModel caseModel) async {
-    await _db.collection("CaseSurvey").doc(caseModel.id).set(caseModel.toJson()).whenComplete(() {
+    await _db
+        .collection("CaseSurvey")
+        .doc(caseModel.id)
+        .set(caseModel.toJson())
+        .whenComplete(() {
+      setLoading(false);
       MySnackBar.successSnackbar("Step 1 completed");
       Get.toNamed(AppRoutes.surveyForm1CreateScreen);
     });
@@ -94,6 +104,7 @@ class EstablishCaseController extends BaseController {
         .collection("WeentialSurveyForm")
         .add(wsDataModel.toJson())
         .whenComplete(() {
+      setLoading(false);
       MySnackBar.successSnackbar("Step 2 completed");
       Get.toNamed(AppRoutes.surveyForm2CreateScreen);
     });
@@ -127,36 +138,40 @@ class EstablishCaseController extends BaseController {
       MySnackBar.errorSnackbar(WordStrings.errCaseWeather);
       return;
     }
-
-    await createCase(caseModel);
+    setLoading(true);
+    // await createCase(caseModel);
+    Get.toNamed(AppRoutes.surveyForm1CreateScreen);
   }
 
-  Future<void> storeWeentialStep1Data(WeentialSurveyData1Model caseModel) async {
-    // if (txtCaseName.text.isEmpty) {
-    //   MySnackBar.errorSnackbar(WordStrings.errCaseName);
-    //   return;
-    // }
+  Future<void> storeWeentialStep1Data(
+      WeentialSurveyData1Model caseModel) async {
+    if (selectedStructure.value == WordStrings.selectStructure.toString()) {
+      MySnackBar.errorSnackbar(WordStrings.errStructure);
+      return;
+    }
 
-    // if (txtCaseAddress.text.isEmpty) {
-    //   MySnackBar.errorSnackbar(WordStrings.errCaseAddress);
-    //   return;
-    // }
+    if (selectedUse.value == WordStrings.selectUse.toString()) {
+      MySnackBar.errorSnackbar(WordStrings.errUse);
+      return;
+    }
 
-    // if (txtCaseDate.text.isEmpty) {
-    //   MySnackBar.errorSnackbar(WordStrings.errCaseDate);
-    //   return;
-    // }
+    if (selectedWall.value == WordStrings.selectWall.toString()) {
+      MySnackBar.errorSnackbar(WordStrings.errWall);
+      return;
+    }
 
-    // if (txtCaseEquipmentName.text.isEmpty) {
-    //   MySnackBar.errorSnackbar(WordStrings.errCaseEquipmentName);
-    //   return;
-    // }
+    if (selectedFlatTopMaterial.value == WordStrings.selectFTop.toString()) {
+      MySnackBar.errorSnackbar(WordStrings.errFTop);
+      return;
+    }
 
-    // if (txtCaseWeather.text.isEmpty) {
-    //   MySnackBar.errorSnackbar(WordStrings.errCaseWeather);
-    //   return;
-    // }
+    if (selectedFloor.value == WordStrings.selectFloor.toString()) {
+      MySnackBar.errorSnackbar(WordStrings.errFloor);
+      return;
+    }
 
-    await createWeentialSurveyDoc1(caseModel);
+    setLoading(true);
+    // await createWeentialSurveyDoc1(caseModel);
+    Get.toNamed(AppRoutes.surveyForm2CreateScreen);
   }
 }

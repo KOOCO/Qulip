@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qulip/apis/api_repository.dart';
@@ -6,6 +7,7 @@ import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/controller/base_controller.dart';
 import 'package:qulip/models/login/login_model.dart';
+import 'package:qulip/models/login/user_db_model_.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/storage_helper.dart';
 
@@ -26,6 +28,8 @@ class LoginController extends BaseController {
   final txtProfileEmail = TextEditingController();
   final txtProfileAddress = TextEditingController();
   final txtProfileAffiUId = TextEditingController();
+
+  final _db = FirebaseFirestore.instance;
 
   String formatHHMMSS(int seconds) {
     final int hours = (seconds / 3600).truncate();
@@ -65,39 +69,78 @@ class LoginController extends BaseController {
       return;
     }
 
-    // if (txtPhone.text.length < 10) {
-    //   MySnackBar.errorSnackbar(WordStrings.errorValidMobileLbl);
-    //   return;
-    // }
-
     if (txtPassword.text.isEmpty) {
       MySnackBar.errorSnackbar(WordStrings.errorPasswordLbl);
       return;
     }
 
-    // if (txtPassword.text.length < 8 || txtPassword.text.length >= 16) {
-    //   MySnackBar.errorSnackbar(WordStrings.errorValidPasswordLbl);
-    //   return;
-    // }
-
     setLoading(true);
     if (isRemember.value == true) {
       await StorageHelper.write(StorageKeys.phoneNumber, txtPhone.text);
-      await StorageHelper.write(StorageKeys.password, txtPhone.text);
+      await StorageHelper.write(StorageKeys.password, txtPassword.text);
     }
     ApiRepo.loginWithMobile(
       mobile: txtPhone.text,
       password: txtPassword.text,
       onComplete: (success, response) async {
-        setLoading(false);
         if (success) {
           userData.value.points = response['points'];
+          userData.value.link = response['link'];
           StorageHelper.write(StorageKeys.isLogin, true);
           StorageHelper.write(StorageKeys.userData, userData);
-          Get.toNamed(AppRoutes.homeScreen);
-        } else {}
+
+          final userDbModel = UserDBModel(
+            username: txtPhone.text,
+            password: txtPassword.text,
+            points: userData.value.points,
+          );
+          checkUserExists(userDbModel);
+        } else {
+          setLoading(false);
+          MySnackBar.errorSnackbar(WordStrings.somethingwentWrong);
+        }
       },
     );
+  }
+
+  checkUserExists(UserDBModel uModel) async {
+    bool isCompleted = false;
+    List<UserDBModel> list = [];
+    await _db.collection('User').get().then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        list.add(UserDBModel(
+            username: doc["UserName"],
+            password: doc["Password"],
+            points: doc["Points"]));
+
+        debugPrint(
+            "LoginModel inProgress >> $isCompleted >> ${doc["UserName"]} >> ${doc["Password"]} >> ${doc["Points"]} >> ${list.length}");
+      }
+    }).whenComplete(() => isCompleted = true);
+
+    if (isCompleted) {
+      if (list.firstWhereOrNull((it) => (it.username == uModel.username &&
+              it.password == uModel.password &&
+              it.points == uModel.points)) !=
+          null) {
+        Get.toNamed(AppRoutes.homeScreen);
+        debugPrint('LoginModel Already exists! >> ');
+      } else {
+        debugPrint('LoginModel Added!');
+        storeUserInDb(uModel);
+      }
+    }
+  }
+
+  //FireStore method
+  storeUserInDb(UserDBModel uModel) async {
+    await _db
+        .collection("User")
+        .add(uModel.toJson())
+        .then((value) => StorageHelper.write(StorageKeys.userId, value.id))
+        .whenComplete(() {
+      Get.toNamed(AppRoutes.homeScreen);
+    });
   }
 
   void getPoints(String mobile) {

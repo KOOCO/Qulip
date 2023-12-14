@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
 import 'package:qulip/common/strings.dart';
@@ -11,11 +12,13 @@ import 'package:qulip/common/widgets/my_image.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/controller/login_controller.dart';
 import 'package:qulip/routes/app_routes.dart';
+import 'package:qulip/utils/storage_helper.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   final controller = Get.put(LoginController());
+  int points = 0;
 
   Future showWarning(BuildContext context) async => showDialog(
       context: context,
@@ -64,7 +67,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // debugPrint("Points >> ${controller.userData.value.points}");
+    StorageHelper.read(StorageKeys.userData)
+        .then((value) => {points = value['points']});
     return WillPopScope(
       onWillPop: () async {
         final shouldPop = await showWarning(context);
@@ -120,13 +124,14 @@ class HomeScreen extends StatelessWidget {
                           fontSize: 12,
                           fontColor: stdgrey,
                         ),
-                        Obx(() => MyText(
-                              "${controller.userData.value.points} ${WordStrings.pointLblHome}",
-                              fontWeight: FontWeight.w600,
-                              fontFamily: FontFamilyConstant.sinkinSansMedium,
-                              fontSize: 14,
-                              fontColor: yasRed,
-                            )),
+                        MyText(
+                          "$points ${WordStrings.pointLblHome}",
+                          // "${controller.userData.value.points} ${WordStrings.pointLblHome}",
+                          fontWeight: FontWeight.w600,
+                          fontFamily: FontFamilyConstant.sinkinSansMedium,
+                          fontSize: 14,
+                          fontColor: yasRed,
+                        ),
                       ]).paddingSymmetric(horizontal: 20.w),
                 ],
               ),
