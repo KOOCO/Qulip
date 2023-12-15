@@ -207,7 +207,6 @@ class EstablishCaseController extends BaseController {
     }
     setLoading(true);
     await createCase(caseModel);
-    Get.toNamed(AppRoutes.surveyForm1CreateScreen);
   }
 
   Future<void> storeWeentialStep1Data(
@@ -239,7 +238,6 @@ class EstablishCaseController extends BaseController {
 
     setLoading(true);
     await createWeentialSurveyDoc1(caseModel);
-    Get.toNamed(AppRoutes.surveyForm2CreateScreen);
   }
 
   Future<void> takePhoto(BuildContext context) async {

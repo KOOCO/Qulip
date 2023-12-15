@@ -7,7 +7,6 @@ import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_dropdown_area.dart';
-import 'package:qulip/common/widgets/my_image.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
