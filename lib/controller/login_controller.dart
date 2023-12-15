@@ -59,8 +59,10 @@ class LoginController extends BaseController {
   }
 
   Future<void> setRemembered() async {
-    txtPhone.text = await StorageHelper.read(StorageKeys.phoneNumber);
-    txtPassword.text = await StorageHelper.read(StorageKeys.password);
+    txtPhone.text = await StorageHelper.read(StorageKeys.phoneNumber) ?? '';
+    txtPassword.text = await StorageHelper.read(StorageKeys.password) ?? '';
+    isRemember.value =
+        await StorageHelper.read(StorageKeys.isRemember) ?? false;
   }
 
   void loginMobile() async {
@@ -78,6 +80,11 @@ class LoginController extends BaseController {
     if (isRemember.value == true) {
       await StorageHelper.write(StorageKeys.phoneNumber, txtPhone.text);
       await StorageHelper.write(StorageKeys.password, txtPassword.text);
+      await StorageHelper.write(StorageKeys.isRemember, isRemember.value);
+    } else {
+      await StorageHelper.write(StorageKeys.phoneNumber, "");
+      await StorageHelper.write(StorageKeys.password, "");
+      await StorageHelper.write(StorageKeys.isRemember, false);
     }
     ApiRepo.loginWithMobile(
       mobile: txtPhone.text,
@@ -88,6 +95,8 @@ class LoginController extends BaseController {
           userData.value.link = response['link'];
           StorageHelper.write(StorageKeys.isLogin, true);
           StorageHelper.write(StorageKeys.userData, userData);
+          StorageHelper.write(StorageKeys.point, response['points']);
+          StorageHelper.write(StorageKeys.profileLink, response['link']);
 
           final userDbModel = UserDBModel(
             username: txtPhone.text,
@@ -123,6 +132,8 @@ class LoginController extends BaseController {
               it.password == uModel.password &&
               it.points == uModel.points)) !=
           null) {
+        txtPhone.clear();
+        txtPassword.clear();
         Get.toNamed(AppRoutes.homeScreen);
         debugPrint('LoginModel Already exists! >> ');
       } else {
@@ -139,6 +150,8 @@ class LoginController extends BaseController {
         .add(uModel.toJson())
         .then((value) => StorageHelper.write(StorageKeys.userId, value.id))
         .whenComplete(() {
+      txtPhone.clear();
+      txtPassword.clear();
       Get.toNamed(AppRoutes.homeScreen);
     });
   }

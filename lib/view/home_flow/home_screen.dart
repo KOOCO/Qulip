@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
 import 'package:qulip/common/strings.dart';
@@ -67,8 +66,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    StorageHelper.read(StorageKeys.userData)
-        .then((value) => {points = value['points']});
+    StorageHelper.read(StorageKeys.point).then((value) => {points = value});
     return WillPopScope(
       onWillPop: () async {
         final shouldPop = await showWarning(context);
@@ -83,12 +81,31 @@ class HomeScreen extends StatelessWidget {
             children: [
               Container(
                 color: stdwhite,
-                child: Center(
-                  child: MyImage(
-                    image: AssetImages.splashLogo,
-                    height: 45.h,
-                  ),
-                ).paddingOnly(top: Get.height * 0.05),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Expanded(child: SizedBox()),
+                    Center(
+                      child: MyImage(
+                        image: AssetImages.splashLogo,
+                        height: 45.h,
+                      ),
+                    ).paddingOnly(top: Get.height * 0.05),
+                    const Expanded(child: SizedBox()),
+                    InkWell(
+                        onTap: () {
+                          StorageHelper.logout();
+                          Navigator.of(context).pop(true);
+                          Get.offAllNamed(AppRoutes.loginScreen);
+                        },
+                        child: const Icon(
+                          Icons.login_rounded,
+                          size: 25,
+                          color: yasRed,
+                        ).paddingOnly(top: Get.height * 0.04, right: 10)),
+                  ],
+                ),
               ),
               SizedBox(
                 height: Get.height * 0.01,

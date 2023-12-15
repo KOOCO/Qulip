@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_dropdown_area.dart';
 import 'package:qulip/common/widgets/my_text.dart';
-import 'package:qulip/common/widgets/my_textarea.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
 import 'package:qulip/models/createcase/weential_survey_data1_model.dart';
 import 'package:qulip/routes/app_routes.dart';
@@ -400,12 +398,12 @@ class SurveyFormStep1 extends StatelessWidget {
                       wsFloorMaterial: controller.selectedFloor.value,
                       wsTechDescription:
                           controller.txtSupplimentryDesc.value.text);
-
-                  controller.storeWeentialStep1Data(caseModel);
+                  Get.toNamed(AppRoutes.surveyForm2CreateScreen);
+                  // controller.storeWeentialStep1Data(caseModel);
                 },
               )
             ],
-          ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 20.w),
+          ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 14.w),
         ),
       ),
     );

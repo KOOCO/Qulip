@@ -7,12 +7,14 @@ import 'package:qulip/controller/base_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
 import 'package:qulip/models/createcase/weential_survey_data1_model.dart';
 import 'package:qulip/routes/app_routes.dart';
+import 'package:qulip/utils/dailog_helper.dart';
 
 class EstablishCaseController extends BaseController {
   static EstablishCaseController get instance => Get.find();
 
   final sDate = DateTime.now();
 
+  //Weential Step 1
   final txtCaseName = TextEditingController();
   final txtCaseAddress = TextEditingController();
   final txtCaseDate = TextEditingController();
@@ -20,7 +22,7 @@ class EstablishCaseController extends BaseController {
   final txtCaseWeather = TextEditingController();
   final txtSupplimentryDesc = TextEditingController();
 
-  //Step - 1 list//
+  //Weential Step - 2 list//
   final selectedStructure = WordStrings.selectStructure.toString().obs;
   final selectedUse = WordStrings.selectUse.toString().obs;
   final selectedWall = WordStrings.selectWall.toString().obs;
@@ -86,6 +88,71 @@ class EstablishCaseController extends BaseController {
 
   final _db = FirebaseFirestore.instance;
 
+  //Weential Step -3
+  final txtLocation = TextEditingController();
+  final txtSituation = TextEditingController();
+  final txtCrackLength = TextEditingController();
+  final txtCrackWidth = TextEditingController();
+  final txtTechDescription2 = TextEditingController();
+  final selectedLocation = WordStrings.selectLocation.toString().obs;
+  final selectedFlaw = WordStrings.selectFlaw.toString().obs;
+
+  final RxList photoList = [].obs;
+
+  final List<String> locationList = [
+    WordStrings.selectLocation,
+    WordStrings.locationLiang,
+    WordStrings.locationColumn,
+    WordStrings.locationFlatTop,
+    WordStrings.locationFloor,
+    WordStrings.locationWall,
+    WordStrings.locationDW,
+    WordStrings.locationBalcony,
+    WordStrings.locationTerraceWall,
+    WordStrings.locationDoor,
+    WordStrings.locationWindowFram,
+    WordStrings.locationStairs,
+    WordStrings.locationFTCWindow,
+    WordStrings.locationIRollingDoor,
+    WordStrings.locationCeiling,
+    WordStrings.locationLSteelF,
+    WordStrings.locationLCompartment,
+    WordStrings.locationWardrobe,
+    WordStrings.locationBookcase,
+    WordStrings.locationCupboard,
+    WordStrings.locationFlowerT,
+    WordStrings.locationRailing,
+    WordStrings.locationACEqu
+  ];
+
+  final List<String> flawList = [
+    WordStrings.selectFlaw,
+    WordStrings.flawCurrentSit,
+    WordStrings.flawMicrocrack,
+    WordStrings.flawMeshCrack,
+    WordStrings.flawWaterSeepage,
+    WordStrings.flawAffDamp,
+    WordStrings.flawMottled,
+    WordStrings.flawWaterStain,
+    WordStrings.flawMagneticBrick,
+    WordStrings.flawBrokenTiles,
+    WordStrings.flawTilePeelingOff,
+    WordStrings.flawPaintPeeling,
+    WordStrings.flawPAintArches,
+    WordStrings.flawPAintPeels,
+    WordStrings.flawPAintDamaged,
+    WordStrings.flawProtePeel,
+    WordStrings.flawRainExpo,
+    WordStrings.flawSeamless,
+    WordStrings.flawDamaged,
+    WordStrings.flawCracking,
+    WordStrings.flawDeformation,
+    WordStrings.flawCaveIn,
+    WordStrings.flawPatching,
+    WordStrings.flawBaiHua,
+    WordStrings.flawOther
+  ];
+
   //FireStore method
   createCase(EstablishCaseModel caseModel) async {
     await _db
@@ -139,7 +206,7 @@ class EstablishCaseController extends BaseController {
       return;
     }
     setLoading(true);
-    // await createCase(caseModel);
+    await createCase(caseModel);
     Get.toNamed(AppRoutes.surveyForm1CreateScreen);
   }
 
@@ -171,7 +238,19 @@ class EstablishCaseController extends BaseController {
     }
 
     setLoading(true);
-    // await createWeentialSurveyDoc1(caseModel);
+    await createWeentialSurveyDoc1(caseModel);
     Get.toNamed(AppRoutes.surveyForm2CreateScreen);
+  }
+
+  Future<void> takePhoto(BuildContext context) async {
+    DialogBox.selectImage(
+      context,
+      onComplete: (filePath) async {
+        if (filePath.isNotEmpty) {
+          debugPrint("FilePath $filePath");
+          photoList.add(filePath);
+        }
+      },
+    );
   }
 }

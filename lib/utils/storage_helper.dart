@@ -23,6 +23,12 @@ class StorageHelper {
     return await box.erase();
   }
 
+  static Future<void> logout() async {
+    remove(StorageKeys.isLogin);
+    remove(StorageKeys.userData);
+    remove(StorageKeys.userId);
+  }
+
   static Future<void> remove(String key) async {
     Log.logs(
       WordStrings.lblStorage,
@@ -36,8 +42,11 @@ class StorageKeys {
   static const String isLogin = "isLogin";
   static const String phoneNumber = "Phone Number";
   static const String password = "Password";
+  static const String isRemember = "isRemember";
   static const String userId = "userId";
 
   static const String authToken = 'Authorization';
   static const String userData = 'userData';
+  static const String point = 'points';
+  static const String profileLink = 'profileLink';
 }

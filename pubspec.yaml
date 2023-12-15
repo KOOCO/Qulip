@@ -59,6 +59,7 @@ dependencies:
   toggle_switch: ^2.1.0
   firebase_core: ^2.15.0
   cloud_firestore: ^4.13.6
+  image_cropper: ^5.0.1
 
 dev_dependencies:
   flutter_test:

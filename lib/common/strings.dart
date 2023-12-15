@@ -2,12 +2,18 @@ class WordStrings {
   static const apiKey = "3aaa230be8a34174820f6308f3b176a3";
   static const apiSecret = "94bd22c3369f4a5fbaede97a0b59e2c1";
 
+  //Common
+  static const String selectImageLbl = "Select From";
+  static const String galleryImageLbl = "Gallery";
+  static const String cameraImageLbl = "Camera";
+  static const String uploadPhoto = 'Upload Photo';
+
   //Login
   static const String countryCodeLbl = '+886';
   static const String mobileLbl = 'Please enter your phone number';
   static const String passwordLbl = 'Please enter your password';
-  static const String loginLbl = 'login';
-  static const String signupLbl = 'register';
+  static const String loginLbl = 'Login';
+  static const String signupLbl = 'Register';
   static const String errorMobileLbl = 'Please enter phone number';
   static const String errorValidMobileLbl = 'Please enter valid phone number';
   static const String errorPasswordLbl = 'Please enter password';
@@ -152,6 +158,67 @@ class WordStrings {
   static const String floorStoneMaterial = "Stone material";
   static const String floorPlasticFloorTiles = "Plastic floor tiles";
   static const String floorOther = "Other";
+
+  //Weential survey step - 2
+  static const String locationLbl = "Location";
+  static const String situationLbl = "Situation";
+  static const String crackLengthLbl = "Cracked Length (M)";
+  static const String crackWidthLbl = "Cracked Width (Mm)";
+  static const String flawLbl = "Flaw";
+
+  //Location drop down
+  static const String selectLocation = "Select Location";
+  static const String locationLiang = "Liang (B)";
+  static const String locationColumn = "Column (C)";
+  static const String locationFlatTop = "Flat top (S)";
+  static const String locationFloor = "Floor (F)";
+  static const String locationWall = "Wall. Wall (W)";
+  static const String locationDW = "Daughter Wall (PW)";
+  static const String locationBalcony = "Balcony";
+  static const String locationTerraceWall = "Terrace wall";
+  static const String locationDoor = "The door";
+  static const String locationWindowFram = "Window frame";
+  static const String locationStairs =
+      "Stairs (side of stairs, back of stairs)";
+  static const String locationFTCWindow = "Floor-to-ceiling window DW";
+  static const String locationIRollingDoor = "Iron Rolling Door SD";
+  static const String locationCeiling = "Ceiling";
+  static const String locationLSteelF = "Light steel frame";
+  static const String locationLCompartment = "Light compartment";
+  static const String locationWardrobe = "Wardrobe";
+  static const String locationBookcase = "Bookcase";
+  static const String locationCupboard = "Cupboard";
+  static const String locationFlowerT = "Flower table";
+  static const String locationRailing = "Railing";
+  static const String locationACEqu =
+      "Electromechanical air conditioning equipment";
+
+  //Flaw drop down
+  static const String selectFlaw = "Select Flaw";
+  static const String flawCurrentSit = "Current situation";
+  static const String flawMicrocrack = "Microcrack";
+  static const String flawMeshCrack = "Mesh crack";
+  static const String flawWaterSeepage = "Water seepage";
+  static const String flawAffDamp = "Be affected with damp";
+  static const String flawMottled = "Mottled";
+  static const String flawWaterStain = "Water stains";
+  static const String flawMagneticBrick = "Magnetic brick cracks";
+  static const String flawBrokenTiles = "Broken tiles";
+  static const String flawTilePeelingOff = "Tile peeling off";
+  static const String flawPaintPeeling = "Paint peeling off";
+  static const String flawPAintArches = "The painting layer arches";
+  static const String flawPAintPeels = "The paint layer peels off";
+  static const String flawPAintDamaged = "The paint layer is damaged";
+  static const String flawProtePeel = "Protective layer peeling off";
+  static const String flawRainExpo = "Reinforced exposed";
+  static const String flawSeamless = "Seamless";
+  static const String flawDamaged = "Damaged";
+  static const String flawCracking = "Cracking";
+  static const String flawDeformation = "Deformation";
+  static const String flawCaveIn = "Cave in";
+  static const String flawPatching = "Patching situation";
+  static const String flawBaiHua = "Bai Hua";
+  static const String flawOther = "Other";
 
   static const String accessToken = "Access Token";
   static const String lblStorage = 'Storage';

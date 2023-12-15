@@ -13,11 +13,13 @@ class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
 
   // final controller = Get.put(LoginController());
-  String link = "";
+  final link = "https://civiltw-c0bb2554960c.herokuapp.com/".obs;
   @override
   Widget build(BuildContext context) {
-    StorageHelper.read(StorageKeys.userData)
-        .then((value) => {link = value['link']});
+    debugPrint("Link >> 111 ${link.value}");
+    StorageHelper.read(StorageKeys.profileLink).then((value) => {
+          link.value = value,
+        });
     return Scaffold(
       appBar: AppBar(
         backgroundColor: stdwhite,
@@ -31,7 +33,7 @@ class ProfileScreen extends StatelessWidget {
         ),
       ),
       backgroundColor: transparentGrey,
-      body: WebViewWidget(
+      body: Obx(() => WebViewWidget(
           controller: WebViewController()
             ..setJavaScriptMode(JavaScriptMode.unrestricted)
             ..setBackgroundColor(const Color(0x00000000))
@@ -55,7 +57,7 @@ class ProfileScreen extends StatelessWidget {
                 },
               ),
             )
-            ..loadRequest(Uri.parse(link))),
+            ..loadRequest(Uri.parse(link.value)))),
       // body: SingleChildScrollView(
       //   child: Column(
       //     crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,4 +189,11 @@ class ProfileScreen extends StatelessWidget {
       // ).paddingSymmetric(horizontal: 24.w, vertical: 4.h),
     );
   }
+
+  // profileLink() async {
+  //   final String? link = await StorageHelper.read(StorageKeys.profileLink).then((value) => {
+  //         link.value = value,
+  //       });
+  //   return link;
+  // }
 }
