@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:get_storage/get_storage.dart';
 import 'package:qulip/common/strings.dart';
-import 'package:qulip/models/login_model.dart';
 import 'package:qulip/utils/log_utils.dart';
 
 class StorageHelper {
@@ -24,6 +23,12 @@ class StorageHelper {
     return await box.erase();
   }
 
+  static Future<void> logout() async {
+    remove(StorageKeys.isLogin);
+    remove(StorageKeys.userData);
+    remove(StorageKeys.userId);
+  }
+
   static Future<void> remove(String key) async {
     Log.logs(
       WordStrings.lblStorage,
@@ -34,20 +39,14 @@ class StorageHelper {
 }
 
 class StorageKeys {
+  static const String isLogin = "isLogin";
   static const String phoneNumber = "Phone Number";
   static const String password = "Password";
+  static const String isRemember = "isRemember";
+  static const String userId = "userId";
 
   static const String authToken = 'Authorization';
   static const String userData = 'userData';
-  static const String intro = 'intro';
-  static const String isVerified = 'verified';
-  static const String profilePic = 'profilePic';
-  static const String userId = 'userId';
-  static const String dateFormat = 'dateFormat';
-  static const String selectedCategory = 'selectedCategory';
-
-  static const String searchType = 'searchType';
-  static const String searchState = 'searchState';
-  static const String searchCity = 'searchCity';
-  static const String searchSubCity = 'searchSubCity';
+  static const String point = 'points';
+  static const String profileLink = 'profileLink';
 }
