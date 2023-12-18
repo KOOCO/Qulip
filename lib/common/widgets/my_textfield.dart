@@ -19,6 +19,7 @@ class MyTextField extends StatelessWidget {
     this.fillColor = yasRed,
     this.obscureText = false,
     this.enabled = true,
+    this.isDateField = false,
     this.isDense = true,
     this.suffixIcon,
     this.prefixIcon,
@@ -54,6 +55,7 @@ class MyTextField extends StatelessWidget {
   final bool obscureText;
   final TextAlignVertical textAlign;
   final bool enabled;
+  final bool isDateField;
   final bool expand;
   final bool isDense;
   final bool autofocus;
@@ -151,6 +153,22 @@ class MyTextField extends StatelessWidget {
                 : null
             : const OutlineInputBorder(
                 borderSide: BorderSide.none,
+              ),
+
+        disabledBorder: isDateField
+            ? OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: fillColor ?? yasRed,
+                ),
+                borderRadius: borderRadius ??
+                    const BorderRadius.all(Radius.circular(5.0)),
+              )
+            : OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: stdgrey,
+                ),
+                borderRadius: borderRadius ??
+                    const BorderRadius.all(Radius.circular(5.0)),
               ),
         enabledBorder: hasBorder
             ? fullBorder
