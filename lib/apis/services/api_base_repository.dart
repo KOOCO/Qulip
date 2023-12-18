@@ -57,7 +57,7 @@ class DioHelper<T> {
         data: data,
         queryParameters: queryParameters,
         options: Options(
-            headers: {'V-ID': WordStrings.apiKey, 'V-Sign': getVSignIn(data)}),
+            headers: {'V-ID': WordStrings.apiKey, 'V-Sign': getDigest(data)}),
       );
       if (response.data['code'] != codeSucces) {
         MySnackBar.errorSnackbar(response.data['message']);
@@ -71,18 +71,16 @@ class DioHelper<T> {
     }
   }
 
-  String getVSignIn(params) {
-    final dataF =
-        '${json.encode(params).replaceAll(",", ":")}${WordStrings.apiKey}';
-    var key = utf8.encode(WordStrings.apiSecret);
-    var bytes = utf8.encode(dataF);
+  String getDigest(Map<String, dynamic>? params) {
+    String jsonString =
+        json.encode(params, toEncodable: (value) => value.toString());
+    String concatenatedString = jsonString + WordStrings.apiKey;
 
-    var hmacSha256 = Hmac(sha256, key); // HMAC-SHA256
-    var digest = hmacSha256.convert(bytes);
+    List<int> secretKeyBytes = utf8.encode(WordStrings.apiSecret);
+    List<int> paramsBytes = utf8.encode(concatenatedString);
 
-    // print("HMAC digest data: ${dataF}");
-    // print("HMAC digest as bytes: ${digest.bytes}");
-    // print("HMAC digest as hex string: $digest");
+    Hmac hmacSha256 = Hmac(sha256, secretKeyBytes);
+    Digest digest = hmacSha256.convert(paramsBytes);
 
     return digest.toString();
   }

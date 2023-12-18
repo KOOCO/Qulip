@@ -20,7 +20,7 @@ class MySnackBar {
       message,
       colorText: whiteTxt,
       icon: const Icon(Icons.error_outline, color: Colors.white),
-      snackPosition: SnackPosition.TOP,
+      snackPosition: SnackPosition.BOTTOM,
       backgroundColor: yasRed.withOpacity(0.5),
     );
   }

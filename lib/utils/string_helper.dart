@@ -1,4 +1,16 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+
+String getCaseNumber() {
+  var rnd = Random();
+  var next = rnd.nextDouble() * 1000000;
+  while (next < 100000) {
+    next *= 10;
+  }
+  debugPrint(next.toInt().toString());
+  return next.toInt().toString();
+}
 
 String getCurrency(String? price) {
   double currency = 0.00;

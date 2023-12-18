@@ -9,13 +9,13 @@ import 'package:qulip/common/colors.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_text.dart';
-import 'package:qulip/controller/profile_controller.dart';
+import 'package:qulip/controller/login_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SystemInfoScreen extends StatelessWidget {
   SystemInfoScreen({super.key});
 
-  final controller = Get.put(ProfileController());
+  final controller = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {

@@ -18,6 +18,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.setRemembered();
     return Scaffold(
       backgroundColor: stdwhite,
       body: SingleChildScrollView(
@@ -34,22 +35,44 @@ class LoginScreen extends StatelessWidget {
             SizedBox(
               height: Get.height * 0.06,
             ),
-            MyTextField(
-              fullBorder: true,
-              hasFloatingLabel: false,
-              controller: controller.txtPhone,
-              maxLength: 10,
-              keyboard: TextInputType.text,
-              labelText: WordStrings.mobileLbl,
-              hintText: WordStrings.mobileLbl,
-            ).paddingOnly(top: 10.h).paddingSymmetric(horizontal: 20.w),
+            Container(
+              alignment: Alignment.center,
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                border: Border.all(
+                  width: 1,
+                  color: yasRed,
+                ),
+              ),
+              child: Row(children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  child: const MyText(
+                    WordStrings.countryCodeLbl,
+                    fontColor: stdgrey,
+                  ),
+                ),
+                Expanded(
+                  child: MyTextField(
+                    fullBorder: false,
+                    hasBorder: false,
+                    hasFloatingLabel: false,
+                    controller: controller.txtPhone,
+                    maxLength: 10,
+                    keyboard: TextInputType.text,
+                    hintText: WordStrings.mobileLbl,
+                  ),
+                ),
+              ]),
+            ).paddingSymmetric(horizontal: 20.w),
             MyTextField(
               fullBorder: true,
               hasFloatingLabel: false,
               controller: controller.txtPassword,
+              obscureText: true,
               maxLength: 16,
               keyboard: TextInputType.text,
-              labelText: WordStrings.passwordLbl,
               hintText: WordStrings.passwordLbl,
             ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 20.w),
             Row(
@@ -71,7 +94,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                 )
               ],
-            ).paddingSymmetric(horizontal: 10.w),
+            ).paddingOnly(top: 5.h).paddingSymmetric(horizontal: 15.w),
             MyButton(
               label: WordStrings.loginLbl,
               style: const TextStyle(
@@ -88,7 +111,7 @@ class LoginScreen extends StatelessWidget {
                   )
                 ],
               ),
-              height: Get.height * 0.10,
+              height: Get.height * 0.05,
               borderRadius: 2,
               onTap: () async {
                 controller.loginMobile();
@@ -112,13 +135,15 @@ class LoginScreen extends StatelessWidget {
                   )
                 ],
               ),
-              height: Get.height * 0.10,
+              height: Get.height * 0.05,
               borderRadius: 2,
               onTap: () async {
                 Get.toNamed(AppRoutes.signupScreen);
               },
-            ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 20)
-            .marginOnly(bottom: 50),
+            )
+                .paddingOnly(top: 20.h)
+                .paddingSymmetric(horizontal: 20)
+                .marginOnly(bottom: 50),
           ],
         ),
       ),
