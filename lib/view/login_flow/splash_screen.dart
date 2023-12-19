@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> nextScreen() async {
     Timer(
         const Duration(seconds: 3),
-        () => Get.toNamed(AppRoutes.loginScreen) );
+        () => Get.toNamed(AppRoutes.surveyForm2CreateScreen) );
 
     // final userID = await StorageHelper.read(StorageKeys.userId);
     // Future.delayed(const Duration(seconds: 1), () {
