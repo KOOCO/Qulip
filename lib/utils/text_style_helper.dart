@@ -35,12 +35,12 @@ class MyTextTheme9Bold {
 class MyTextTheme11Normal {
   static double fontSize = 11;
   static FontWeight fontWeight = FontWeight.normal;
-  static Color blackColor = blackColor;
-  static Color greenColor = greenColor;
-  static Color greyColor = greyColor;
-  static Color redColor = redColor;
-  static Color orangeColor = orangeColor;
-  static Color whiteColor = whiteColor;
+  static Color blackColor = stdBlack;
+  static Color greenColor = Colors.green;
+  static Color greyColor = stdgrey;
+  static Color redColor = Colors.red;
+  static Color orangeColor = Colors.orange;
+  static Color whiteColor = stdwhite;
 
   static TextStyle black() {
     return TextStyle(
@@ -100,8 +100,8 @@ class MyTextTheme11Normal {
 class MyTextTheme11Bold {
   static double fontSize = 11;
   static FontWeight fontWeight = FontWeight.bold;
-  static Color greyColor = greyColor;
-  static Color whiteColor = whiteColor;
+  static Color greyColor = stdgrey;
+  static Color whiteColor = stdwhite;
 
   static TextStyle grey() {
     return TextStyle(
@@ -160,24 +160,13 @@ class MyTextTheme12Bold {
       color: MyTextTheme14Bold.blackColor,
     );
   }
-
-  static TextStyle green() {
-    return TextStyle(
-      fontFamily: slashieFontFamily,
-      fontSize: MyTextTheme14Bold.fontSize,
-      fontWeight: MyTextTheme14Bold.fontWeight,
-      color: MyTextTheme14Bold.greenColor,
-    );
-  }
 }
 
 class MyTextTheme14Normal {
   static double fontSize = 14;
   static FontWeight fontWeight = FontWeight.normal;
-  static Color greenColor = greenColor;
-  static Color greyColor = greyColor;
-  static Color blackColor = blackColor;
-  static Color purpleColor = purpleColor;
+  static Color greyColor = stdDarkGray;
+  static Color blackColor = stdBlack;
   static Color whiteColor = Colors.white;
 
   static TextStyle black() {
@@ -189,30 +178,12 @@ class MyTextTheme14Normal {
     );
   }
 
-  static TextStyle green() {
-    return TextStyle(
-      fontFamily: slashieFontFamily,
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      color: greenColor,
-    );
-  }
-
   static TextStyle grey() {
     return TextStyle(
       fontFamily: slashieFontFamily,
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: greyColor,
-    );
-  }
-
-  static TextStyle purple() {
-    return TextStyle(
-      fontFamily: slashieFontFamily,
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      color: purpleColor,
     );
   }
 
@@ -229,11 +200,9 @@ class MyTextTheme14Normal {
 class MyTextTheme14Bold {
   static double fontSize = 14;
   static FontWeight fontWeight = FontWeight.bold;
-  static Color greenColor = greenColor;
-  static Color greyColor = greyColor;
-  static Color blackColor = blackColor;
-  static Color purpleColor = purpleColor;
-  static Color whiteColor = whiteColor;
+  static Color greyColor = stdDarkGray;
+  static Color blackColor = stdBlack;
+  static Color whiteColor = stdwhite;
 
   static TextStyle black() {
     return TextStyle(
@@ -244,30 +213,12 @@ class MyTextTheme14Bold {
     );
   }
 
-  static TextStyle green() {
-    return TextStyle(
-      fontFamily: slashieFontFamily,
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      color: greenColor,
-    );
-  }
-
   static TextStyle grey() {
     return TextStyle(
       fontFamily: slashieFontFamily,
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: greyColor,
-    );
-  }
-
-  static TextStyle purple() {
-    return TextStyle(
-      fontFamily: slashieFontFamily,
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      color: purpleColor,
     );
   }
 
@@ -291,15 +242,6 @@ class MyTextTheme16Bold {
     );
   }
 
-  static TextStyle green() {
-    return TextStyle(
-      fontFamily: slashieFontFamily,
-      fontSize: MyTextTheme20Bold.fontSize - 4,
-      fontWeight: MyTextTheme20Bold.fontWeight,
-      color: MyTextTheme20Bold.greenColor,
-    );
-  }
-
   static TextStyle grey() {
     return TextStyle(
       fontFamily: slashieFontFamily,
@@ -319,24 +261,14 @@ class MyTextTheme18Bold {
       color: MyTextTheme20Bold.blackColor,
     );
   }
-
-  static TextStyle green() {
-    return TextStyle(
-      fontFamily: slashieFontFamily,
-      fontSize: MyTextTheme20Bold.fontSize - 2,
-      fontWeight: MyTextTheme20Bold.fontWeight,
-      color: MyTextTheme20Bold.greenColor,
-    );
-  }
 }
 
 class MyTextTheme20Bold {
   static double fontSize = 20;
   static FontWeight fontWeight = FontWeight.bold;
-  static Color greenColor = greenColor;
-  static Color greyColor = greyColor;
-  static Color blackColor = blackColor;
-  static Color whiteColor = whiteColor;
+  static Color greyColor = stdgrey;
+  static Color blackColor = stdBlack;
+  static Color whiteColor = stdwhite;
 
   static TextStyle black() {
     return TextStyle(
@@ -344,15 +276,6 @@ class MyTextTheme20Bold {
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: blackColor,
-    );
-  }
-
-  static TextStyle green() {
-    return TextStyle(
-      fontFamily: slashieFontFamily,
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      color: greenColor,
     );
   }
 

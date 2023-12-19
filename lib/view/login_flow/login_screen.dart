@@ -18,6 +18,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.setRemembered();
     return Scaffold(
       backgroundColor: stdwhite,
       body: SingleChildScrollView(
@@ -36,11 +37,7 @@ class LoginScreen extends StatelessWidget {
             ),
             Container(
               alignment: Alignment.center,
-              height: 60,
-              margin: const EdgeInsets.only(
-                left: 45,
-                right: 45,
-              ),
+              height: 50,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(5.0)),
                 border: Border.all(
@@ -57,7 +54,6 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  flex: 1,
                   child: MyTextField(
                     fullBorder: false,
                     hasBorder: false,
@@ -69,7 +65,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
               ]),
-            ),
+            ).paddingSymmetric(horizontal: 20.w),
             MyTextField(
               fullBorder: true,
               hasFloatingLabel: false,

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qulip/routes/app_routes.dart';
-import 'package:qulip/view/home_flow/home_screen.dart';
+import 'package:qulip/utils/storage_helper.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,15 +14,20 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   Future<void> nextScreen() async {
+    final isLogin = await StorageHelper.read(StorageKeys.isLogin);
     Timer(
         const Duration(seconds: 3),
-        () => Get.toNamed(AppRoutes.surveyForm2CreateScreen) );
+        () => {
+              if (isLogin != null && isLogin)
+                {Get.toNamed(AppRoutes.homeScreen)}
+              else
+                {Get.toNamed(AppRoutes.loginScreen)}
+            });
 
-    // final userID = await StorageHelper.read(StorageKeys.userId);
-    // Future.delayed(const Duration(seconds: 1), () {
+    // Future.delayed(const Duration(seconds: 3), () {
     //   SchedulerBinding.instance.addPostFrameCallback((_) {
-    //     if (userID == null) {
-    //       Get.toNamed(AppRoutes.loginScreen);
+    //     if (isLogin) {
+    //       Get.toNamed(AppRoutes.homeScreen);
     //     } else {
     //       Get.toNamed(AppRoutes.loginScreen);
     //     }
