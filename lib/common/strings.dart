@@ -102,6 +102,7 @@ class WordStrings {
   static const String sfFloorMateriallErr = "Please choose the floor";
   static const String sfSupDirectionlErr =
       "Please enter the supplementary description";
+      static const String surveyFormVerticallLbl = "Vertical measurement table";
 
   //Structure drop down
   static const String selectStructure = "Select structure";
@@ -166,6 +167,18 @@ class WordStrings {
   static const String crackWidthLbl = "Cracked Width (Mm)";
   static const String flawLbl = "Flaw";
 
+  // Veritcal Form 
+  static const String upperPointLbl = "Upper point";
+  static const String lowerPointLbl = "Lower point";
+  static const String highDifferenceLbl = "High difference";
+  static const String leftPointLbl = "Left point";
+  static const String rightPointLbl = "Right point";
+  static const String tiltValueLbl = "Tilt Value";
+  static const String slopeLbl = "Slope";
+  static const String diagramLbl = "Diagram";
+  static const String newMeasuringPointNumber = 'New measuring point number';
+
+
   //Location drop down
   static const String selectLocation = "Select Location";
   static const String locationLiang = "Liang (B)";
@@ -219,6 +232,11 @@ class WordStrings {
   static const String flawPatching = "Patching situation";
   static const String flawBaiHua = "Bai Hua";
   static const String flawOther = "Other";
+
+  // Tilt Direction List
+  static const String selectDirection = "Select Tilt Direction";
+  static const String selectLeftDirection = "Left";
+  static const String selectRightDirection = "Right";
 
   static const String accessToken = "Access Token";
   static const String lblStorage = 'Storage';

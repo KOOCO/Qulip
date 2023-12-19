@@ -1,19 +1,18 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
 import 'package:qulip/common/strings.dart';
+import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_dropdown_area.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
 import 'package:qulip/utils/text_style_helper.dart';
 
-class SurveyFormStep2 extends StatelessWidget {
-  SurveyFormStep2({super.key});
+class SurveyFormVertical extends StatelessWidget {
+  SurveyFormVertical({super.key});
 
   final controller = Get.put(EstablishCaseController());
   DateTime sDate = DateTime.now();
@@ -22,14 +21,13 @@ class SurveyFormStep2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("Size>> ${controller.photoList.length}");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: stdwhite,
         foregroundColor: yasRed,
         centerTitle: true,
         title: const MyText(
-          "${WordStrings.surveyFormCreatelLbl}- 2",
+          "${WordStrings.surveyFormVerticallLbl}",
           fontFamily: FontFamilyConstant.sinkinSans,
           fontSize: 18,
           fontColor: yasRed,
@@ -47,37 +45,110 @@ class SurveyFormStep2 extends StatelessWidget {
         ],
       ),
       backgroundColor: stdwhite,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: Container(
-                color: cardBg,
-                child: ExpansionTile(
-                  initiallyExpanded: true,
-                  trailing: const Icon(
-                    Icons.arrow_drop_down,
-                    color: yasRed,
-                  ),
-                  title: const MyText(
-                    "Number 1",
-                    fontFamily: FontFamilyConstant.sinkinSans,
-                    fontSize: 14,
-                    fontColor: yasRed,
-                  ),
-                  children: <Widget>[_buildItem(context)],
-                ),
-              ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Obx(() => _forumTabBarItem(context)),
+          MyButton(
+            label: WordStrings.newMeasuringPointNumber,
+            style: const TextStyle(
+              color: whiteTxt,
+              fontWeight: FontWeight.bold,
             ),
-          ],
-        ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 12.w),
+            decoration: const BoxDecoration(
+              color: yasRed,
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 6,
+                  color: Colors.black54,
+                )
+              ],
+            ),
+            height: Get.height * 0.05,
+            borderRadius: 2,
+            onTap: () async {
+              controller.addWidget();
+              debugPrint(controller.listOfForm.length.toString());
+            },
+          )
+              .paddingOnly(top: 20.h)
+              .paddingSymmetric(horizontal: 20)
+              .marginOnly(bottom: 10),
+          MyButton(
+            label: WordStrings.establishLbl,
+            style: const TextStyle(
+              color: whiteTxt,
+              fontWeight: FontWeight.bold,
+            ),
+            decoration: const BoxDecoration(
+              color: yasRed,
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 6,
+                  color: Colors.black54,
+                )
+              ],
+            ),
+            height: Get.height * 0.05,
+            borderRadius: 2,
+            onTap: () async {
+              controller.addWidget();
+              debugPrint(controller.listOfForm.length.toString());
+            },
+          )
+              .paddingOnly(top: 20.h)
+              .paddingSymmetric(horizontal: 20)
+              .marginOnly(bottom: 50),
+        ],
+      ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 12.w),
+    );
+  }
+
+  validateForm(){
+    if(controller.txtUpperPoint.text.toString().isEmpty 
+    && controller.txtLowerPoint.text.toString().isEmpty
+    && controller.highDifference == 0 ){
+
+    }
+  }
+
+  Widget _forumTabBarItem(BuildContext context) {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: controller.listOfForm.length,
+        itemBuilder: (context, index) {
+          return _buildList(context, controller.listOfForm[index]);
+        },
+      ),
+    );
+  }
+
+  Widget _buildList(BuildContext context, int number) {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Container(
+        color: cardBg,
+        child: ExpansionTile(
+          initiallyExpanded: false,
+          trailing: const Icon(
+            Icons.arrow_drop_down,
+            color: yasRed,
+          ),
+          title: MyText(
+            "Number $number",
+            fontFamily: FontFamilyConstant.sinkinSans,
+            fontSize: 14,
+            fontColor: yasRed,
+          ),
+          children: [_buildItem(context)],
+        ),
       ),
     );
   }
@@ -91,162 +162,151 @@ class SurveyFormStep2 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const MyText(
-            WordStrings.locationLbl,
+          MyTextField(
+            onChanged: (value){
+              if(value.isNotEmpty){
+                controller.calculateHighDifference(controller.txtUpperPoint.text.toString(), controller.txtLowerPoint.text.toString());
+              }
+            },
+            fullBorder: true,
+            hasFloatingLabel: false,
+            controller: controller.txtUpperPoint,
+            keyboard: TextInputType.text,
+            labelText: WordStrings.upperPointLbl,
+            hintText: WordStrings.upperPointLbl,
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          MyTextField(
+            onChanged: (value){
+              if(value.isNotEmpty){
+                controller.calculateHighDifference(controller.txtUpperPoint.text.toString(), controller.txtLowerPoint.text.toString());
+              }
+            },
+            fullBorder: true,
+            hasFloatingLabel: false,
+            controller: controller.txtLowerPoint,
+            keyboard: TextInputType.text,
+            labelText: WordStrings.lowerPointLbl,
+            hintText: WordStrings.lowerPointLbl,
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Obx(() => MyText(
+            "${WordStrings.highDifferenceLbl} ${controller.highDifference}",
             fontWeight: FontWeight.w400,
             fontFamily: FontFamilyConstant.sinkinSansMedium,
-            fontColor: yasRed,
+            fontColor: stdBlack,
+          ).paddingOnly(left: 2, right: 2, bottom: 4)),
+          const SizedBox(
+            height: 15,
+          ),
+          Container(
+            height: 35.h,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: stdwhite,
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              border: Border.all(
+                width: 0.5,
+                color: yasRed,
+              ),
+              boxShadow: const [
+                BoxShadow(
+                  blurRadius: 2,
+                  color: yasRed,
+                )
+              ],
+            ),
+            child: DropdownButtonHideUnderline(
+              child: MyDropDownArea(
+                iconColor: lightGrey,
+                isExpanded: false,
+                items: controller.tileDirectionList.map((element) {
+                  return DropdownMenuItem<String>(
+                    value: element,
+                    child: MyText(
+                      element,
+                      fontStyle: MyTextTheme14Normal.black(),
+                    ),
+                  );
+                }).toList(),
+                selectedItemBuilder: (context) {
+                  return controller.tileDirectionList
+                      .map(
+                        (element) => Container(
+                          height: 25,
+                          alignment: Alignment.centerLeft,
+                          child: MyText(
+                            element,
+                            fontStyle: MyTextTheme14Normal.black(),
+                          ),
+                        ),
+                      )
+                      .toList();
+                },
+                value: controller.selectedDirection.value,
+                onchange: (value) {
+                  if (value != null) {
+                    controller.selectedDirection.value = value;
+                  }
+                },
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          MyTextField(
+            fullBorder: true,
+            hasFloatingLabel: false,
+            controller: controller.txtLeftPoint,
+            keyboard: TextInputType.text,
+            labelText: WordStrings.leftPointLbl,
+            hintText: WordStrings.leftPointLbl,
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          MyTextField(
+            fullBorder: true,
+            hasFloatingLabel: false,
+            controller: controller.txtRightPoint,
+            keyboard: TextInputType.text,
+            labelText: WordStrings.rightPointLbl,
+            hintText: WordStrings.rightPointLbl,
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          const MyText(
+            WordStrings.tiltValueLbl,
+            fontWeight: FontWeight.w400,
+            fontFamily: FontFamilyConstant.sinkinSansMedium,
+            fontColor: stdBlack,
           ).paddingOnly(left: 2, right: 2, bottom: 4),
-          Container(
-            height: 35.h,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: stdwhite,
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
-              border: Border.all(
-                width: 0.5,
-                color: yasRed,
-              ),
-              boxShadow: const [
-                BoxShadow(
-                  blurRadius: 2,
-                  color: yasRed,
-                )
-              ],
-            ),
-            child: DropdownButtonHideUnderline(
-              child: MyDropDownArea(
-                iconColor: lightGrey,
-                isExpanded: false,
-                items: controller.locationList.map((element) {
-                  return DropdownMenuItem<String>(
-                    value: element,
-                    child: MyText(
-                      element,
-                      fontStyle: MyTextTheme14Normal.black(),
-                    ),
-                  );
-                }).toList(),
-                selectedItemBuilder: (context) {
-                  return controller.locationList
-                      .map(
-                        (element) => Container(
-                          height: 25,
-                          alignment: Alignment.centerLeft,
-                          child: MyText(
-                            element,
-                            fontStyle: MyTextTheme14Normal.black(),
-                          ),
-                        ),
-                      )
-                      .toList();
-                },
-                value: controller.selectedLocation.value,
-                onchange: (value) {
-                  if (value != null) {
-                    controller.selectedLocation.value = value;
-                  }
-                },
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          MyTextField(
-            fullBorder: true,
-            hasFloatingLabel: false,
-            controller: controller.txtSituation,
-            keyboard: TextInputType.text,
-            labelText: WordStrings.situationLbl,
-            hintText: WordStrings.situationLbl,
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          MyTextField(
-            fullBorder: true,
-            hasFloatingLabel: false,
-            controller: controller.txtCrackLength,
-            keyboard: TextInputType.text,
-            labelText: WordStrings.crackLengthLbl,
-            hintText: WordStrings.crackLengthLbl,
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          MyTextField(
-            fullBorder: true,
-            hasFloatingLabel: false,
-            controller: controller.txtCrackWidth,
-            keyboard: TextInputType.text,
-            labelText: WordStrings.crackWidthLbl,
-            hintText: WordStrings.crackWidthLbl,
-          ),
           const SizedBox(
             height: 15,
           ),
           const MyText(
-            WordStrings.flawLbl,
+            WordStrings.slopeLbl,
             fontWeight: FontWeight.w400,
             fontFamily: FontFamilyConstant.sinkinSansMedium,
-            fontColor: yasRed,
-          ).paddingOnly(left: 2, right: 2),
-          Container(
-            height: 35.h,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: stdwhite,
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
-              border: Border.all(
-                width: 0.5,
-                color: yasRed,
-              ),
-              boxShadow: const [
-                BoxShadow(
-                  blurRadius: 2,
-                  color: yasRed,
-                )
-              ],
-            ),
-            child: DropdownButtonHideUnderline(
-              child: MyDropDownArea(
-                iconColor: lightGrey,
-                isExpanded: false,
-                items: controller.flawList.map((element) {
-                  return DropdownMenuItem<String>(
-                    value: element,
-                    child: MyText(
-                      element,
-                      fontStyle: MyTextTheme14Normal.black(),
-                    ),
-                  );
-                }).toList(),
-                selectedItemBuilder: (context) {
-                  return controller.flawList
-                      .map(
-                        (element) => Container(
-                          height: 25,
-                          alignment: Alignment.centerLeft,
-                          child: MyText(
-                            element,
-                            fontStyle: MyTextTheme14Normal.black(),
-                          ),
-                        ),
-                      )
-                      .toList();
-                },
-                value: controller.selectedFlaw.value,
-                onchange: (value) {
-                  if (value != null) {
-                    controller.selectedFlaw.value = value;
-                  }
-                },
-              ),
-            ),
-          ),
+            fontColor: stdBlack,
+          ).paddingOnly(left: 2, right: 2, bottom: 4),
           const SizedBox(
             height: 15,
+          ),
+          const MyText(
+            WordStrings.diagramLbl,
+            fontWeight: FontWeight.w400,
+            fontFamily: FontFamilyConstant.sinkinSansMedium,
+            fontColor: stdBlack,
+          ).paddingOnly(left: 2, right: 2, bottom: 4),
+          const SizedBox(
+            height: 200,
           ),
           const MyText(
             WordStrings.sfDescriptionLbl,
@@ -334,33 +394,15 @@ class SurveyFormStep2 extends StatelessWidget {
                     ),
                   ),
                 ),
-                Visibility(
-                  visible: controller.photoList.isNotEmpty ? true : false,
-                  child: _buildImageList(),
-                )
+                // Visibility(
+                //   visible: controller.photoList.isNotEmpty ? true : false,
+                //   child: _buildImageList(),
+                // )
               ],
             ),
           ),
         ],
       ).paddingAll(6),
-    );
-  }
-
-  Widget _buildImageList() {
-    return Obx(
-      () => ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: controller.photoList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return SizedBox(
-            height: 100,
-            width: 100,
-            child: Row(
-              children: [Image.file(File(controller.photoList.first))],
-            ),
-          );
-        },
-      ),
     );
   }
 }
