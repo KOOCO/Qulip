@@ -32,12 +32,12 @@ class VerticalFormModel {
 
   String? upperPoint;
   String? lowerPoint;
-  String? highDifference;
+  int? highDifference;
   String? titlDirection;
   String? leftPoint;
   String? rightPoint;
-  String? tiltValue;
-  String? slope;
+  int? tiltValue;
+  double? slope;
   String? description;
-  String? filePath;
+  List<dynamic>? filePath;
 }

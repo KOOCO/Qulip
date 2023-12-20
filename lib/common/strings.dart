@@ -178,6 +178,8 @@ class WordStrings {
   static const String diagramLbl = "Diagram";
   static const String newMeasuringPointNumber = 'New measuring point number';
 
+  static const String errValidateForm = "Please enter all the required details";
+
 
   //Location drop down
   static const String selectLocation = "Select Location";

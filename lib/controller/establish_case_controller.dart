@@ -100,20 +100,23 @@ class EstablishCaseController extends BaseController {
   final selectedFlaw = WordStrings.selectFlaw.toString().obs;
 
   RxInt highDifference = 0.obs;
+  RxInt tiltValue = 0.obs;
+  RxDouble slope = 0.0.obs;
 
   int number = 1;
 
   final RxList listOfForm = [1].obs;
 
-  final RxList photoList = [].obs;
+  final RxList photoList = ["dummy"].obs;
 
   final RxList listOfVerticalForm = <VerticalFormModel>[].obs;
 
-  // Vertical Form 
+  // Vertical Form
   final txtUpperPoint = TextEditingController();
   final txtLowerPoint = TextEditingController();
   final txtLeftPoint = TextEditingController();
   final txtRightPoint = TextEditingController();
+  final txtTechnicalDescription = TextEditingController();
   final selectedDirection = WordStrings.selectDirection.toString().obs;
 
   final List<String> locationList = [
@@ -170,42 +173,55 @@ class EstablishCaseController extends BaseController {
     WordStrings.flawOther
   ];
 
-  void addWidget(){
+  void addWidget() {
     number += 1;
     listOfForm.add(number);
   }
 
-  void addVerticalFormItem(VerticalFormModel item){
+  void addImage() {
+    photoList.add("dummy");
+  }
+
+  void addVerticalFormItem(VerticalFormModel item) {
     listOfVerticalForm.add(item);
   }
 
-  calculateHighDifference(String upperPoint, String lowerPoint){
-    if(upperPoint.isNotEmpty && lowerPoint.isNotEmpty){
+  calculateHighDifference(String upperPoint, String lowerPoint) {
+    if (upperPoint.isNotEmpty && lowerPoint.isNotEmpty) {
       highDifference.value = (int.parse(upperPoint) - int.parse(lowerPoint));
-    }else{
+    } else {
       highDifference.value = 0;
     }
+    calculateSlope(tiltValue.value, highDifference.value);
   }
 
-  int calculateTiltValue(String tiltDirection,int leftPoint, int rightPoint){
-    int tiltValue = 0;
-    if(tiltDirection.toLowerCase() == "left"){
-      tiltValue = leftPoint - rightPoint;
-    }else{
-      tiltValue = rightPoint - leftPoint;
+  calculateTiltValue(
+      String tiltDirection, String leftPoint, String rightPoint) {
+    if (leftPoint.isNotEmpty && rightPoint.isNotEmpty) {
+      if (tiltDirection.toLowerCase() == "left") {
+        tiltValue.value = int.parse(leftPoint) - int.parse(rightPoint);
+      } else {
+        tiltValue.value = int.parse(rightPoint) - int.parse(leftPoint);
+      }
+    } else {
+      tiltValue.value = 0;
     }
-    return tiltValue;
+    calculateSlope(tiltValue.value, highDifference.value);
   }
 
-  double calculateSlope(int tiltValue, int highDifference){
-    return tiltValue / highDifference;
+  calculateSlope(int tiltValue, int highDifference) {
+    slope.value = tiltValue / highDifference;
+  }
+
+  performSelectDirection(String value) {
+    selectedDirection.value = value;
   }
 
   final List<String> tileDirectionList = [
     WordStrings.selectDirection,
     WordStrings.selectLeftDirection,
     WordStrings.selectRightDirection,
-  ];
+  ].obs;
 
   //FireStore method
   createCase(EstablishCaseModel caseModel) async {
@@ -228,6 +244,18 @@ class EstablishCaseController extends BaseController {
       setLoading(false);
       MySnackBar.successSnackbar("Step 2 completed");
       Get.toNamed(AppRoutes.surveyForm2CreateScreen);
+    });
+  }
+
+  createVerticalForm(VerticalFormModel formModel) async {
+    await _db
+        .collection("VeritcalForm")
+        .doc("Veritcal Form $number")
+        .set(formModel.toJson())
+        .whenComplete(() {
+      setLoading(false);
+      MySnackBar.successSnackbar("Vertical Form completed");
+      //Get.toNamed(AppRoutes.surveyForm1CreateScreen);
     });
   }
 
@@ -294,13 +322,20 @@ class EstablishCaseController extends BaseController {
     await createWeentialSurveyDoc1(caseModel);
   }
 
-  Future<void> takePhoto(BuildContext context) async {
+  Future<void> storeVeritcalFormData(
+      VerticalFormModel caseModel) async {
+
+    setLoading(true);
+    await createVerticalForm(caseModel);
+  }
+
+  Future<void> takePhoto(BuildContext context, int index) async {
     DialogBox.selectImage(
       context,
       onComplete: (filePath) async {
         if (filePath.isNotEmpty) {
           debugPrint("FilePath $filePath");
-          photoList.add(filePath);
+          photoList[index] = filePath;
         }
       },
     );

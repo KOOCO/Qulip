@@ -41,7 +41,7 @@ class SurveyFormStep2 extends StatelessWidget {
               color: yasRed,
             ),
             onPressed: () {
-              controller.takePhoto(context);
+              //controller.takePhoto(context);
             },
           )
         ],
@@ -318,7 +318,7 @@ class SurveyFormStep2 extends StatelessWidget {
                 Obx(
                   () => InkWell(
                     onTap: () {
-                      controller.takePhoto(context);
+                      //controller.takePhoto(context);
                     },
                     child: Visibility(
                       // visible: controller.photoList.isNotEmpty ? false : true,
