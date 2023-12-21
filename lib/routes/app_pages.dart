@@ -3,6 +3,7 @@ import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/view/case_create_survey/establish_case.dart';
 import 'package:qulip/view/case_create_survey/survey_form_step2.dart';
 import 'package:qulip/view/case_create_survey/survey_form_step1.dart';
+import 'package:qulip/view/case_create_survey/vertical_form/survey_form_vertical.dart';
 import 'package:qulip/view/home_flow/case_list/case_detail_screen.dart';
 import 'package:qulip/view/home_flow/case_list/case_list_screen.dart';
 import 'package:qulip/view/home_flow/home_screen.dart';
@@ -58,6 +59,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.surveyForm2CreateScreen,
       page: () => SurveyFormStep2(),
+    ),
+    GetPage(
+      name: AppRoutes.surveyFormVerticalScreen,
+      page: () => SurveyFormVertical(),
     ),
   ];
 }
