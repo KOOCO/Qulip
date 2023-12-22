@@ -10,13 +10,13 @@ import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_dropdown_area.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
-import 'package:qulip/controller/vertical_case_controller.dart';
+import 'package:qulip/controller/horizontal_case_controller.dart';
 import 'package:qulip/utils/text_style_helper.dart';
 
-class VerticalMeasurement1 extends StatelessWidget {
-  VerticalMeasurement1({super.key});
+class HorizontalMeasurement1 extends StatelessWidget {
+  HorizontalMeasurement1({super.key});
 
-  final controller = Get.put(VerticalCaseController());
+  final controller = Get.put(HorizontalCaseController());
   DateTime sDate = DateTime.now();
   RxString enteredTechDesc = ''.obs;
   final isImageSelect = false.obs;
