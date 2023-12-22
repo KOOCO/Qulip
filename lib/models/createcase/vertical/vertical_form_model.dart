@@ -39,5 +39,5 @@ class VerticalFormModel {
   int? tiltValue;
   double? slope;
   String? description;
-  List<dynamic>? filePath;
+  List<String>? filePath;
 }

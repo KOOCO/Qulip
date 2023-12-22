@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -132,8 +131,8 @@ class CreateCaseScreen extends StatelessWidget {
                     caseDate: controller.txtCaseDate.value.text,
                     caseEquipmentNo: controller.txtCaseEquipmentName.value.text,
                     caseWeather: controller.txtCaseWeather.value.text);
-                // Get.toNamed(AppRoutes.surveyForm1CreateScreen);
-                controller.storeCaseEstablishData(caseModel);
+                Get.toNamed(AppRoutes.surveyForm1CreateScreen);
+                // controller.storeCaseEstablishData(caseModel);
               },
             ).paddingOnly(top: Get.height * 0.04),
           ],

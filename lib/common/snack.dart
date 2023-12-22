@@ -9,8 +9,8 @@ class MySnackBar {
       message,
       colorText: whiteTxt,
       icon: const Icon(Icons.error_outline, color: stdBlack),
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: yasRed.withOpacity(0.4),
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: Colors.red.withOpacity(0.4),
     );
   }
 
@@ -20,8 +20,8 @@ class MySnackBar {
       message,
       colorText: whiteTxt,
       icon: const Icon(Icons.error_outline, color: Colors.white),
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: yasRed.withOpacity(0.5),
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: Colors.green.withOpacity(0.5),
     );
   }
 }

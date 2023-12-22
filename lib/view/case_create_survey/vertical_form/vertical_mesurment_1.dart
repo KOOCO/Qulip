@@ -1,10 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
 import 'package:qulip/common/snack.dart';
@@ -13,14 +11,14 @@ import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_dropdown_area.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
-import 'package:qulip/controller/establish_case_controller.dart';
-import 'package:qulip/models/createcase/vertical_form_model.dart';
+import 'package:qulip/controller/vertical_case_controller.dart';
+import 'package:qulip/models/createcase/vertical/vertical_form_model.dart';
 import 'package:qulip/utils/text_style_helper.dart';
 
-class SurveyFormVertical extends StatelessWidget {
-  SurveyFormVertical({super.key});
+class VerticalMeasurement1 extends StatelessWidget {
+  VerticalMeasurement1({super.key});
 
-  final controller = Get.put(EstablishCaseController());
+  final controller = Get.put(VerticalCaseController());
   DateTime sDate = DateTime.now();
   RxString enteredTechDesc = ''.obs;
   final isImageSelect = false.obs;
@@ -33,7 +31,7 @@ class SurveyFormVertical extends StatelessWidget {
         foregroundColor: yasRed,
         centerTitle: true,
         title: const MyText(
-          "${WordStrings.surveyFormVerticallLbl}",
+          WordStrings.surveyFormVerticallLbl,
           fontFamily: FontFamilyConstant.sinkinSans,
           fontSize: 18,
           fontColor: yasRed,
@@ -55,7 +53,9 @@ class SurveyFormVertical extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Obx(() => _forumTabBarItem(context)),
+          Obx(
+            () => _buildListView(context),
+          ),
           MyButton(
             label: WordStrings.newMeasuringPointNumber,
             style: const TextStyle(
@@ -75,12 +75,9 @@ class SurveyFormVertical extends StatelessWidget {
             height: Get.height * 0.05,
             borderRadius: 2,
             onTap: () async {
-              validateForm();
+              controller.checkValidation();
             },
-          )
-              .paddingOnly(top: 20.h)
-              .paddingSymmetric(horizontal: 20)
-              .marginOnly(bottom: 10),
+          ).paddingAll(10),
           MyButton(
             label: WordStrings.establishLbl,
             style: const TextStyle(
@@ -99,69 +96,19 @@ class SurveyFormVertical extends StatelessWidget {
             ),
             height: Get.height * 0.05,
             borderRadius: 2,
-            onTap: () async {
-              
-            },
-          )
-              .paddingOnly(top: 20.h)
-              .paddingSymmetric(horizontal: 20)
-              .marginOnly(bottom: 50),
+            onTap: () async {},
+          ).paddingAll(10).marginOnly(bottom: 10),
         ],
       ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 12.w),
     );
   }
 
-  validateForm() {
-    if (controller.txtUpperPoint.text.toString().isNotEmpty &&
-        controller.txtLowerPoint.text.toString().isNotEmpty &&
-        controller.highDifference != 0 &&
-        controller.selectedDirection.value !=
-            WordStrings.selectDirection.toString() &&
-        controller.txtLeftPoint.text.toString().isNotEmpty &&
-        controller.txtRightPoint.text.toString().isNotEmpty &&
-        controller.tiltValue != 0 &&
-        controller.slope != 0.0 &&
-        controller.txtTechnicalDescription.text.toString().isNotEmpty &&
-        (controller.photoList.isNotEmpty &&
-            controller.photoList.first != "dummy")) {
-      
-      controller.addVerticalFormItem(VerticalFormModel(
-          upperPoint: controller.txtUpperPoint.text.toString(),
-          lowerPoint: controller.txtLowerPoint.text.toString(),
-          highDifference: controller.highDifference.value,
-          titlDirection: controller.selectedDirection.value,
-          leftPoint: controller.txtLeftPoint.text.toString(),
-          rightPoint: controller.txtRightPoint.text.toString(),
-          tiltValue: controller.tiltValue.value,
-          slope: controller.slope.value,
-          description: controller.txtTechnicalDescription.text.toString(),
-          filePath: controller.photoList));
-
-      controller.txtUpperPoint.clear();
-      controller.txtLowerPoint.clear();
-      controller.highDifference.value = 0;
-      controller.selectedDirection.value = WordStrings.selectDirection.toString();
-      controller.txtLeftPoint.clear();
-      controller.txtRightPoint.clear();
-      controller.tiltValue.value = 0;
-      controller.slope.value = 0.0;
-      controller.txtTechnicalDescription.clear();
-      controller.photoList.clear();
-
-      controller.addWidget();
-      
-      debugPrint(controller.listOfForm.length.toString());
-    } else {
-      MySnackBar.successSnackbar(WordStrings.errValidateForm);
-    }
-  }
-
-  Widget _forumTabBarItem(BuildContext context) {
+  Widget _buildListView(BuildContext context) {
     return Expanded(
       child: ListView.builder(
-        itemCount: controller.listOfForm.length,
+        itemCount: controller.formList.length,
         itemBuilder: (context, index) {
-          return _buildList(context, controller.listOfForm[index]);
+          return _buildList(context, controller.formList[index]);
         },
       ),
     );
@@ -204,17 +151,15 @@ class SurveyFormVertical extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           MyTextField(
-            onChanged: (value) {
+            onSubmit: (value) {
               if (value.isNotEmpty) {
-                controller.calculateHighDifference(
-                    controller.txtUpperPoint.text.toString(),
-                    controller.txtLowerPoint.text.toString());
+                controller.calculateHighDifference();
               }
             },
             fullBorder: true,
             hasFloatingLabel: false,
             controller: controller.txtUpperPoint,
-            keyboard: TextInputType.text,
+            keyboard: TextInputType.number,
             labelText: WordStrings.upperPointLbl,
             hintText: WordStrings.upperPointLbl,
           ),
@@ -222,29 +167,29 @@ class SurveyFormVertical extends StatelessWidget {
             height: 15,
           ),
           MyTextField(
-            onChanged: (value) {
+            onSubmit: (value) {
               if (value.isNotEmpty) {
-                controller.calculateHighDifference(
-                    controller.txtUpperPoint.text.toString(),
-                    controller.txtLowerPoint.text.toString());
+                controller.calculateHighDifference();
               }
             },
             fullBorder: true,
             hasFloatingLabel: false,
             controller: controller.txtLowerPoint,
-            keyboard: TextInputType.text,
+            keyboard: TextInputType.number,
             labelText: WordStrings.lowerPointLbl,
             hintText: WordStrings.lowerPointLbl,
           ),
           const SizedBox(
             height: 15,
           ),
-          Obx(() => MyText(
-                "${WordStrings.highDifferenceLbl} ${controller.highDifference}",
-                fontWeight: FontWeight.w400,
-                fontFamily: FontFamilyConstant.sinkinSansMedium,
-                fontColor: stdBlack,
-              ).paddingOnly(left: 2, right: 2, bottom: 4)),
+          Obx(
+            () => MyText(
+              "${WordStrings.highDifferenceLbl} : ${controller.highDifference}",
+              fontWeight: FontWeight.w600,
+              fontFamily: FontFamilyConstant.sinkinSansMedium,
+              fontColor: stdBlack,
+            ).paddingOnly(left: 6, right: 2),
+          ),
           const SizedBox(
             height: 15,
           ),
@@ -295,7 +240,7 @@ class SurveyFormVertical extends StatelessWidget {
                     value: controller.selectedDirection.value,
                     onchange: (value) {
                       if (value != null) {
-                        controller.performSelectDirection(value);
+                        controller.selectedDirection.value = value;
                       }
                     },
                   ),
@@ -308,14 +253,11 @@ class SurveyFormVertical extends StatelessWidget {
             fullBorder: true,
             hasFloatingLabel: false,
             controller: controller.txtLeftPoint,
-            keyboard: TextInputType.text,
+            keyboard: TextInputType.number,
             labelText: WordStrings.leftPointLbl,
             hintText: WordStrings.leftPointLbl,
-            onChanged: (value) {
-              controller.calculateTiltValue(
-                  controller.selectedDirection.value,
-                  controller.txtLeftPoint.text.toString(),
-                  controller.txtRightPoint.text.toString());
+            onSubmit: (value) {
+              controller.calculateTiltValue();
             },
           ),
           const SizedBox(
@@ -325,34 +267,37 @@ class SurveyFormVertical extends StatelessWidget {
             fullBorder: true,
             hasFloatingLabel: false,
             controller: controller.txtRightPoint,
-            keyboard: TextInputType.text,
+            keyboard: TextInputType.number,
             labelText: WordStrings.rightPointLbl,
             hintText: WordStrings.rightPointLbl,
-            onChanged: (value) {
-              controller.calculateTiltValue(
-                  controller.selectedDirection.value,
-                  controller.txtLeftPoint.text.toString(),
-                  controller.txtRightPoint.text.toString());
+            onSubmit: (value) {
+              controller.calculateTiltValue();
             },
           ),
           const SizedBox(
             height: 15,
           ),
-          Obx(() => MyText(
-                "${WordStrings.tiltValueLbl} ${controller.tiltValue}",
-                fontWeight: FontWeight.w400,
-                fontFamily: FontFamilyConstant.sinkinSansMedium,
-                fontColor: stdBlack,
-              ).paddingOnly(left: 2, right: 2, bottom: 4)),
-          const SizedBox(
-            height: 15,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Obx(
+                () => MyText(
+                  "${WordStrings.tiltValueLbl} : ${controller.tiltValue}",
+                  fontWeight: FontWeight.w600,
+                  fontFamily: FontFamilyConstant.sinkinSansMedium,
+                  fontColor: stdBlack,
+                ).paddingOnly(left: 6),
+              ),
+              Obx(
+                () => MyText(
+                  "${WordStrings.slopeLbl} : ${controller.slope}",
+                  fontWeight: FontWeight.w600,
+                  fontFamily: FontFamilyConstant.sinkinSansMedium,
+                  fontColor: stdBlack,
+                ).paddingOnly(right: 6),
+              ),
+            ],
           ),
-          Obx(() => MyText(
-                "${WordStrings.slopeLbl} ${controller.slope}",
-                fontWeight: FontWeight.w400,
-                fontFamily: FontFamilyConstant.sinkinSansMedium,
-                fontColor: stdBlack,
-              ).paddingOnly(left: 2, right: 2, bottom: 4)),
           const SizedBox(
             height: 15,
           ),
@@ -403,44 +348,72 @@ class SurveyFormVertical extends StatelessWidget {
           const SizedBox(
             height: 15,
           ),
-          Align(
-            alignment: Alignment.topRight,
-            child: InkWell(
-              onTap: () {
-                controller.addImage();
-              },
-              child: const Icon(
-                Icons.add_a_photo,
+          Container(
+            width: double.infinity,
+            height: Get.height * 0.30,
+            decoration: BoxDecoration(
+              color: stdwhite,
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              border: Border.all(
+                width: 1,
                 color: yasRed,
-                size: 50,
-              ).paddingAll(10),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Obx(
+                  () => InkWell(
+                    onTap: () {
+                      controller.takePhoto(context);
+                    },
+                    child: Visibility(
+                      child: Align(
+                        alignment: controller.photoList.isEmpty
+                            ? Alignment.center
+                            : Alignment.topRight,
+                        heightFactor: controller.photoList.isEmpty ? 4.0 : 1.0,
+                        child: Icon(
+                          Icons.add_a_photo,
+                          color: yasRed,
+                          size: controller.photoList.isEmpty ? 50 : 25,
+                        ).paddingAll(4),
+                      ),
+                    ),
+                  ),
+                ),
+                Obx(
+                  () => Visibility(
+                    visible: controller.photoList.isNotEmpty ? true : false,
+                    child: _buildImageList(),
+                  ),
+                )
+              ],
             ),
           ),
-          Obx(() => _buildImageList(context))
         ],
       ).paddingAll(6),
     );
   }
 
-  Widget _buildImageList(BuildContext context) {
-    return Container(
-      height: 500,
-      child: Expanded(
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: controller.photoList.length,
-          itemBuilder: (context, index) {
-            return _buildImageItem(context, index);
-          },
-        ),
+  Widget _buildImageList() {
+    return Expanded(
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: controller.photoList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _buildImageItem(context, index);
+        },
       ),
     );
   }
 
   Widget _buildImageItem(BuildContext context, int index) {
     return Container(
-      width: Get.width - 80,
-      height: Get.height * 0.30,
+      height: double.infinity,
+      alignment: Alignment.center,
+      // width:
+      // (controller.photoList.length == 1) ? Get.width - 60 : Get.width - 220,
       decoration: BoxDecoration(
         color: stdwhite,
         borderRadius: const BorderRadius.all(Radius.circular(5)),
@@ -449,52 +422,40 @@ class SurveyFormVertical extends StatelessWidget {
           color: yasRed,
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Obx(
-            () => InkWell(
-              onTap: () {
-                controller.photoList.removeAt(index);
-              },
-              child: Visibility(
-                visible: controller.photoList[index].isNotEmpty &&
-                        controller.photoList[index] != "dummy"
-                    ? true
-                    : false,
-                child: const Icon(
-                  Icons.delete,
-                  color: yasRed,
-                  size: 25,
-                ).paddingAll(10),
+      child: Obx(
+        () => InkWell(
+          child: Stack(children: [
+            Center(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(5)),
+                child: Image.file(
+                  fit: BoxFit.contain,
+                  File(controller.photoList[index]),
+                ),
               ),
             ),
-          ),
-          Obx(
-            () => InkWell(
-                onTap: () {
-                  controller.takePhoto(context, index);
-                },
-                child: controller.photoList[index].isNotEmpty &&
-                        controller.photoList[index] != "dummy"
-                    ? Center(
-                        child: Image.file(
-                          File(controller.photoList[index]),
-                          height: 100,
-                          width: 100,
-                        ).paddingAll(10),
-                      )
-                    : Center(
-                        heightFactor: 3.0,
-                        child: const Icon(
-                          Icons.image_search,
-                          color: yasRed,
-                          size: 50,
-                        ).paddingAll(10),
-                      )),
-          ),
-        ],
+            Positioned(
+                right: -8,
+                top: -6,
+                child: Obx(
+                  () => InkWell(
+                    onTap: () {
+                      controller.photoList.removeAt(index);
+                    },
+                    child: Visibility(
+                      visible:
+                          controller.photoList[index].isNotEmpty ? true : false,
+                      child: const Icon(
+                        Icons.cancel,
+                        color: Colors.red,
+                        size: 18,
+                      ).paddingAll(10),
+                    ),
+                  ),
+                ))
+          ]),
+        ),
       ),
-    );
+    ).paddingAll(4);
   }
 }

@@ -102,7 +102,7 @@ class WordStrings {
   static const String sfFloorMateriallErr = "Please choose the floor";
   static const String sfSupDirectionlErr =
       "Please enter the supplementary description";
-      static const String surveyFormVerticallLbl = "Vertical measurement table";
+  static const String surveyFormVerticallLbl = "Vertical measurement table";
 
   //Structure drop down
   static const String selectStructure = "Select structure";
@@ -166,8 +166,11 @@ class WordStrings {
   static const String crackLengthLbl = "Cracked Length (M)";
   static const String crackWidthLbl = "Cracked Width (Mm)";
   static const String flawLbl = "Flaw";
+  static const String errLocation = "Please select location";
+  static const String errSituation = "Please enter situation";
+  static const String errFlaw = "Please select flaw";
 
-  // Veritcal Form 
+  // Veritcal Form
   static const String upperPointLbl = "Upper point";
   static const String lowerPointLbl = "Lower point";
   static const String highDifferenceLbl = "High difference";
@@ -176,10 +179,19 @@ class WordStrings {
   static const String tiltValueLbl = "Tilt Value";
   static const String slopeLbl = "Slope";
   static const String diagramLbl = "Diagram";
-  static const String newMeasuringPointNumber = 'New measuring point number';
+  static const String newMeasuringPointNumber = 'Add New';
+  static const String errUpperPointEmpty = "Please enter Upper Point";
+  static const String errLowerPointEmpty = "Please enter Lower Point";
+  static const String errLeftPointEmpty = "Please enter Left Point";
+  static const String errRightPointEmpty = "Please enter Right Point";
 
-  static const String errValidateForm = "Please enter all the required details";
-
+  static const String errUpperPointMustValid =
+      "Lower point should less then upper point";
+  static const String errRightPointMustValid =
+      "Right point should less then left point";
+  static const String errLeftPointMustValid =
+      "Left point should less then right point";
+  static const String errselectDirection = "Please select Tilt Direction";
 
   //Location drop down
   static const String selectLocation = "Select Location";

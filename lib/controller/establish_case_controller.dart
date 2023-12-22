@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/controller/base_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
-import 'package:qulip/models/createcase/vertical_form_model.dart';
 import 'package:qulip/models/createcase/weential_survey_data1_model.dart';
+import 'package:qulip/models/createcase/weential_survey_data2_model.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/dailog_helper.dart';
 
@@ -91,6 +90,10 @@ class EstablishCaseController extends BaseController {
   final _db = FirebaseFirestore.instance;
 
   //Weential Step -3
+  int number = 1;
+  final photoList = <String>[].obs;
+  final addNewDataList = <int>[1].obs;
+  final List<WeentialSurveyData2Model> surveyModelList = [];
   final txtLocation = TextEditingController();
   final txtSituation = TextEditingController();
   final txtCrackLength = TextEditingController();
@@ -98,26 +101,6 @@ class EstablishCaseController extends BaseController {
   final txtTechDescription2 = TextEditingController();
   final selectedLocation = WordStrings.selectLocation.toString().obs;
   final selectedFlaw = WordStrings.selectFlaw.toString().obs;
-
-  RxInt highDifference = 0.obs;
-  RxInt tiltValue = 0.obs;
-  RxDouble slope = 0.0.obs;
-
-  int number = 1;
-
-  final RxList listOfForm = [1].obs;
-
-  final RxList photoList = ["dummy"].obs;
-
-  final RxList listOfVerticalForm = <VerticalFormModel>[].obs;
-
-  // Vertical Form
-  final txtUpperPoint = TextEditingController();
-  final txtLowerPoint = TextEditingController();
-  final txtLeftPoint = TextEditingController();
-  final txtRightPoint = TextEditingController();
-  final txtTechnicalDescription = TextEditingController();
-  final selectedDirection = WordStrings.selectDirection.toString().obs;
 
   final List<String> locationList = [
     WordStrings.selectLocation,
@@ -173,56 +156,6 @@ class EstablishCaseController extends BaseController {
     WordStrings.flawOther
   ];
 
-  void addWidget() {
-    number += 1;
-    listOfForm.add(number);
-  }
-
-  void addImage() {
-    photoList.add("dummy");
-  }
-
-  void addVerticalFormItem(VerticalFormModel item) {
-    listOfVerticalForm.add(item);
-  }
-
-  calculateHighDifference(String upperPoint, String lowerPoint) {
-    if (upperPoint.isNotEmpty && lowerPoint.isNotEmpty) {
-      highDifference.value = (int.parse(upperPoint) - int.parse(lowerPoint));
-    } else {
-      highDifference.value = 0;
-    }
-    calculateSlope(tiltValue.value, highDifference.value);
-  }
-
-  calculateTiltValue(
-      String tiltDirection, String leftPoint, String rightPoint) {
-    if (leftPoint.isNotEmpty && rightPoint.isNotEmpty) {
-      if (tiltDirection.toLowerCase() == "left") {
-        tiltValue.value = int.parse(leftPoint) - int.parse(rightPoint);
-      } else {
-        tiltValue.value = int.parse(rightPoint) - int.parse(leftPoint);
-      }
-    } else {
-      tiltValue.value = 0;
-    }
-    calculateSlope(tiltValue.value, highDifference.value);
-  }
-
-  calculateSlope(int tiltValue, int highDifference) {
-    slope.value = tiltValue / highDifference;
-  }
-
-  performSelectDirection(String value) {
-    selectedDirection.value = value;
-  }
-
-  final List<String> tileDirectionList = [
-    WordStrings.selectDirection,
-    WordStrings.selectLeftDirection,
-    WordStrings.selectRightDirection,
-  ].obs;
-
   //FireStore method
   createCase(EstablishCaseModel caseModel) async {
     await _db
@@ -246,20 +179,6 @@ class EstablishCaseController extends BaseController {
       Get.toNamed(AppRoutes.surveyForm2CreateScreen);
     });
   }
-
-  createVerticalForm(VerticalFormModel formModel) async {
-    await _db
-        .collection("VeritcalForm")
-        .doc("Veritcal Form $number")
-        .set(formModel.toJson())
-        .whenComplete(() {
-      setLoading(false);
-      MySnackBar.successSnackbar("Vertical Form completed");
-      //Get.toNamed(AppRoutes.surveyForm1CreateScreen);
-    });
-  }
-
-  //
 
   //Check validation and store data
   Future<void> storeCaseEstablishData(EstablishCaseModel caseModel) async {
@@ -322,22 +241,45 @@ class EstablishCaseController extends BaseController {
     await createWeentialSurveyDoc1(caseModel);
   }
 
-  Future<void> storeVeritcalFormData(
-      VerticalFormModel caseModel) async {
-
-    setLoading(true);
-    await createVerticalForm(caseModel);
-  }
-
-  Future<void> takePhoto(BuildContext context, int index) async {
+  Future<void> takePhoto(BuildContext context) async {
     DialogBox.selectImage(
       context,
       onComplete: (filePath) async {
         if (filePath.isNotEmpty) {
           debugPrint("FilePath $filePath");
-          photoList[index] = filePath;
+          photoList.add(filePath);
         }
       },
     );
+  }
+
+  void addValidatationForm() {
+    if (selectedLocation.value == WordStrings.selectLocation.toString()) {
+      MySnackBar.errorSnackbar(WordStrings.errLocation);
+      return;
+    }
+
+    if (txtSituation.text.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errSituation);
+      return;
+    }
+
+    if (selectedFlaw.value == WordStrings.selectFlaw.toString()) {
+      MySnackBar.errorSnackbar(WordStrings.errFlaw);
+      return;
+    }
+    number += 1;
+    addNewDataList.add(number);
+    final ws2Model = WeentialSurveyData2Model(
+        wsLocation: selectedLocation.value,
+        wsSituation: txtSituation.text,
+        wsCrackedLength: txtCrackLength.text,
+        wsCrackedWidth: txtCrackWidth.text,
+        wsFlaw: selectedFlaw.value,
+        wsImages: photoList,
+        wsTechDescr: txtTechDescription2.text);
+    surveyModelList.add(ws2Model);
+
+    debugPrint("Himadri >> Weential Model 2 >> ${surveyModelList.toList()}");
   }
 }

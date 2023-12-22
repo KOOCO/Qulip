@@ -398,8 +398,8 @@ class SurveyFormStep1 extends StatelessWidget {
                       wsFloorMaterial: controller.selectedFloor.value,
                       wsTechDescription:
                           controller.txtSupplimentryDesc.value.text);
-                  // Get.toNamed(AppRoutes.surveyForm2CreateScreen);
-                  controller.storeWeentialStep1Data(caseModel);
+                  Get.toNamed(AppRoutes.surveyForm2CreateScreen);
+                  // controller.storeWeentialStep1Data(caseModel);
                 },
               )
             ],
