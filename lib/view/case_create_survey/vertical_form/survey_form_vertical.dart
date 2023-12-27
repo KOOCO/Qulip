@@ -99,9 +99,7 @@ class SurveyFormVertical extends StatelessWidget {
             ),
             height: Get.height * 0.05,
             borderRadius: 2,
-            onTap: () async {
-              //controller.storeVeritcalFormData(controller.listOfVerticalForm);
-            },
+            onTap: () async {},
           )
               .paddingOnly(top: 20.h)
               .paddingSymmetric(horizontal: 20)
@@ -124,7 +122,6 @@ class SurveyFormVertical extends StatelessWidget {
         controller.txtTechnicalDescription.text.toString().isNotEmpty &&
         (controller.photoList.isNotEmpty &&
             controller.photoList.first != "dummy")) {
-      
       controller.addVerticalFormItem(VerticalFormModel(
           upperPoint: controller.txtUpperPoint.text.toString(),
           lowerPoint: controller.txtLowerPoint.text.toString(),
@@ -140,7 +137,8 @@ class SurveyFormVertical extends StatelessWidget {
       controller.txtUpperPoint.clear();
       controller.txtLowerPoint.clear();
       controller.highDifference.value = 0;
-      controller.selectedDirection.value = WordStrings.selectDirection.toString();
+      controller.selectedDirection.value =
+          WordStrings.selectDirection.toString();
       controller.txtLeftPoint.clear();
       controller.txtRightPoint.clear();
       controller.tiltValue.value = 0;
@@ -149,7 +147,7 @@ class SurveyFormVertical extends StatelessWidget {
       controller.photoList.clear();
 
       controller.addWidget();
-      
+
       debugPrint(controller.listOfForm.length.toString());
     } else {
       MySnackBar.successSnackbar(WordStrings.errValidateForm);
