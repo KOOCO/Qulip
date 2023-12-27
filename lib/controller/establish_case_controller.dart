@@ -156,32 +156,8 @@ class EstablishCaseController extends BaseController {
     WordStrings.flawOther
   ];
 
-  //FireStore method
-  createCase(EstablishCaseModel caseModel) async {
-    await _db
-        .collection("case_survey")
-        .doc(caseModel.id)
-        .set(caseModel.toJson())
-        .whenComplete(() {
-      setLoading(false);
-      // MySnackBar.successSnackbar("Step 1 completed");
-      Get.toNamed(AppRoutes.surveyForm1CreateScreen);
-    });
-  }
-
-  createWeentialSurveyDoc1(WeentialSurveyData1Model wsDataModel) async {
-    await _db
-        .collection("WeentialSurveyForm")
-        .add(wsDataModel.toJson())
-        .whenComplete(() {
-      setLoading(false);
-      MySnackBar.successSnackbar("Step 2 completed");
-      Get.toNamed(AppRoutes.surveyForm2CreateScreen);
-    });
-  }
-
   //Check validation and store data
-  Future<void> storeCaseEstablishData(EstablishCaseModel caseModel) async {
+  Future<void> storeCaseEstablishData() async {
     if (txtCaseName.text.isEmpty) {
       MySnackBar.errorSnackbar(WordStrings.errCaseName);
       return;
@@ -206,12 +182,13 @@ class EstablishCaseController extends BaseController {
       MySnackBar.errorSnackbar(WordStrings.errCaseWeather);
       return;
     }
-    setLoading(true);
-    await createCase(caseModel);
+
+    Get.toNamed(AppRoutes.surveyForm1CreateScreen);
+    // setLoading(true);
+    // await createCase(caseModel);
   }
 
-  Future<void> storeWeentialStep1Data(
-      WeentialSurveyData1Model caseModel) async {
+  Future<void> storeWeentialStep1Data(EstablishCaseModel caseModel) async {
     if (selectedStructure.value == WordStrings.selectStructure.toString()) {
       MySnackBar.errorSnackbar(WordStrings.errStructure);
       return;
@@ -238,7 +215,29 @@ class EstablishCaseController extends BaseController {
     }
 
     setLoading(true);
-    await createWeentialSurveyDoc1(caseModel);
+    await createCase(caseModel);
+  }
+
+  createCase(EstablishCaseModel caseModel) async {
+    await _db
+        .collection("case_survey")
+        .doc(caseModel.id)
+        .set(caseModel.toJson())
+        .whenComplete(() {
+      setLoading(false);
+      Get.toNamed(AppRoutes.surveyForm2CreateScreen);
+    });
+  }
+
+  createWeentialSurveyDoc1(WeentialSurveyData1Model wsDataModel) async {
+    await _db
+        .collection("case_survey/A1234_173885/weential_survey_data/")
+        .add(wsDataModel.toJson())
+        .whenComplete(() {
+      setLoading(false);
+      MySnackBar.successSnackbar("Step 2 completed");
+      Get.toNamed(AppRoutes.surveyForm2CreateScreen);
+    });
   }
 
   Future<void> takePhoto(BuildContext context) async {

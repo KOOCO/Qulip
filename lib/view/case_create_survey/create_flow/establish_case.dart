@@ -123,16 +123,15 @@ class CreateCaseScreen extends StatelessWidget {
               height: Get.height * 0.05,
               borderRadius: 2,
               onTap: () async {
-                final caseModel = EstablishCaseModel(
-                    id: "${controller.txtCaseName.value.text}_${getCaseNumber()}",
-                    userId: StorageHelper.read(StorageKeys.userId).toString(),
-                    caseName: controller.txtCaseName.value.text,
-                    caseAddress: controller.txtCaseAddress.value.text,
-                    caseDate: controller.txtCaseDate.value.text,
-                    caseEquipmentNo: controller.txtCaseEquipmentName.value.text,
-                    caseWeather: controller.txtCaseWeather.value.text);
-                Get.toNamed(AppRoutes.surveyForm1CreateScreen);
-                // controller.storeCaseEstablishData(caseModel);
+                // final caseModel = EstablishCaseModel(
+                //     id: "${controller.txtCaseName.value.text}_${getCaseNumber()}",
+                //     userId: StorageHelper.read(StorageKeys.userId).toString(),
+                //     caseName: controller.txtCaseName.value.text,
+                //     caseAddress: controller.txtCaseAddress.value.text,
+                //     caseDate: controller.txtCaseDate.value.text,
+                //     caseEquipmentNo: controller.txtCaseEquipmentName.value.text,
+                //     caseWeather: controller.txtCaseWeather.value.text);
+                controller.storeCaseEstablishData();
               },
             ).paddingOnly(top: Get.height * 0.04),
           ],
