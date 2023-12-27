@@ -1,101 +1,75 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:qulip/common/snack.dart';
-import 'package:qulip/common/strings.dart';
 import 'package:qulip/controller/base_controller.dart';
-import 'package:qulip/models/createcase/vertical/vertical_form_model.dart';
+import 'package:qulip/models/createcase/horizontal/horizontal_mesurement_datamodel.dart';
 import 'package:qulip/utils/dailog_helper.dart';
+import 'package:path/path.dart' as Path;
 
-class VerticalCaseController extends BaseController {
-  static VerticalCaseController get instance => Get.find();
-
-  final sDate = DateTime.now();
+class HorizontalCaseController extends BaseController {
+  static HorizontalCaseController get instance => Get.find();
   final _db = FirebaseFirestore.instance;
-
-  int number = 1;
-
-  final formList = <int>[1].obs;
   final photoList = <String>[].obs;
-  final List<VerticalFormModel> verticalDataList = [];
-  // Vertical Form
-  final txtUpperPoint = TextEditingController();
-  final txtLowerPoint = TextEditingController();
-  final txtLeftPoint = TextEditingController();
-  final txtRightPoint = TextEditingController();
-  final txtTechnicalDescription = TextEditingController();
-  final selectedDirection = WordStrings.selectDirection.toString().obs;
+  var finalList = <HorizontalDataModel>[].obs;
 
-  Future<void> takePhoto(BuildContext context) async {
+  Future<void> takePhoto(BuildContext context, int index) async {
     DialogBox.selectImage(
       context,
       onComplete: (filePath) async {
         if (filePath.isNotEmpty) {
+          setLoading(true);
           debugPrint("FilePath $filePath");
-          photoList.add(filePath);
+          final uFile = File(filePath);
+          uploadImage(uFile, index).then((url) {
+            setLoading(false);
+            finalList[index].imageUri = url;
+            photoList[index] = url!;
+            debugPrint("Himadri : Download url>> $index >>> $url");
+          });
         }
       },
     );
   }
 
-  void checkValidation() {
-    if (txtUpperPoint.text.isEmpty) {
-      MySnackBar.errorSnackbar(WordStrings.errUpperPointEmpty);
-      return;
-    }
+  Future<String?> uploadImage(File pickedImg, int index) async {
+    var imageName =
+        "${finalList[index].mesuringPoint!}_${DateTime.now().millisecondsSinceEpoch}";
+    var ref = FirebaseStorage.instance
+        .ref()
+        .child('horizontal_survey')
+        .child("$imageName.jpg");
+    await ref.putFile(pickedImg);
 
-    if (txtLowerPoint.text.isEmpty) {
-      MySnackBar.errorSnackbar(WordStrings.errLowerPointEmpty);
-      return;
-    }
-    if (selectedDirection.value == WordStrings.selectDirection.toString()) {
-      MySnackBar.errorSnackbar(WordStrings.errselectDirection);
-      return;
-    }
-
-    if (txtLeftPoint.text.isEmpty) {
-      MySnackBar.errorSnackbar(WordStrings.errLeftPointEmpty);
-      return;
-    }
-
-    if (txtRightPoint.text.isEmpty) {
-      MySnackBar.errorSnackbar(WordStrings.errRightPointEmpty);
-      return;
-    }
-
-    number += 1;
-    formList.add(number);
-
-    // final verticalModel = VerticalFormModel(
-    //     upperPoint: txtUpperPoint.text,
-    //     lowerPoint: txtLowerPoint.text,
-    //     highDifference: highDifference.value,
-    //     titlDirection: selectedDirection.value,
-    //     leftPoint: txtLeftPoint.text,
-    //     rightPoint: txtRightPoint.text,
-    //     tiltValue: tiltValue.value,
-    //     slope: slope.value,
-    //     description: txtTechnicalDescription.text,
-    //     filePath: photoList);
-    // verticalDataList.add(verticalModel);
-
-    // debugPrint("Himadri >> Vertical data >>${verticalDataList.toList()}");
+    return await ref.getDownloadURL();
   }
 
-  createVerticalForm(VerticalFormModel formModel) async {
-    await _db
-        .collection("VeritcalForm")
-        .doc("Veritcal Form $number")
-        .set(formModel.toJson())
-        .whenComplete(() {
-      setLoading(false);
-      MySnackBar.successSnackbar("Vertical Form completed");
-      //Get.toNamed(AppRoutes.surveyForm1CreateScreen);
-    });
+  Future<void> deleteImage(String imageFileUrl) async {
+    String fileUrl = Uri.decodeFull(Path.basename(imageFileUrl))
+        .replaceAll(RegExp(r'(\?alt).*'), '');
+    var ref = FirebaseStorage.instance.ref().child(fileUrl);
+
+    await ref.delete();
   }
 
-  Future<void> storeVeritcalFormData(VerticalFormModel caseModel) async {
+  Future<void> storeHorizontalFormData(List<HorizontalDataModel> list) async {
     setLoading(true);
-    await createVerticalForm(caseModel);
+    await createHorizontalForm(list);
+  }
+
+  createHorizontalForm(List<HorizontalDataModel> list) async {
+    for (var i = 0; i < list.length; i++) {
+      var currentElement = list[i];
+      await _db
+          .collection("horizontal_data")
+          // .doc("Veritcal Form $number")
+          .add(currentElement.toJson())
+          .whenComplete(() {
+        setLoading(false);
+        photoList.clear();
+      });
+    }
   }
 }

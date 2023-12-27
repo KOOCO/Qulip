@@ -1,28 +1,34 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
+import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_button.dart';
-import 'package:qulip/common/widgets/my_dropdown_area.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
 import 'package:qulip/controller/horizontal_case_controller.dart';
-import 'package:qulip/utils/text_style_helper.dart';
+import 'package:qulip/models/createcase/horizontal/horizontal_mesurement_datamodel.dart';
+import 'package:qulip/routes/app_routes.dart';
 
 class HorizontalMeasurement1 extends StatelessWidget {
   HorizontalMeasurement1({super.key});
 
   final controller = Get.put(HorizontalCaseController());
-  DateTime sDate = DateTime.now();
-  RxString enteredTechDesc = ''.obs;
-  final isImageSelect = false.obs;
+  var dataObj = HorizontalDataModel(
+      mesuringPoint: "BM",
+      backView: "",
+      forwardView: "",
+      hypothesis: "",
+      levelElevation: 0,
+      imageUri: "");
+  final tempList = <HorizontalDataModel>[].obs;
+  // var levelElv = 0.obs;
 
   @override
   Widget build(BuildContext context) {
+    tempList.add(dataObj);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: stdwhite,
@@ -73,11 +79,11 @@ class HorizontalMeasurement1 extends StatelessWidget {
             height: Get.height * 0.05,
             borderRadius: 2,
             onTap: () async {
-              controller.checkValidation();
+              addmoreItem();
             },
           ).paddingAll(10),
           MyButton(
-            label: WordStrings.establishLbl,
+            label: WordStrings.nextLbl,
             style: const TextStyle(
               color: whiteTxt,
               fontWeight: FontWeight.bold,
@@ -94,7 +100,10 @@ class HorizontalMeasurement1 extends StatelessWidget {
             ),
             height: Get.height * 0.05,
             borderRadius: 2,
-            onTap: () async {},
+            onTap: () async {
+              controller.finalList.value = tempList.map((v) => v).toList();
+              Get.toNamed(AppRoutes.horizontalCase2Screen);
+            },
           ).paddingAll(10).marginOnly(bottom: 10),
         ],
       ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 12.w),
@@ -104,15 +113,15 @@ class HorizontalMeasurement1 extends StatelessWidget {
   Widget _buildListView(BuildContext context) {
     return Expanded(
       child: ListView.builder(
-        itemCount: controller.formList.length,
+        itemCount: tempList.length,
         itemBuilder: (context, index) {
-          return _buildList(context, controller.formList[index]);
+          return _buildList(context, index);
         },
       ),
     );
   }
 
-  Widget _buildList(BuildContext context, int number) {
+  Widget _buildList(BuildContext context, int index) {
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -128,18 +137,18 @@ class HorizontalMeasurement1 extends StatelessWidget {
             color: yasRed,
           ),
           title: MyText(
-            "Number $number",
+            "Number ${index + 1}",
             fontFamily: FontFamilyConstant.sinkinSans,
             fontSize: 14,
             fontColor: yasRed,
           ),
-          children: [_buildItem(context)],
+          children: [_buildItem(context, index)],
         ),
       ),
     );
   }
 
-  Widget _buildItem(BuildContext context) {
+  Widget _buildItem(BuildContext context, int index) {
     return Container(
       decoration: const BoxDecoration(
         color: cardBg,
@@ -148,18 +157,33 @@ class HorizontalMeasurement1 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          const MyText(
+            WordStrings.sfMesuringPointLbl,
+            fontWeight: FontWeight.w400,
+            fontFamily: FontFamilyConstant.sinkinSansMedium,
+            fontColor: yasRed,
+          ).paddingOnly(left: 2, right: 2, bottom: 4),
+          MyText(
+            tempList[index].mesuringPoint!,
+            fontWeight: FontWeight.bold,
+            fontFamily: FontFamilyConstant.sinkinSansMedium,
+            fontColor: yasRed,
+          ).paddingOnly(left: 2, right: 2, bottom: 4),
+          const SizedBox(
+            height: 15,
+          ),
           MyTextField(
             onSubmit: (value) {
               if (value.isNotEmpty) {
-                controller.calculateHighDifference();
+                tempList[index].backView = value;
               }
             },
             fullBorder: true,
             hasFloatingLabel: false,
-            controller: controller.txtUpperPoint,
+            controller: TextEditingController(text: tempList[index].backView),
             keyboard: TextInputType.number,
-            labelText: WordStrings.upperPointLbl,
-            hintText: WordStrings.upperPointLbl,
+            labelText: WordStrings.sfBackwardViewLbl,
+            hintText: WordStrings.sfBackwardViewLbl,
           ),
           const SizedBox(
             height: 15,
@@ -167,293 +191,138 @@ class HorizontalMeasurement1 extends StatelessWidget {
           MyTextField(
             onSubmit: (value) {
               if (value.isNotEmpty) {
-                controller.calculateHighDifference();
+                tempList[index].forwardView = value;
+                if (index >= 1) {
+                  tempList[index].levelElevation =
+                      tempList[index - 1].levelElevation;
+                  tempList[index].hypothesis =
+                      calculateHypo(tempList[index]).toString();
+                  tempList[index] = dataObj;
+                  debugPrint(
+                      "Himadri >> Level hypo ${tempList[index].hypothesis} >>$index");
+                }
               }
             },
             fullBorder: true,
             hasFloatingLabel: false,
-            controller: controller.txtLowerPoint,
+            controller:
+                TextEditingController(text: tempList[index].forwardView),
             keyboard: TextInputType.number,
-            labelText: WordStrings.lowerPointLbl,
-            hintText: WordStrings.lowerPointLbl,
+            labelText: WordStrings.sfForwardViewLbl,
+            hintText: WordStrings.sfForwardViewLbl,
           ),
           const SizedBox(
             height: 15,
+          ),
+          Visibility(
+            visible: (index < 1) ? true : false,
+            child: MyTextField(
+              onSubmit: (value) {
+                if (value.isNotEmpty) {
+                  tempList[index].hypothesis = value;
+                  // levelElv.value = calculateLevelElevation(tempList[index]);
+                  tempList[index].levelElevation =
+                      calculateLevelElevation(tempList[index]);
+                  tempList[index] = dataObj;
+                  debugPrint(
+                      "Himadri >> Level Elevation ${tempList[index].levelElevation} >> $index");
+                }
+              },
+              fullBorder: true,
+              hasFloatingLabel: false,
+              controller: TextEditingController(
+                  text: tempList[index].hypothesis.toString()),
+              keyboard: TextInputType.number,
+              labelText: WordStrings.sfHypothesisLbl,
+              hintText: WordStrings.sfHypothesisLbl,
+            ),
           ),
           Obx(
             () => MyText(
-              "${WordStrings.highDifferenceLbl} : ${controller.highDifference}",
+              "${WordStrings.sfLevelElevationLbl} : ${tempList[index].levelElevation}",
               fontWeight: FontWeight.w600,
               fontFamily: FontFamilyConstant.sinkinSansMedium,
               fontColor: stdBlack,
             ).paddingOnly(left: 6, right: 2),
           ),
-          const SizedBox(
-            height: 15,
-          ),
-          Obx(() => Container(
-                height: 35.h,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: stdwhite,
-                  borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  border: Border.all(
-                    width: 0.5,
-                    color: yasRed,
-                  ),
-                  boxShadow: const [
-                    BoxShadow(
-                      blurRadius: 2,
-                      color: yasRed,
-                    )
-                  ],
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: MyDropDownArea(
-                    iconColor: lightGrey,
-                    isExpanded: false,
-                    items: controller.tileDirectionList.map((element) {
-                      return DropdownMenuItem<String>(
-                        value: element,
-                        child: MyText(
-                          element,
-                          fontStyle: MyTextTheme14Normal.black(),
-                        ),
-                      );
-                    }).toList(),
-                    selectedItemBuilder: (context) {
-                      return controller.tileDirectionList
-                          .map(
-                            (element) => Container(
-                              height: 25,
-                              alignment: Alignment.centerLeft,
-                              child: MyText(
-                                element,
-                                fontStyle: MyTextTheme14Normal.black(),
-                              ),
-                            ),
-                          )
-                          .toList();
-                    },
-                    value: controller.selectedDirection.value,
-                    onchange: (value) {
-                      if (value != null) {
-                        controller.selectedDirection.value = value;
-                      }
-                    },
-                  ),
-                ),
-              )),
-          const SizedBox(
-            height: 15,
-          ),
-          MyTextField(
-            fullBorder: true,
-            hasFloatingLabel: false,
-            controller: controller.txtLeftPoint,
-            keyboard: TextInputType.number,
-            labelText: WordStrings.leftPointLbl,
-            hintText: WordStrings.leftPointLbl,
-            onSubmit: (value) {
-              controller.calculateTiltValue();
-            },
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          MyTextField(
-            fullBorder: true,
-            hasFloatingLabel: false,
-            controller: controller.txtRightPoint,
-            keyboard: TextInputType.number,
-            labelText: WordStrings.rightPointLbl,
-            hintText: WordStrings.rightPointLbl,
-            onSubmit: (value) {
-              controller.calculateTiltValue();
-            },
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Obx(
-                () => MyText(
-                  "${WordStrings.tiltValueLbl} : ${controller.tiltValue}",
-                  fontWeight: FontWeight.w600,
-                  fontFamily: FontFamilyConstant.sinkinSansMedium,
-                  fontColor: stdBlack,
-                ).paddingOnly(left: 6),
-              ),
-              Obx(
-                () => MyText(
-                  "${WordStrings.slopeLbl} : ${controller.slope}",
-                  fontWeight: FontWeight.w600,
-                  fontFamily: FontFamilyConstant.sinkinSansMedium,
-                  fontColor: stdBlack,
-                ).paddingOnly(right: 6),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          const MyText(
-            WordStrings.diagramLbl,
-            fontWeight: FontWeight.w400,
-            fontFamily: FontFamilyConstant.sinkinSansMedium,
-            fontColor: stdBlack,
-          ).paddingOnly(left: 2, right: 2, bottom: 4),
-          const SizedBox(
-            height: 200,
-          ),
-          const MyText(
-            WordStrings.sfDescriptionLbl,
-            fontWeight: FontWeight.w400,
-            fontFamily: FontFamilyConstant.sinkinSansMedium,
-            fontColor: yasRed,
-          ).paddingOnly(left: 2, right: 2, bottom: 4),
-          TextField(
-            controller: controller.txtTechnicalDescription,
-            maxLength: 50,
-            maxLines: 3,
-            cursorColor: yasRed,
-            onChanged: (value) {
-              enteredTechDesc.value = value;
-            },
-            decoration: InputDecoration(
-                alignLabelWithHint: true,
-                floatingLabelBehavior: FloatingLabelBehavior.never,
-                enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: yasRed),
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                ),
-                border: const OutlineInputBorder(
-                  borderSide: BorderSide(color: yasRed),
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                ),
-                focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: yasRed),
-                ),
-                floatingLabelStyle: const TextStyle(color: yasRed),
-                labelText: WordStrings.sfDescriptionHint,
-                labelStyle: const TextStyle(fontSize: 14, color: stdgrey),
-                hintText: '',
-                counterText: '${enteredTechDesc.value.length.toString()}/ 50',
-                counterStyle: const TextStyle(fontSize: 12, color: yasRed)),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Container(
-            width: double.infinity,
-            height: Get.height * 0.30,
-            decoration: BoxDecoration(
-              color: stdwhite,
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
-              border: Border.all(
-                width: 1,
-                color: yasRed,
-              ),
+          Visibility(
+            visible: (index >= 1) ? true : false,
+            child: const SizedBox(
+              height: 15,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Obx(
-                  () => InkWell(
-                    onTap: () {
-                      controller.takePhoto(context);
-                    },
-                    child: Visibility(
-                      child: Align(
-                        alignment: controller.photoList.isEmpty
-                            ? Alignment.center
-                            : Alignment.topRight,
-                        heightFactor: controller.photoList.isEmpty ? 4.0 : 1.0,
-                        child: Icon(
-                          Icons.add_a_photo,
-                          color: yasRed,
-                          size: controller.photoList.isEmpty ? 50 : 25,
-                        ).paddingAll(4),
-                      ),
-                    ),
-                  ),
-                ),
-                Obx(
-                  () => Visibility(
-                    visible: controller.photoList.isNotEmpty ? true : false,
-                    child: _buildImageList(),
-                  ),
-                )
-              ],
+          ),
+          Obx(
+            () => Visibility(
+              visible: (index >= 1) ? true : false,
+              child: MyText(
+                "${WordStrings.sfHypothesisLbl} : ${tempList[index].hypothesis!.isEmpty ? 0 : tempList[index].hypothesis}",
+                fontWeight: FontWeight.w600,
+                fontFamily: FontFamilyConstant.sinkinSansMedium,
+                fontColor: stdBlack,
+              ).paddingOnly(left: 6, right: 2),
             ),
+          ),
+          const SizedBox(
+            height: 15,
           ),
         ],
       ).paddingAll(6),
     );
   }
 
-  Widget _buildImageList() {
-    return Expanded(
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: controller.photoList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return _buildImageItem(context, index);
-        },
-      ),
-    );
+  void addmoreItem() {
+    debugPrint("Himadri >> List size ?? ${tempList.length}");
+    final index = tempList.length - 1;
+    if (tempList[index].backView!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errBackwardViewEmpty);
+      return;
+    }
+
+    if (tempList[index].forwardView!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errForwardViewEmpty);
+      return;
+    }
+
+    if (tempList[index].hypothesis!.isEmpty && index < 1) {
+      MySnackBar.errorSnackbar(WordStrings.errHypothesisEmpty);
+      return;
+    }
+
+    tempList[index] = dataObj;
+    debugPrint("Himadri >> OldObj >> ${dataObj.toJson()}");
+    dataObj = HorizontalDataModel(
+        mesuringPoint:
+            (tempList.length == 1) ? "BM1" : "TP${tempList.length - 1}",
+        backView: "",
+        forwardView: "",
+        hypothesis: "",
+        levelElevation: 0,
+        imageUri: "");
+    debugPrint("Himadri >> NewObj >> ${dataObj.toJson()}");
+    tempList.add(dataObj);
   }
 
-  Widget _buildImageItem(BuildContext context, int index) {
-    return Container(
-      height: double.infinity,
-      alignment: Alignment.center,
-      // width:
-      // (controller.photoList.length == 1) ? Get.width - 60 : Get.width - 220,
-      decoration: BoxDecoration(
-        color: stdwhite,
-        borderRadius: const BorderRadius.all(Radius.circular(5)),
-        border: Border.all(
-          width: 1,
-          color: yasRed,
-        ),
-      ),
-      child: Obx(
-        () => InkWell(
-          child: Stack(children: [
-            Center(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(5)),
-                child: Image.file(
-                  fit: BoxFit.contain,
-                  File(controller.photoList[index]),
-                ),
-              ),
-            ),
-            Positioned(
-                right: -8,
-                top: -6,
-                child: Obx(
-                  () => InkWell(
-                    onTap: () {
-                      controller.photoList.removeAt(index);
-                    },
-                    child: Visibility(
-                      visible:
-                          controller.photoList[index].isNotEmpty ? true : false,
-                      child: const Icon(
-                        Icons.cancel,
-                        color: Colors.red,
-                        size: 18,
-                      ).paddingAll(10),
-                    ),
-                  ),
-                ))
-          ]),
-        ),
-      ),
-    ).paddingAll(4);
+  int calculateHypo(HorizontalDataModel data) {
+    final forwardValue = data.forwardView;
+    final levelElevation = data.levelElevation;
+    if (forwardValue!.isNotEmpty) {
+      final fValue = int.parse(forwardValue);
+      final result = levelElevation - fValue;
+      return result;
+    } else {
+      return 0;
+    }
+  }
+
+  int calculateLevelElevation(HorizontalDataModel data) {
+    final backwardValue = data.backView;
+    final hypoValue = data.hypothesis;
+    if (backwardValue!.isNotEmpty && hypoValue!.isNotEmpty) {
+      final bValue = int.parse(backwardValue);
+      final hValue = int.parse(hypoValue);
+      return bValue + hValue;
+    } else {
+      return 0;
+    }
   }
 }

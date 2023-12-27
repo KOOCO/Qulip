@@ -124,7 +124,7 @@ class HomeScreen extends StatelessWidget {
                           fontColor: stdgrey,
                         ),
                         MyText(
-                          'Himadri',
+                          '測試員',
                           fontWeight: FontWeight.w600,
                           fontFamily: FontFamilyConstant.sinkinSansMedium,
                           fontSize: 14,
@@ -200,7 +200,7 @@ class HomeScreen extends StatelessWidget {
                 height: Get.height * 0.06,
                 borderRadius: 2,
                 onTap: () async {
-                  Get.toNamed(AppRoutes.horizontalCase1Screen);
+                  Get.toNamed(AppRoutes.caseCreateScreen);
                 },
               ).paddingSymmetric(horizontal: 20, vertical: 10),
               MyButtonWithIcon(
@@ -224,8 +224,7 @@ class HomeScreen extends StatelessWidget {
                 height: Get.height * 0.06,
                 borderRadius: 2,
                 onTap: () async {
-                  Get.toNamed(AppRoutes.surveyFormVerticalScreen);
-                  // Get.toNamed(AppRoutes.caseListScreen);
+                  Get.toNamed(AppRoutes.caseListScreen);
                 },
               ).paddingSymmetric(horizontal: 20, vertical: 5),
               MyButtonWithIcon(

@@ -159,12 +159,12 @@ class EstablishCaseController extends BaseController {
   //FireStore method
   createCase(EstablishCaseModel caseModel) async {
     await _db
-        .collection("CaseSurvey")
+        .collection("case_survey")
         .doc(caseModel.id)
         .set(caseModel.toJson())
         .whenComplete(() {
       setLoading(false);
-      MySnackBar.successSnackbar("Step 1 completed");
+      // MySnackBar.successSnackbar("Step 1 completed");
       Get.toNamed(AppRoutes.surveyForm1CreateScreen);
     });
   }

@@ -17,9 +17,7 @@ class VerticalMeasurement1 extends StatelessWidget {
   VerticalMeasurement1({super.key});
 
   final controller = Get.put(VerticalCaseController());
-  DateTime sDate = DateTime.now();
   RxString enteredTechDesc = ''.obs;
-  final isImageSelect = false.obs;
 
   @override
   Widget build(BuildContext context) {

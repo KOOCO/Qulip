@@ -146,7 +146,7 @@ class LoginController extends BaseController {
   //FireStore method
   storeUserInDb(UserDBModel uModel) async {
     await _db
-        .collection("User")
+        .collection("user")
         .add(uModel.toJson())
         .then((value) => StorageHelper.write(StorageKeys.userId, value.id))
         .whenComplete(() {
