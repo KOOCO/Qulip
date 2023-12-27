@@ -100,7 +100,7 @@ class SurveyFormVertical extends StatelessWidget {
             height: Get.height * 0.05,
             borderRadius: 2,
             onTap: () async {
-              
+              //controller.storeVeritcalFormData(controller.listOfVerticalForm);
             },
           )
               .paddingOnly(top: 20.h)
