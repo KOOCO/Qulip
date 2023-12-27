@@ -27,8 +27,8 @@ class SurveyFormStep1 extends StatelessWidget {
         backgroundColor: stdwhite,
         foregroundColor: yasRed,
         centerTitle: true,
-        title: const MyText(
-          WordStrings.surveyFormCreatelLbl,
+        title: MyText(
+          "${controller.txtCaseName.text}_${WordStrings.surveyFormCreatelLbl}",
           fontFamily: FontFamilyConstant.sinkinSans,
           fontSize: 18,
           fontColor: yasRed,
