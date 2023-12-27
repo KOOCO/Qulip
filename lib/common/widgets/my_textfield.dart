@@ -36,6 +36,7 @@ class MyTextField extends StatelessWidget {
     this.autovalidateMode = AutovalidateMode.disabled,
     this.fontSize = 12,
     this.onChanged,
+    this.onSubmit,
     this.colorFilled = false,
     this.hintcolor = stdgrey,
     this.labelcolor = stdgrey,
@@ -71,6 +72,7 @@ class MyTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final double? fontSize;
   final Function(String)? onChanged;
+  final Function(String)? onSubmit;
   final bool? colorFilled;
   final bool readOnly;
 
@@ -81,6 +83,7 @@ class MyTextField extends StatelessWidget {
       validator: validator,
       expands: expand,
       onChanged: onChanged,
+      onFieldSubmitted: onSubmit,
       minLines: minLine,
       maxLines: maxLine,
       readOnly: readOnly,
@@ -93,6 +96,7 @@ class MyTextField extends StatelessWidget {
       keyboardType: keyboard,
       maxLength: maxLength,
       inputFormatters: inputFormatters,
+      textInputAction: TextInputAction.next,
       autofocus: autofocus,
       style: const TextStyle(fontFamily: FontFamilyConstant.sinkinSans),
       decoration: InputDecoration(

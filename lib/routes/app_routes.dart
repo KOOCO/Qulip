@@ -11,4 +11,6 @@ class AppRoutes {
   static const surveyForm1CreateScreen = '/surveyForm1CreateScreen';
   static const surveyForm2CreateScreen = '/surveyForm2CreateScreen';
   static const surveyFormVerticalScreen = '/surveyFormVerticalScreen';
+  static const horizontalCase1Screen = '/horizontalCase1Screen';
+  static const horizontalCase2Screen = '/horizontalCase2Screen';
 }
