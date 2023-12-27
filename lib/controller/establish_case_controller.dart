@@ -229,7 +229,7 @@ class EstablishCaseController extends BaseController {
     });
   }
 
-  createWeentialSurveyDoc1(WeentialSurveyData1Model wsDataModel) async {
+  createWeentialSurveyDoc1(EstablishCaseModel wsDataModel) async {
     await _db
         .collection("case_survey/A1234_173885/weential_survey_data/")
         .add(wsDataModel.toJson())
