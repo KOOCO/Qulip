@@ -7,17 +7,17 @@ import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_button_with_icon.dart';
 import 'package:qulip/common/widgets/my_text.dart';
-import 'package:qulip/controller/login_controller.dart';
-import 'package:toggle_switch/toggle_switch.dart';
+import 'package:qulip/controller/case_list_controller.dart';
 
 class CaseDetailScreen extends StatelessWidget {
   CaseDetailScreen({super.key});
 
-  final controller = Get.put(LoginController());
+  final controller = Get.put(CaseListController());
   // List<String> list = ["Himadri", "Viral", "Sunny", "Ruhi", "Ridham"];
 
   @override
   Widget build(BuildContext context) {
+    controller.getData();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: stdwhite,
