@@ -3,15 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
-import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_dropdown_area.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
+import 'package:qulip/models/createcase/weential_survey_data2_model.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/text_style_helper.dart';
 
@@ -73,7 +74,7 @@ class SurveyFormStep2 extends StatelessWidget {
             height: Get.height * 0.05,
             borderRadius: 2,
             onTap: () async {
-              controller.addValidatationForm();
+              controller.addSurveyForm2ValidatationForm();
             },
           ).paddingAll(10),
           MyButton(
@@ -95,7 +96,17 @@ class SurveyFormStep2 extends StatelessWidget {
             height: Get.height * 0.05,
             borderRadius: 2,
             onTap: () async {
-              Get.toNamed(AppRoutes.surveyFormVerticalScreen);
+              var dataWeentialSurveyData2 = WeentialSurveyData2Model(
+                id:"Weentail Survey Form 2",
+                wsLocation: controller.selectedLocation.value,
+                wsSituation: controller.txtSituation.value.text,
+                wsCrackedLength: controller.txtCrackLength.value.text,
+                wsCrackedWidth: controller.txtCrackWidth.value.text,
+                wsFlaw: controller.selectedFlaw.value,
+                wsTechDescr: controller.txtTechDesc.value.text,
+                wsImages: controller.photoList
+              );
+              controller.storeSurveyForm2ValidatationForm(dataWeentialSurveyData2);
             },
           ).paddingAll(10).marginOnly(bottom: 10),
         ],
@@ -323,6 +334,7 @@ class SurveyFormStep2 extends StatelessWidget {
             fontColor: yasRed,
           ).paddingOnly(left: 2, right: 2, bottom: 4),
           TextField(
+            controller: controller.txtTechDesc,
             maxLength: 50,
             maxLines: 3,
             cursorColor: yasRed,

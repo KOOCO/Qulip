@@ -5,7 +5,6 @@ import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/controller/base_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
-import 'package:qulip/models/createcase/weential_survey_data1_model.dart';
 import 'package:qulip/models/createcase/weential_survey_data2_model.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/dailog_helper.dart';
@@ -101,6 +100,7 @@ class EstablishCaseController extends BaseController {
   final txtTechDescription2 = TextEditingController();
   final selectedLocation = WordStrings.selectLocation.toString().obs;
   final selectedFlaw = WordStrings.selectFlaw.toString().obs;
+  final txtTechDesc = TextEditingController();
 
   final List<String> locationList = [
     WordStrings.selectLocation,
@@ -252,7 +252,7 @@ class EstablishCaseController extends BaseController {
     );
   }
 
-  void addValidatationForm() {
+  addSurveyForm2ValidatationForm(){
     if (selectedLocation.value == WordStrings.selectLocation.toString()) {
       MySnackBar.errorSnackbar(WordStrings.errLocation);
       return;
@@ -263,10 +263,26 @@ class EstablishCaseController extends BaseController {
       return;
     }
 
+    if (txtCrackLength.text.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errCrackLength);
+      return;
+    }
+
+    if (txtCrackWidth.text.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errCrackWidth);
+      return;
+    }
+
     if (selectedFlaw.value == WordStrings.selectFlaw.toString()) {
       MySnackBar.errorSnackbar(WordStrings.errFlaw);
       return;
     }
+
+    if (txtTechDesc.text.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errTechDesc);
+      return;
+    }
+
     number += 1;
     addNewDataList.add(number);
     final ws2Model = WeentialSurveyData2Model(
@@ -278,7 +294,57 @@ class EstablishCaseController extends BaseController {
         wsImages: photoList,
         wsTechDescr: txtTechDescription2.text);
     surveyModelList.add(ws2Model);
+  }
+
+  Future<void>  storeSurveyForm2ValidatationForm(WeentialSurveyData2Model weentialSurveyData2Model) async {
+    if (selectedLocation.value == WordStrings.selectLocation.toString()) {
+      MySnackBar.errorSnackbar(WordStrings.errLocation);
+      return;
+    }
+
+    if (txtSituation.text.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errSituation);
+      return;
+    }
+
+    if (txtCrackLength.text.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errCrackLength);
+      return;
+    }
+
+    if (txtCrackWidth.text.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errCrackWidth);
+      return;
+    }
+
+    if (selectedFlaw.value == WordStrings.selectFlaw.toString()) {
+      MySnackBar.errorSnackbar(WordStrings.errFlaw);
+      return;
+    }
+
+    if (txtTechDesc.text.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errTechDesc);
+      return;
+    }
 
     debugPrint("Himadri >> Weential Model 2 >> ${surveyModelList.toList()}");
+
+    setLoading(true);
+    for(var item in surveyModelList ){
+      await createWeetialSurveyForm2(item);
+    }
+
+    Get.toNamed(AppRoutes.surveyFormVerticalScreen);
+  }
+
+  createWeetialSurveyForm2(WeentialSurveyData2Model weentialSurveyData2Model) async {
+    await _db
+        .collection("case_weential_survey_form_2")
+        .doc(weentialSurveyData2Model.id)
+        .set(weentialSurveyData2Model.toJson())
+        .whenComplete(() {
+      setLoading(false);
+      //Get.toNamed(AppRoutes.surveyFormVerticalScreen);
+    });
   }
 }
