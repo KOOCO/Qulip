@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qulip/common/snack.dart';
@@ -10,7 +9,6 @@ import 'package:qulip/controller/base_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
 import 'package:qulip/models/createcase/weential_survey_data2_model.dart';
 import 'package:qulip/routes/app_routes.dart';
-import 'package:qulip/utils/dailog_helper.dart';
 
 class EstablishCaseController extends BaseController {
   static EstablishCaseController get instance => Get.find();
@@ -290,16 +288,16 @@ class EstablishCaseController extends BaseController {
 
     setLoading(true);
     for(var item in surveyForm2FinalList ){
-      await createWeetialSurveyForm2(item);
+      await createWeetialSurveyForm2(item, index);
     }
     setLoading(false);
     MySnackBar.successSnackbar("Horizontal Form completed");
     Get.toNamed(AppRoutes.surveyFormVerticalScreen);
   }
 
-  createWeetialSurveyForm2(WeentialSurveyData2Model weentialSurveyData2Model) async {
+  createWeetialSurveyForm2(WeentialSurveyData2Model weentialSurveyData2Model, int index) async {
     await _db
-        .collection("case_weential_survey_form_2")
+        .collection("case_weential_survey_form")
         .doc(weentialSurveyData2Model.id)
         .set(weentialSurveyData2Model.toJson())
         .whenComplete(() {

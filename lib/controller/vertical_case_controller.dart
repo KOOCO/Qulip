@@ -5,18 +5,14 @@ import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/controller/base_controller.dart';
 import 'package:qulip/models/createcase/vertical/vertical_form_model.dart';
-import 'package:qulip/utils/dailog_helper.dart';
+import 'package:qulip/routes/app_routes.dart';
 
 class VerticalCaseController extends BaseController {
   static VerticalCaseController get instance => Get.find();
 
-  final sDate = DateTime.now();
   final _db = FirebaseFirestore.instance;
 
-  int number = 1;
-  final highDifference = 0.obs;
-  final tiltValue = 0.obs;
-  final slope = 0.0.obs;
+  var verticalFinalList = <VerticalFormModel>[].obs;
 
   final List<String> tileDirectionList = [
     WordStrings.selectDirection,
@@ -24,8 +20,6 @@ class VerticalCaseController extends BaseController {
     WordStrings.selectRightDirection,
   ].obs;
 
-  final formList = <int>[1].obs;
-  final photoList = <String>[].obs;
   final List<VerticalFormModel> verticalDataList = [];
   // Vertical Form
   final txtUpperPoint = TextEditingController();
@@ -35,130 +29,61 @@ class VerticalCaseController extends BaseController {
   final txtTechnicalDescription = TextEditingController();
   final selectedDirection = WordStrings.selectDirection.toString().obs;
 
-  void calculateHighDifference() {
-    final upperPoint = txtUpperPoint.text;
-    final lowerPoint = txtLowerPoint.text;
-    if (upperPoint.isNotEmpty && lowerPoint.isNotEmpty) {
-      if (int.parse(lowerPoint) >= int.parse(upperPoint)) {
-        MySnackBar.errorSnackbar(WordStrings.errUpperPointMustValid);
-        highDifference.value = 0;
-      } else {
-        highDifference.value = (int.parse(upperPoint) - int.parse(lowerPoint));
-      }
-    } else {
-      highDifference.value = 0;
-    }
-    calculateSlope(tiltValue.value, highDifference.value);
+  createVerticalForm(VerticalFormModel formModel, int index) async {
+    await _db
+        .collection("Veritcal_Data")
+        .doc(DateTime.now().millisecondsSinceEpoch.toString())
+        .set(formModel.toJson())
+        .whenComplete(() {
+    });
   }
 
-  void calculateTiltValue() {
-    final tiltDirection = selectedDirection.value;
-    final leftPoint = txtLeftPoint.text;
-    final rightPoint = txtRightPoint.text;
+  Future<void> storeVeritcalFormData(RxList<VerticalFormModel> tempList) async {
 
-    if (selectedDirection.value == WordStrings.selectDirection.toString()) {
-      MySnackBar.errorSnackbar(WordStrings.errselectDirection);
-      return;
-    }
+    debugPrint("Himadri >> List size ?? ${tempList.length}");
+    final index = tempList.length - 1;
 
-    if (leftPoint.isNotEmpty && rightPoint.isNotEmpty) {
-      if (tiltDirection == WordStrings.selectLeftDirection.toString()) {
-        if (int.parse(rightPoint) >= int.parse(leftPoint)) {
-          MySnackBar.errorSnackbar(WordStrings.errRightPointMustValid);
-          tiltValue.value = 0;
-        } else {
-          tiltValue.value = int.parse(leftPoint) - int.parse(rightPoint);
-        }
-      } else {
-        if (int.parse(leftPoint) >= int.parse(rightPoint)) {
-          MySnackBar.errorSnackbar(WordStrings.errLeftPointMustValid);
-          tiltValue.value = 0;
-        } else {
-          tiltValue.value = int.parse(rightPoint) - int.parse(leftPoint);
-        }
-      }
-    } else {
-      tiltValue.value = 0;
-    }
-    calculateSlope(tiltValue.value, highDifference.value);
-  }
-
-  void calculateSlope(int tiltValue, int highDifference) {
-    final result = tiltValue / highDifference;
-    debugPrint("Himadri >> ${result.toStringAsFixed(2)}");
-    slope.value = double.parse(result.toStringAsFixed(2));
-  }
-
-  Future<void> takePhoto(BuildContext context) async {
-    DialogBox.selectImage(
-      context,
-      onComplete: (filePath) async {
-        if (filePath.isNotEmpty) {
-          debugPrint("FilePath $filePath");
-          photoList.add(filePath);
-        }
-      },
-    );
-  }
-
-  void checkValidation() {
-    if (txtUpperPoint.text.isEmpty) {
+    if (tempList[index].upperPoint!.isEmpty) {
       MySnackBar.errorSnackbar(WordStrings.errUpperPointEmpty);
       return;
     }
 
-    if (txtLowerPoint.text.isEmpty) {
+    if (tempList[index].lowerPoint!.isEmpty) {
       MySnackBar.errorSnackbar(WordStrings.errLowerPointEmpty);
       return;
     }
-    if (selectedDirection.value == WordStrings.selectDirection.toString()) {
+
+    if (tempList[index].titlDirection!.isEmpty || tempList[index].titlDirection! == WordStrings.selectDirection.toString()) {
       MySnackBar.errorSnackbar(WordStrings.errselectDirection);
       return;
     }
 
-    if (txtLeftPoint.text.isEmpty) {
+    if (tempList[index].leftPoint!.isEmpty) {
       MySnackBar.errorSnackbar(WordStrings.errLeftPointEmpty);
       return;
     }
 
-    if (txtRightPoint.text.isEmpty) {
+    if (tempList[index].rightPoint!.isEmpty) {
       MySnackBar.errorSnackbar(WordStrings.errRightPointEmpty);
       return;
     }
 
-    number += 1;
-    formList.add(number);
+    if (tempList[index].description!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errTechDesc);
+      return;
+    }
 
-    final verticalModel = VerticalFormModel(
-        upperPoint: txtUpperPoint.text,
-        lowerPoint: txtLowerPoint.text,
-        highDifference: highDifference.value,
-        titlDirection: selectedDirection.value,
-        leftPoint: txtLeftPoint.text,
-        rightPoint: txtRightPoint.text,
-        tiltValue: tiltValue.value,
-        slope: slope.value,
-        description: txtTechnicalDescription.text,
-        filePath: photoList);
-    verticalDataList.add(verticalModel);
+    if (tempList[index].filePath!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errImage);
+      return;
+    }
 
-    debugPrint("Himadri >> Vertical data >>${verticalDataList.toList()}");
-  }
-
-  createVerticalForm(VerticalFormModel formModel) async {
-    await _db
-        .collection("VeritcalForm")
-        .doc("Veritcal Form $number")
-        .set(formModel.toJson())
-        .whenComplete(() {
-      setLoading(false);
-      MySnackBar.successSnackbar("Vertical Form completed");
-      //Get.toNamed(AppRoutes.surveyForm1CreateScreen);
-    });
-  }
-
-  Future<void> storeVeritcalFormData(VerticalFormModel caseModel) async {
     setLoading(true);
-    await createVerticalForm(caseModel);
+    for(var item in verticalFinalList ){
+      await createVerticalForm(item, index);
+    }
+    setLoading(false);
+    MySnackBar.successSnackbar("Horizontal Form completed");
+    Get.toNamed(AppRoutes.horizontalCase1Screen);
   }
 }

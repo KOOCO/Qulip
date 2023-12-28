@@ -177,6 +177,7 @@ class WordStrings {
   static const String errCrackLength = "Enter Cracked Length";
   static const String errCrackWidth = "Enter Cracked";
   static const String errTechDesc = "Enter Technical Description";
+  static const String errImage = "Enter Image";
   static const String errFlaw = "請選擇瑕疵";
 
   // Veritcal Form

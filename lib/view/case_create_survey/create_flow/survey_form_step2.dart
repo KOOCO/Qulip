@@ -14,7 +14,6 @@ import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
 import 'package:qulip/models/createcase/weential_survey_data2_model.dart';
-import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/dailog_helper.dart';
 import 'package:qulip/utils/text_style_helper.dart';
 
@@ -113,10 +112,7 @@ class SurveyFormStep2 extends StatelessWidget {
             onTap: () async {
               controller.surveyForm2FinalList.value =
                   tempList.map((v) => v).toList();
-              controller
-                  .storeSurveyForm2ValidatationForm(tempList)
-                  .then((_) {
-                  });
+              controller.storeSurveyForm2ValidatationForm(tempList);
             },
           ).paddingAll(10).marginOnly(bottom: 10),
         ],
@@ -529,14 +525,14 @@ class SurveyFormStep2 extends StatelessWidget {
     }
 
     if (tempList[index].wsImages!.isEmpty) {
-      MySnackBar.errorSnackbar(WordStrings.errTechDesc);
+      MySnackBar.errorSnackbar(WordStrings.errImage);
       return;
     }
 
     tempList[index] = dataObj;
     debugPrint("Himadri >> OldObj >> ${dataObj.toJson()}");
     dataObj = WeentialSurveyData2Model(
-      id: "Weentail Survey Form 2",
+      id: "Weentail Survey Form $index",
       wsLocation: WordStrings.selectLocation.toString(),
       wsSituation: "",
       wsCrackedLength: "",
