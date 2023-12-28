@@ -9,6 +9,7 @@ import 'package:qulip/common/widgets/my_dropdown_area.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
+import 'package:qulip/utils/datetime_helper.dart';
 import 'package:qulip/utils/storage_helper.dart';
 import 'package:qulip/utils/string_helper.dart';
 import 'package:qulip/utils/text_style_helper.dart';
@@ -402,9 +403,13 @@ class SurveyFormStep1 extends StatelessWidget {
                   //     wsTechDescription:
                   //         controller.txtSupplimentryDesc.value.text);
 
+                  final now = DateTime.now();
+                  final caseId =
+                      "${now.caseGeneratorDateFormate()}_${controller.txtCaseName.value.text}";
+                  // "${controller.txtCaseName.value.text}_${getCaseNumber()}",
                   final caseModel = EstablishCaseModel(
-                      id:
-                          "${controller.txtCaseName.value.text}_${getCaseNumber()}",
+                      id: caseId,
+                      createdAt: now.caseGeneratorDateFormate(),
                       userId: userId,
                       caseName: controller.txtCaseName.value.text,
                       caseAddress: controller.txtCaseAddress.value.text,
