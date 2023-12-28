@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qulip/common/snack.dart';
@@ -13,6 +16,10 @@ class EstablishCaseController extends BaseController {
   static EstablishCaseController get instance => Get.find();
 
   final sDate = DateTime.now();
+
+  var surveyForm2FinalList = <WeentialSurveyData2Model>[].obs;
+
+  final photoList = <String>[].obs;
 
   //Weential Step 1
   final txtCaseName = TextEditingController();
@@ -90,8 +97,7 @@ class EstablishCaseController extends BaseController {
 
   //Weential Step -3
   int number = 1;
-  final photoList = <String>[].obs;
-  final addNewDataList = <int>[1].obs;
+  //final photoList = <String>[].obs;
   final List<WeentialSurveyData2Model> surveyModelList = [];
   final txtLocation = TextEditingController();
   final txtSituation = TextEditingController();
@@ -100,6 +106,7 @@ class EstablishCaseController extends BaseController {
   final txtTechDescription2 = TextEditingController();
   final selectedLocation = WordStrings.selectLocation.toString().obs;
   final selectedFlaw = WordStrings.selectFlaw.toString().obs;
+  final txtTechDesc = TextEditingController();
 
   final List<String> locationList = [
     WordStrings.selectLocation,
@@ -239,45 +246,63 @@ class EstablishCaseController extends BaseController {
     });
   }
 
-  Future<void> takePhoto(BuildContext context) async {
-    DialogBox.selectImage(
-      context,
-      onComplete: (filePath) async {
-        if (filePath.isNotEmpty) {
-          debugPrint("FilePath $filePath");
-          photoList.add(filePath);
-        }
-      },
-    );
-  }
+  Future<void>  storeSurveyForm2ValidatationForm(RxList<WeentialSurveyData2Model> tempList) async {
 
-  void addValidatationForm() {
-    if (selectedLocation.value == WordStrings.selectLocation.toString()) {
+    debugPrint("Himadri >> List size ?? ${tempList.length}");
+    final index = tempList.length - 1;
+
+    if (tempList[index].wsLocation!.isEmpty ||
+        tempList[index].wsLocation! == WordStrings.selectLocation.toString()) {
       MySnackBar.errorSnackbar(WordStrings.errLocation);
       return;
     }
 
-    if (txtSituation.text.isEmpty) {
+    if (tempList[index].wsSituation!.isEmpty) {
       MySnackBar.errorSnackbar(WordStrings.errSituation);
       return;
     }
 
-    if (selectedFlaw.value == WordStrings.selectFlaw.toString()) {
+    if (tempList[index].wsCrackedLength!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errCrackLength);
+      return;
+    }
+
+    if (tempList[index].wsCrackedWidth!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errCrackWidth);
+      return;
+    }
+
+    if (tempList[index].wsFlaw!.isEmpty ||
+        tempList[index].wsFlaw! == WordStrings.selectFlaw.toString()) {
       MySnackBar.errorSnackbar(WordStrings.errFlaw);
       return;
     }
-    number += 1;
-    addNewDataList.add(number);
-    final ws2Model = WeentialSurveyData2Model(
-        wsLocation: selectedLocation.value,
-        wsSituation: txtSituation.text,
-        wsCrackedLength: txtCrackLength.text,
-        wsCrackedWidth: txtCrackWidth.text,
-        wsFlaw: selectedFlaw.value,
-        wsImages: photoList,
-        wsTechDescr: txtTechDescription2.text);
-    surveyModelList.add(ws2Model);
 
-    debugPrint("Himadri >> Weential Model 2 >> ${surveyModelList.toList()}");
+    if (tempList[index].wsTechDescr!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errTechDesc);
+      return;
+    }
+
+    if (tempList[index].wsImages!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errTechDesc);
+      return;
+    }
+
+    setLoading(true);
+    for(var item in surveyForm2FinalList ){
+      await createWeetialSurveyForm2(item);
+    }
+    setLoading(false);
+    MySnackBar.successSnackbar("Horizontal Form completed");
+    Get.toNamed(AppRoutes.surveyFormVerticalScreen);
+  }
+
+  createWeetialSurveyForm2(WeentialSurveyData2Model weentialSurveyData2Model) async {
+    await _db
+        .collection("case_weential_survey_form_2")
+        .doc(weentialSurveyData2Model.id)
+        .set(weentialSurveyData2Model.toJson())
+        .whenComplete(() {
+    });
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -12,19 +13,34 @@ import 'package:qulip/common/widgets/my_dropdown_area.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
+import 'package:qulip/models/createcase/weential_survey_data2_model.dart';
 import 'package:qulip/routes/app_routes.dart';
+import 'package:qulip/utils/dailog_helper.dart';
 import 'package:qulip/utils/text_style_helper.dart';
 
 class SurveyFormStep2 extends StatelessWidget {
   SurveyFormStep2({super.key});
 
   final controller = Get.put(EstablishCaseController());
-  DateTime sDate = DateTime.now();
-  RxString enteredTechDesc = ''.obs;
-  final isImageSelect = false.obs;
+
+  var dataObj = WeentialSurveyData2Model(
+    id: "Weentail Survey Form 2",
+    wsLocation: WordStrings.selectLocation.toString(),
+    wsSituation: "",
+    wsCrackedLength: "",
+    wsCrackedWidth: "",
+    wsFlaw: WordStrings.selectFlaw.toString(),
+    wsTechDescr: "",
+    wsImages: [],
+  );
+  final tempList = <WeentialSurveyData2Model>[].obs;
 
   @override
   Widget build(BuildContext context) {
+    tempList.add(dataObj);
+    controller.selectedLocation.value = WordStrings.selectLocation.toString();
+    controller.selectedFlaw.value = WordStrings.selectFlaw.toString();
+    controller.photoList.clear();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: stdwhite,
@@ -53,7 +69,7 @@ class SurveyFormStep2 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Obx(() => _addMoreList(context)),
+          Obx(() => _buildListView(context)),
           MyButton(
             label: WordStrings.newMeasuringPointNumber,
             style: const TextStyle(
@@ -73,7 +89,7 @@ class SurveyFormStep2 extends StatelessWidget {
             height: Get.height * 0.05,
             borderRadius: 2,
             onTap: () async {
-              controller.addValidatationForm();
+              addSurveyForm2ValidatationForm();
             },
           ).paddingAll(10),
           MyButton(
@@ -95,7 +111,12 @@ class SurveyFormStep2 extends StatelessWidget {
             height: Get.height * 0.05,
             borderRadius: 2,
             onTap: () async {
-              Get.toNamed(AppRoutes.surveyFormVerticalScreen);
+              controller.surveyForm2FinalList.value =
+                  tempList.map((v) => v).toList();
+              controller
+                  .storeSurveyForm2ValidatationForm(tempList)
+                  .then((_) {
+                  });
             },
           ).paddingAll(10).marginOnly(bottom: 10),
         ],
@@ -103,20 +124,18 @@ class SurveyFormStep2 extends StatelessWidget {
     );
   }
 
-  Widget _addMoreList(BuildContext context) {
+  Widget _buildListView(BuildContext context) {
     return Expanded(
       child: ListView.builder(
-        // physics: const PositionRetainedScrollPhysics(shouldRetain: false),
-        itemCount: controller.addNewDataList.length,
+        itemCount: tempList.length,
         itemBuilder: (context, index) {
-          return _buildExpandableList(
-              context, controller.addNewDataList[index]);
+          return _buildList(context, index);
         },
       ),
     );
   }
 
-  Widget _buildExpandableList(BuildContext context, int number) {
+  Widget _buildList(BuildContext context, int index) {
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -127,24 +146,23 @@ class SurveyFormStep2 extends StatelessWidget {
         color: cardBg,
         child: ExpansionTile(
           initiallyExpanded: false,
-          // initiallyExpanded: number == 1 ? true : false,
           trailing: const Icon(
             Icons.arrow_drop_down,
             color: yasRed,
           ),
           title: MyText(
-            "Number $number",
+            "Number $index",
             fontFamily: FontFamilyConstant.sinkinSans,
             fontSize: 14,
             fontColor: yasRed,
           ),
-          children: [_buildListItem(context)],
+          children: [_buildListItem(context, index)],
         ),
       ),
     );
   }
 
-  Widget _buildListItem(BuildContext context) {
+  Widget _buildListItem(BuildContext context, int index) {
     return Container(
       decoration: const BoxDecoration(
         color: cardBg,
@@ -204,13 +222,11 @@ class SurveyFormStep2 extends StatelessWidget {
                         )
                         .toList();
                   },
-                  value: controller.selectedLocation.value,
+                  value: tempList[index].wsLocation!,
                   onchange: (value) {
-                    if (value != null) {
-                      controller.selectedLocation.value = value;
-                      // debugPrint(
-                      //     "Selected Value >> ${controller.selectedLocation.value}");
-                    }
+                    controller.selectedLocation.value = value!;
+                    tempList[index].wsLocation = value;
+                    tempList[index] = dataObj;
                   },
                 ),
               ),
@@ -220,9 +236,13 @@ class SurveyFormStep2 extends StatelessWidget {
             height: 15,
           ),
           MyTextField(
+            onChanged: (value) {
+              tempList[index].wsSituation = value;
+            },
             fullBorder: true,
             hasFloatingLabel: false,
-            controller: controller.txtSituation,
+            controller:
+                TextEditingController(text: tempList[index].wsSituation),
             keyboard: TextInputType.text,
             labelText: WordStrings.situationLbl,
             hintText: WordStrings.situationLbl,
@@ -231,9 +251,13 @@ class SurveyFormStep2 extends StatelessWidget {
             height: 15,
           ),
           MyTextField(
+            onChanged: (value) {
+              tempList[index].wsCrackedLength = value;
+            },
             fullBorder: true,
             hasFloatingLabel: false,
-            controller: controller.txtCrackLength,
+            controller:
+                TextEditingController(text: tempList[index].wsCrackedLength),
             keyboard: TextInputType.number,
             labelText: WordStrings.crackLengthLbl,
             hintText: WordStrings.crackLengthLbl,
@@ -242,9 +266,13 @@ class SurveyFormStep2 extends StatelessWidget {
             height: 15,
           ),
           MyTextField(
+            onChanged: (value) {
+              tempList[index].wsCrackedWidth = value;
+            },
             fullBorder: true,
             hasFloatingLabel: false,
-            controller: controller.txtCrackWidth,
+            controller:
+                TextEditingController(text: tempList[index].wsCrackedWidth),
             keyboard: TextInputType.number,
             labelText: WordStrings.crackWidthLbl,
             hintText: WordStrings.crackWidthLbl,
@@ -303,11 +331,11 @@ class SurveyFormStep2 extends StatelessWidget {
                         )
                         .toList();
                   },
-                  value: controller.selectedFlaw.value,
+                  value: tempList[index].wsFlaw,
                   onchange: (value) {
-                    if (value != null) {
-                      controller.selectedFlaw.value = value;
-                    }
+                    controller.selectedFlaw.value = value!;
+                    tempList[index].wsFlaw = value;
+                    tempList[index] = dataObj;
                   },
                 ),
               ),
@@ -323,11 +351,12 @@ class SurveyFormStep2 extends StatelessWidget {
             fontColor: yasRed,
           ).paddingOnly(left: 2, right: 2, bottom: 4),
           TextField(
+            controller: TextEditingController(text: tempList[index].wsTechDescr),
             maxLength: 50,
             maxLines: 3,
             cursorColor: yasRed,
             onChanged: (value) {
-              enteredTechDesc.value = value;
+              tempList[index].wsTechDescr = value;
             },
             decoration: InputDecoration(
                 alignLabelWithHint: true,
@@ -347,7 +376,8 @@ class SurveyFormStep2 extends StatelessWidget {
                 labelText: WordStrings.sfDescriptionHint,
                 labelStyle: const TextStyle(fontSize: 14, color: stdgrey),
                 hintText: '',
-                counterText: '${enteredTechDesc.value.length.toString()}/ 50',
+                counterText:
+                    '${tempList[index].wsTechDescr!.length.toString()}/ 50',
                 counterStyle: const TextStyle(fontSize: 12, color: yasRed)),
           ),
           const SizedBox(
@@ -370,18 +400,18 @@ class SurveyFormStep2 extends StatelessWidget {
                 Obx(
                   () => InkWell(
                     onTap: () {
-                      controller.takePhoto(context);
+                      takePhoto(context, index);
                     },
                     child: Visibility(
                       child: Align(
-                        alignment: controller.photoList.isEmpty
+                        alignment: tempList[index].wsImages!.isEmpty
                             ? Alignment.center
                             : Alignment.topRight,
-                        heightFactor: controller.photoList.isEmpty ? 4.0 : 1.0,
+                        heightFactor: tempList[index].wsImages!.isEmpty ? 4.0 : 1.0,
                         child: Icon(
                           Icons.add_a_photo,
                           color: yasRed,
-                          size: controller.photoList.isEmpty ? 50 : 25,
+                          size: tempList[index].wsImages!.isEmpty ? 50 : 25,
                         ).paddingAll(4),
                       ),
                     ),
@@ -389,8 +419,8 @@ class SurveyFormStep2 extends StatelessWidget {
                 ),
                 Obx(
                   () => Visibility(
-                    visible: controller.photoList.isNotEmpty ? true : false,
-                    child: _buildImageList(),
+                    visible: tempList[index].wsImages!.isNotEmpty ? true : false,
+                    child: _buildImageList(tempList[index].wsImages!, index),
                   ),
                 )
               ],
@@ -401,24 +431,22 @@ class SurveyFormStep2 extends StatelessWidget {
     );
   }
 
-  Widget _buildImageList() {
+  Widget _buildImageList(List<String> imageList, int tempListIndex) {
     return Expanded(
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: controller.photoList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return _buildImageItem(context, index);
+        itemCount: imageList.length,
+        itemBuilder: (BuildContext context, int imageIndex) {
+          return _buildImageItem(context, imageIndex, tempListIndex);
         },
       ),
     );
   }
 
-  Widget _buildImageItem(BuildContext context, int index) {
+  Widget _buildImageItem(BuildContext context, int imageIndex, int tempListIndex) {
     return Container(
       height: double.infinity,
       alignment: Alignment.center,
-      // width:
-      // (controller.photoList.length == 1) ? Get.width - 60 : Get.width - 220,
       decoration: BoxDecoration(
         color: stdwhite,
         borderRadius: const BorderRadius.all(Radius.circular(5)),
@@ -433,9 +461,9 @@ class SurveyFormStep2 extends StatelessWidget {
             Center(
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(5)),
-                child: Image.file(
+                child: Image.network(
                   fit: BoxFit.contain,
-                  File(controller.photoList[index]),
+                  tempList[tempListIndex].wsImages![imageIndex],
                 ),
               ),
             ),
@@ -445,11 +473,11 @@ class SurveyFormStep2 extends StatelessWidget {
                 child: Obx(
                   () => InkWell(
                     onTap: () {
-                      controller.photoList.removeAt(index);
+                      tempList[tempListIndex].wsImages!.removeAt(imageIndex);
                     },
                     child: Visibility(
                       visible:
-                          controller.photoList[index].isNotEmpty ? true : false,
+                          tempList[tempListIndex].wsImages![imageIndex].isNotEmpty ? true : false,
                       child: const Icon(
                         Icons.cancel,
                         color: Colors.red,
@@ -462,5 +490,96 @@ class SurveyFormStep2 extends StatelessWidget {
         ),
       ),
     ).paddingAll(4);
+  }
+
+  addSurveyForm2ValidatationForm() {
+    debugPrint("Himadri >> List size ?? ${tempList.length}");
+    final index = tempList.length - 1;
+
+    if (tempList[index].wsLocation!.isEmpty ||
+        tempList[index].wsLocation! == WordStrings.selectLocation.toString()) {
+      MySnackBar.errorSnackbar(WordStrings.errLocation);
+      return;
+    }
+
+    if (tempList[index].wsSituation!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errSituation);
+      return;
+    }
+
+    if (tempList[index].wsCrackedLength!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errCrackLength);
+      return;
+    }
+
+    if (tempList[index].wsCrackedWidth!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errCrackWidth);
+      return;
+    }
+
+    if (tempList[index].wsFlaw!.isEmpty ||
+        tempList[index].wsFlaw! == WordStrings.selectFlaw.toString()) {
+      MySnackBar.errorSnackbar(WordStrings.errFlaw);
+      return;
+    }
+
+    if (tempList[index].wsTechDescr!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errTechDesc);
+      return;
+    }
+
+    if (tempList[index].wsImages!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errTechDesc);
+      return;
+    }
+
+    tempList[index] = dataObj;
+    debugPrint("Himadri >> OldObj >> ${dataObj.toJson()}");
+    dataObj = WeentialSurveyData2Model(
+      id: "Weentail Survey Form 2",
+      wsLocation: WordStrings.selectLocation.toString(),
+      wsSituation: "",
+      wsCrackedLength: "",
+      wsCrackedWidth: "",
+      wsFlaw: WordStrings.selectFlaw.toString(),
+      wsTechDescr: "",
+      wsImages: [],
+    );
+    controller.selectedLocation.value = WordStrings.selectLocation.toString();
+    controller.selectedFlaw.value = WordStrings.selectFlaw.toString();
+    controller.photoList.clear();
+    debugPrint("Himadri >> NewObj >> ${dataObj.toJson()}");
+    tempList.add(dataObj);
+  }
+
+  Future<void> takePhoto(BuildContext context, int tempListIndex) async {
+    DialogBox.selectImage(
+      context,
+      onComplete: (filePath) async {
+        if (filePath.isNotEmpty) {
+          controller.setLoading(true);
+          debugPrint("FilePath $filePath");
+          final uFile = File(filePath);
+          uploadImage(uFile, tempListIndex).then((url) {
+            controller.setLoading(false);
+            tempList[tempListIndex].wsImages!.add(url!);
+            controller.photoList.add(url!);
+            debugPrint("Himadri : Download url>> >>> $url");
+            tempList[tempListIndex] = dataObj;
+          });
+        }
+      },
+    );
+  }
+
+  Future<String?> uploadImage(File pickedImg, int index) async {
+    var imageName = "Survey_Form_${DateTime.now().millisecondsSinceEpoch}";
+    var ref = FirebaseStorage.instance
+        .ref()
+        .child('survey_form')
+        .child("$imageName.jpg");
+    await ref.putFile(pickedImg);
+
+    return await ref.getDownloadURL();
   }
 }

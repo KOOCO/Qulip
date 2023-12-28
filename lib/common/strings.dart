@@ -174,6 +174,9 @@ class WordStrings {
   static const String flawLbl = "Flaw";
   static const String errLocation = "請選擇位置";
   static const String errSituation = "請輸入現況";
+  static const String errCrackLength = "Enter Cracked Length";
+  static const String errCrackWidth = "Enter Cracked";
+  static const String errTechDesc = "Enter Technical Description";
   static const String errFlaw = "請選擇瑕疵";
 
   // Veritcal Form

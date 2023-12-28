@@ -393,20 +393,11 @@ class SurveyFormStep1 extends StatelessWidget {
                 height: Get.height * 0.05,
                 borderRadius: 2,
                 onTap: () async {
-                  // final caseModel = WeentialSurveyData1Model(
-                  //     wsStructureType: controller.selectedStructure.value,
-                  //     wsUseFor: controller.selectedUse.value,
-                  //     wsWallType: controller.selectedWall.value,
-                  //     wsFlatTopMaterial:
-                  //         controller.selectedFlatTopMaterial.value,
-                  //     wsFloorMaterial: controller.selectedFloor.value,
-                  //     wsTechDescription:
-                  //         controller.txtSupplimentryDesc.value.text);
-
+                  // "${controller.txtCaseName.value.text}_${getCaseNumber()}",
                   final now = DateTime.now();
                   final caseId =
                       "${now.caseGeneratorDateFormate()}_${controller.txtCaseName.value.text}";
-                  // "${controller.txtCaseName.value.text}_${getCaseNumber()}",
+
                   final caseModel = EstablishCaseModel(
                       id: caseId,
                       createdAt: now.caseGeneratorDateFormate(),

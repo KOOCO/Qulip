@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
@@ -32,5 +33,5 @@ class WeentialSurveyData2Model {
   String? wsCrackedWidth;
   String? wsFlaw;
   String? wsTechDescr;
-  List<String>? wsImages;
+  List<String>? wsImages = <String>[].obs;
 }
