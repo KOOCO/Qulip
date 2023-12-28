@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 class DateTimeHelper {
   static String defaultpattern = 'dd-MM-y hh:mm a';
   static const String dateOnly = 'dd-MM-y';
-  // static const String date2Only = 'yyyy-MM-dd';
+  static const String caseDateFormate = 'yyyyMMddhhmmss';
   static const String date2Only = 'dd-MM-yyyy';
   static const String timeOnly = 'hh:mm a';
   static const String time24Only = 'H:m:s';
@@ -82,6 +82,8 @@ extension Format on DateTime {
     return DateFormat(formatstr).format(this);
   }
 
+  String caseGeneratorDateFormate() =>
+      DateFormat(DateTimeHelper.caseDateFormate).format(this);
   String date2Only() => DateFormat(DateTimeHelper.date2Only).format(this);
   String timeOnly() => DateFormat(DateTimeHelper.timeOnly).format(this);
   String time24Only() => DateFormat(DateTimeHelper.time24Only).format(this);
