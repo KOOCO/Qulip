@@ -5,7 +5,6 @@ import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/controller/base_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
-import 'package:qulip/models/createcase/weential_survey_data1_model.dart';
 import 'package:qulip/models/createcase/weential_survey_data2_model.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/dailog_helper.dart';
