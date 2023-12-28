@@ -1,26 +1,43 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
+import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_dropdown_area.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
 import 'package:qulip/controller/vertical_case_controller.dart';
+import 'package:qulip/models/createcase/vertical/vertical_form_model.dart';
+import 'package:qulip/utils/dailog_helper.dart';
 import 'package:qulip/utils/text_style_helper.dart';
 
 class VerticalMeasurement1 extends StatelessWidget {
   VerticalMeasurement1({super.key});
 
   final controller = Get.put(VerticalCaseController());
-  RxString enteredTechDesc = ''.obs;
+
+  var dataObj = VerticalFormModel(
+      upperPoint: "",
+      lowerPoint: "",
+      highDifference: 0,
+      titlDirection: WordStrings.selectDirection.toString(),
+      leftPoint: "",
+      rightPoint: "",
+      tiltValue: 0,
+      slope: 0.0,
+      description: "",
+      filePath: []);
+  final tempList = <VerticalFormModel>[].obs;
 
   @override
   Widget build(BuildContext context) {
+    tempList.add(dataObj);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: stdwhite,
@@ -71,7 +88,7 @@ class VerticalMeasurement1 extends StatelessWidget {
             height: Get.height * 0.05,
             borderRadius: 2,
             onTap: () async {
-              controller.checkValidation();
+              addVerticalValidatationForm();
             },
           ).paddingAll(10),
           MyButton(
@@ -92,7 +109,11 @@ class VerticalMeasurement1 extends StatelessWidget {
             ),
             height: Get.height * 0.05,
             borderRadius: 2,
-            onTap: () async {},
+            onTap: () async {
+              controller.verticalFinalList.value =
+                  tempList.map((v) => v).toList();
+              controller.storeVeritcalFormData(tempList);
+            },
           ).paddingAll(10).marginOnly(bottom: 10),
         ],
       ).paddingOnly(top: 20.h).paddingSymmetric(horizontal: 12.w),
@@ -102,15 +123,15 @@ class VerticalMeasurement1 extends StatelessWidget {
   Widget _buildListView(BuildContext context) {
     return Expanded(
       child: ListView.builder(
-        itemCount: controller.formList.length,
+        itemCount: tempList.length,
         itemBuilder: (context, index) {
-          return _buildList(context, controller.formList[index]);
+          return _buildList(context, index);
         },
       ),
     );
   }
 
-  Widget _buildList(BuildContext context, int number) {
+  Widget _buildList(BuildContext context, int index) {
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -126,18 +147,18 @@ class VerticalMeasurement1 extends StatelessWidget {
             color: yasRed,
           ),
           title: MyText(
-            "Number $number",
+            "Number $index",
             fontFamily: FontFamilyConstant.sinkinSans,
             fontSize: 14,
             fontColor: yasRed,
           ),
-          children: [_buildItem(context)],
+          children: [_buildItem(context, index)],
         ),
       ),
     );
   }
 
-  Widget _buildItem(BuildContext context) {
+  Widget _buildItem(BuildContext context, int index) {
     return Container(
       decoration: const BoxDecoration(
         color: cardBg,
@@ -147,14 +168,16 @@ class VerticalMeasurement1 extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           MyTextField(
-            onSubmit: (value) {
-              if (value.isNotEmpty) {
-                controller.calculateHighDifference();
-              }
+            onSubmit: (value){
+              tempList[index] = dataObj;
+            },
+            onChanged: (value) {
+              tempList[index].upperPoint = value;
+              calculateHighDifference(index);
             },
             fullBorder: true,
             hasFloatingLabel: false,
-            controller: controller.txtUpperPoint,
+            controller: TextEditingController(text: tempList[index].upperPoint),
             keyboard: TextInputType.number,
             labelText: WordStrings.upperPointLbl,
             hintText: WordStrings.upperPointLbl,
@@ -163,14 +186,16 @@ class VerticalMeasurement1 extends StatelessWidget {
             height: 15,
           ),
           MyTextField(
-            onSubmit: (value) {
-              if (value.isNotEmpty) {
-                controller.calculateHighDifference();
-              }
+            onSubmit: (value){
+              tempList[index] = dataObj;
+            },
+            onChanged: (value) {
+              tempList[index].lowerPoint = value;
+              calculateHighDifference(index);
             },
             fullBorder: true,
             hasFloatingLabel: false,
-            controller: controller.txtLowerPoint,
+            controller: TextEditingController(text: tempList[index].lowerPoint),
             keyboard: TextInputType.number,
             labelText: WordStrings.lowerPointLbl,
             hintText: WordStrings.lowerPointLbl,
@@ -180,7 +205,7 @@ class VerticalMeasurement1 extends StatelessWidget {
           ),
           Obx(
             () => MyText(
-              "${WordStrings.highDifferenceLbl} : ${controller.highDifference}",
+              "${WordStrings.highDifferenceLbl} : ${tempList[index].highDifference}",
               fontWeight: FontWeight.w600,
               fontFamily: FontFamilyConstant.sinkinSansMedium,
               fontColor: stdBlack,
@@ -233,11 +258,10 @@ class VerticalMeasurement1 extends StatelessWidget {
                           )
                           .toList();
                     },
-                    value: controller.selectedDirection.value,
+                    value: tempList[index].titlDirection,
                     onchange: (value) {
-                      if (value != null) {
-                        controller.selectedDirection.value = value;
-                      }
+                      tempList[index].titlDirection = value;
+                      tempList[index] = dataObj;
                     },
                   ),
                 ),
@@ -246,28 +270,36 @@ class VerticalMeasurement1 extends StatelessWidget {
             height: 15,
           ),
           MyTextField(
+            onChanged: (value) {
+              tempList[index].leftPoint = value;
+              calculateTiltValue(index);
+            },
             fullBorder: true,
             hasFloatingLabel: false,
-            controller: controller.txtLeftPoint,
+            controller: TextEditingController(text: tempList[index].leftPoint),
             keyboard: TextInputType.number,
             labelText: WordStrings.leftPointLbl,
             hintText: WordStrings.leftPointLbl,
             onSubmit: (value) {
-              controller.calculateTiltValue();
+              tempList[index] = dataObj;
             },
           ),
           const SizedBox(
             height: 15,
           ),
           MyTextField(
+            onChanged: (value) {
+              tempList[index].rightPoint = value;
+              calculateTiltValue(index);
+            },
             fullBorder: true,
             hasFloatingLabel: false,
-            controller: controller.txtRightPoint,
+            controller: TextEditingController(text: tempList[index].rightPoint),
             keyboard: TextInputType.number,
             labelText: WordStrings.rightPointLbl,
             hintText: WordStrings.rightPointLbl,
             onSubmit: (value) {
-              controller.calculateTiltValue();
+            tempList[index] = dataObj;
             },
           ),
           const SizedBox(
@@ -278,7 +310,7 @@ class VerticalMeasurement1 extends StatelessWidget {
             children: [
               Obx(
                 () => MyText(
-                  "${WordStrings.tiltValueLbl} : ${controller.tiltValue}",
+                  "${WordStrings.tiltValueLbl} : ${tempList[index].tiltValue}",
                   fontWeight: FontWeight.w600,
                   fontFamily: FontFamilyConstant.sinkinSansMedium,
                   fontColor: stdBlack,
@@ -286,7 +318,7 @@ class VerticalMeasurement1 extends StatelessWidget {
               ),
               Obx(
                 () => MyText(
-                  "${WordStrings.slopeLbl} : ${controller.slope}",
+                  "${WordStrings.slopeLbl} : ${tempList[index].slope}",
                   fontWeight: FontWeight.w600,
                   fontFamily: FontFamilyConstant.sinkinSansMedium,
                   fontColor: stdBlack,
@@ -297,15 +329,15 @@ class VerticalMeasurement1 extends StatelessWidget {
           const SizedBox(
             height: 15,
           ),
-          const MyText(
-            WordStrings.diagramLbl,
-            fontWeight: FontWeight.w400,
-            fontFamily: FontFamilyConstant.sinkinSansMedium,
-            fontColor: stdBlack,
-          ).paddingOnly(left: 2, right: 2, bottom: 4),
-          const SizedBox(
-            height: 200,
-          ),
+          // const MyText(
+          //   WordStrings.diagramLbl,
+          //   fontWeight: FontWeight.w400,
+          //   fontFamily: FontFamilyConstant.sinkinSansMedium,
+          //   fontColor: stdBlack,
+          // ).paddingOnly(left: 2, right: 2, bottom: 4),
+          // const SizedBox(
+          //   height: 200,
+          // ),
           const MyText(
             WordStrings.sfDescriptionLbl,
             fontWeight: FontWeight.w400,
@@ -313,12 +345,13 @@ class VerticalMeasurement1 extends StatelessWidget {
             fontColor: yasRed,
           ).paddingOnly(left: 2, right: 2, bottom: 4),
           TextField(
-            controller: controller.txtTechnicalDescription,
+            controller:
+                TextEditingController(text: tempList[index].description),
             maxLength: 50,
             maxLines: 3,
             cursorColor: yasRed,
             onChanged: (value) {
-              enteredTechDesc.value = value;
+              tempList[index].description = value;
             },
             decoration: InputDecoration(
                 alignLabelWithHint: true,
@@ -338,7 +371,8 @@ class VerticalMeasurement1 extends StatelessWidget {
                 labelText: WordStrings.sfDescriptionHint,
                 labelStyle: const TextStyle(fontSize: 14, color: stdgrey),
                 hintText: '',
-                counterText: '${enteredTechDesc.value.length.toString()}/ 50',
+                counterText:
+                    '${tempList[index].description!.length.toString()}/ 50',
                 counterStyle: const TextStyle(fontSize: 12, color: yasRed)),
           ),
           const SizedBox(
@@ -361,18 +395,19 @@ class VerticalMeasurement1 extends StatelessWidget {
                 Obx(
                   () => InkWell(
                     onTap: () {
-                      controller.takePhoto(context);
+                      takePhoto(context, index);
                     },
                     child: Visibility(
                       child: Align(
-                        alignment: controller.photoList.isEmpty
+                        alignment: tempList[index].filePath!.isEmpty
                             ? Alignment.center
                             : Alignment.topRight,
-                        heightFactor: controller.photoList.isEmpty ? 4.0 : 1.0,
+                        heightFactor:
+                            tempList[index].filePath!.isEmpty ? 4.0 : 1.0,
                         child: Icon(
                           Icons.add_a_photo,
                           color: yasRed,
-                          size: controller.photoList.isEmpty ? 50 : 25,
+                          size: tempList[index].filePath!.isEmpty ? 50 : 25,
                         ).paddingAll(4),
                       ),
                     ),
@@ -380,8 +415,9 @@ class VerticalMeasurement1 extends StatelessWidget {
                 ),
                 Obx(
                   () => Visibility(
-                    visible: controller.photoList.isNotEmpty ? true : false,
-                    child: _buildImageList(),
+                    visible:
+                        tempList[index].filePath!.isNotEmpty ? true : false,
+                    child: _buildImageList(tempList[index].filePath!, index),
                   ),
                 )
               ],
@@ -392,24 +428,23 @@ class VerticalMeasurement1 extends StatelessWidget {
     );
   }
 
-  Widget _buildImageList() {
+  Widget _buildImageList(List<String> imageList, int tempListIndex) {
     return Expanded(
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: controller.photoList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return _buildImageItem(context, index);
+        itemCount: imageList.length,
+        itemBuilder: (BuildContext context, int imageIndex) {
+          return _buildImageItem(context, imageIndex, tempListIndex);
         },
       ),
     );
   }
 
-  Widget _buildImageItem(BuildContext context, int index) {
+  Widget _buildImageItem(
+      BuildContext context, int imageIndex, int tempListIndex) {
     return Container(
       height: double.infinity,
       alignment: Alignment.center,
-      // width:
-      // (controller.photoList.length == 1) ? Get.width - 60 : Get.width - 220,
       decoration: BoxDecoration(
         color: stdwhite,
         borderRadius: const BorderRadius.all(Radius.circular(5)),
@@ -424,9 +459,9 @@ class VerticalMeasurement1 extends StatelessWidget {
             Center(
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(5)),
-                child: Image.file(
+                child: Image.network(
                   fit: BoxFit.contain,
-                  File(controller.photoList[index]),
+                  tempList[tempListIndex].filePath![imageIndex],
                 ),
               ),
             ),
@@ -436,11 +471,14 @@ class VerticalMeasurement1 extends StatelessWidget {
                 child: Obx(
                   () => InkWell(
                     onTap: () {
-                      controller.photoList.removeAt(index);
+                      tempList[tempListIndex].filePath!.removeAt(imageIndex);
                     },
                     child: Visibility(
-                      visible:
-                          controller.photoList[index].isNotEmpty ? true : false,
+                      visible: tempList[tempListIndex]
+                              .filePath![imageIndex]
+                              .isNotEmpty
+                          ? true
+                          : false,
                       child: const Icon(
                         Icons.cancel,
                         color: Colors.red,
@@ -453,5 +491,154 @@ class VerticalMeasurement1 extends StatelessWidget {
         ),
       ),
     ).paddingAll(4);
+  }
+
+  Future<void> takePhoto(BuildContext context, int tempListIndex) async {
+    DialogBox.selectImage(
+      context,
+      onComplete: (filePath) async {
+        if (filePath.isNotEmpty) {
+          controller.setLoading(true);
+          debugPrint("FilePath $filePath");
+          final uFile = File(filePath);
+          uploadImage(uFile, tempListIndex).then((url) {
+            controller.setLoading(false);
+            tempList[tempListIndex].filePath!.add(url!);
+            debugPrint("Himadri : Download url>> >>> $url");
+            tempList[tempListIndex] = dataObj;
+          });
+        }
+      },
+    );
+  }
+
+  Future<String?> uploadImage(File pickedImg, int index) async {
+    var imageName =
+        "Vertical_Mesurement_Form_${DateTime.now().millisecondsSinceEpoch}";
+    var ref = FirebaseStorage.instance
+        .ref()
+        .child('vertical_mesurment')
+        .child("$imageName.jpg");
+    await ref.putFile(pickedImg);
+
+    return await ref.getDownloadURL();
+  }
+
+  void calculateHighDifference(int index) {
+    final upperPoint = tempList[index].upperPoint!;
+    final lowerPoint = tempList[index].lowerPoint!;
+    if (upperPoint.isNotEmpty && lowerPoint.isNotEmpty) {
+      if (int.parse(lowerPoint) >= int.parse(upperPoint)) {
+        MySnackBar.errorSnackbar(WordStrings.errUpperPointMustValid);
+        tempList[index].highDifference = 0;
+      } else {
+        tempList[index].highDifference =
+            (int.parse(upperPoint) - int.parse(lowerPoint));
+      }
+    } else {
+      tempList[index].highDifference = 0;
+    }
+    calculateSlope(
+        tempList[index].tiltValue!, tempList[index].highDifference!, index);
+  }
+
+  void calculateTiltValue(int index) {
+    final tiltDirection = tempList[index].titlDirection;
+    final leftPoint = tempList[index].leftPoint!;
+    final rightPoint = tempList[index].rightPoint!;
+
+    if (tiltDirection == WordStrings.selectDirection.toString()) {
+      MySnackBar.errorSnackbar(WordStrings.errselectDirection);
+      return;
+    }
+
+    if (leftPoint.isNotEmpty && rightPoint.isNotEmpty) {
+      if (tiltDirection == WordStrings.selectLeftDirection.toString()) {
+        if (int.parse(rightPoint) >= int.parse(leftPoint)) {
+          MySnackBar.errorSnackbar(WordStrings.errRightPointMustValid);
+          tempList[index].tiltValue = 0;
+        } else {
+          tempList[index].tiltValue =
+              int.parse(leftPoint) - int.parse(rightPoint);
+        }
+      } else {
+        if (int.parse(leftPoint) >= int.parse(rightPoint)) {
+          MySnackBar.errorSnackbar(WordStrings.errLeftPointMustValid);
+          tempList[index].tiltValue = 0;
+        } else {
+          tempList[index].tiltValue =
+              int.parse(rightPoint) - int.parse(leftPoint);
+        }
+      }
+    } else {
+      tempList[index].tiltValue = 0;
+    }
+    calculateSlope(
+        tempList[index].tiltValue!, tempList[index].highDifference!, index);
+  }
+
+  void calculateSlope(int tiltValue, int highDifference, int index) {
+    final result = tiltValue / highDifference;
+    debugPrint("Himadri >> ${result.toStringAsFixed(2)}");
+    tempList[index].slope = double.parse(result.toStringAsFixed(2));
+  }
+
+  void addVerticalValidatationForm() {
+    debugPrint("Himadri >> List size ?? ${tempList.length}");
+    final index = tempList.length - 1;
+
+    if (tempList[index].upperPoint!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errUpperPointEmpty);
+      return;
+    }
+
+    if (tempList[index].lowerPoint!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errLowerPointEmpty);
+      return;
+    }
+
+    if (tempList[index].titlDirection!.isEmpty ||
+        tempList[index].titlDirection! ==
+            WordStrings.selectDirection.toString()) {
+      MySnackBar.errorSnackbar(WordStrings.errselectDirection);
+      return;
+    }
+
+    if (tempList[index].leftPoint!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errLeftPointEmpty);
+      return;
+    }
+
+    if (tempList[index].rightPoint!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errRightPointEmpty);
+      return;
+    }
+
+    if (tempList[index].description!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errTechDesc);
+      return;
+    }
+
+    if (tempList[index].filePath!.isEmpty) {
+      MySnackBar.errorSnackbar(WordStrings.errImage);
+      return;
+    }
+
+    tempList[index] = dataObj;
+    debugPrint("Himadri >> OldObj >> ${dataObj.toJson()}");
+    dataObj = VerticalFormModel(
+        upperPoint: "",
+        lowerPoint: "",
+        highDifference: 0,
+        titlDirection: WordStrings.selectDirection.toString(),
+        leftPoint: "",
+        rightPoint: "",
+        tiltValue: 0,
+        slope: 0.0,
+        description: "",
+        filePath: []);
+
+    debugPrint("Himadri >> NewObj >> ${dataObj.toJson()}");
+    tempList.add(dataObj);
   }
 }
