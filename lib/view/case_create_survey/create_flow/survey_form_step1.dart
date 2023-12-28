@@ -402,6 +402,7 @@ class SurveyFormStep1 extends StatelessWidget {
                       id: caseId,
                       createdAt: now.caseGeneratorDateFormate(),
                       userId: userId,
+                      caseLable: caseId,
                       caseName: controller.txtCaseName.value.text,
                       caseAddress: controller.txtCaseAddress.value.text,
                       caseDate: controller.txtCaseDate.value.text,

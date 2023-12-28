@@ -7,6 +7,7 @@ class EstablishCaseModel {
       required this.createdAt,
       required this.userId,
       required this.caseName,
+      required this.caseLable,
       required this.caseAddress,
       required this.caseDate,
       required this.caseEquipmentNo,
@@ -18,13 +19,32 @@ class EstablishCaseModel {
       required this.wsFloorMaterial,
       required this.wsTechDescription});
 
+  EstablishCaseModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    userId = json['userId'];
+    createdAt = json['createdAt'];
+    caseName = json['caseName'];
+    caseLable = json['caseLabel'];
+    caseAddress = json['caseAddress'];
+    caseDate = json['caseDate'];
+    caseEquipmentNo = json['caseEquipmentNo'];
+    caseWeather = json['caseWeather'];
+    wsStructureType = json['structure'];
+    wsUseFor = json['use'];
+    wsWallType = json['wall'];
+    wsFlatTopMaterial = json['flatTopMaterial'];
+    wsFloorMaterial = json['floorMaterial'];
+    wsTechDescription = json['techDescription'];
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['userId'] = userId;
     data['createdAt'] = createdAt;
     data['caseName'] = caseName;
+    data['caseLabel'] = caseLable;
     data['caseAddress'] = caseAddress;
-    data['caseCreatedDate'] = caseDate;
+    data['caseDate'] = caseDate;
     data['caseEquipmentNo'] = caseEquipmentNo;
     data['caseWeather'] = caseWeather;
     data['structure'] = wsStructureType;
@@ -40,6 +60,7 @@ class EstablishCaseModel {
   String? createdAt;
   String? userId;
   String? caseName;
+  String? caseLable;
   String? caseAddress;
   String? caseDate;
   String? caseEquipmentNo;

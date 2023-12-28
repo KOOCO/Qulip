@@ -6,6 +6,7 @@ import 'package:qulip/common/colors.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/controller/case_list_controller.dart';
+import 'package:qulip/models/createcase/establish_case_model.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
@@ -13,7 +14,6 @@ class CaseListScreen extends StatelessWidget {
   CaseListScreen({super.key});
 
   final controller = Get.put(CaseListController());
-  // List<String> list = ["Himadri", "Viral", "Sunny", "Ruhi", "Ridham"];
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,9 @@ class CaseListScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _forumTabBar().paddingSymmetric(vertical: 14.h),
-          _forumTabBarItem(),
+          Obx(
+            () => _forumTabBarItem(),
+          ),
         ],
       ).paddingSymmetric(horizontal: 14.w, vertical: 4.h),
     );
@@ -70,19 +72,19 @@ class CaseListScreen extends StatelessWidget {
   Widget _forumTabBarItem() {
     return Expanded(
       child: ListView.builder(
-        itemCount: 20,
+        itemCount: controller.caseListNew.length,
         itemBuilder: (context, index) {
           return InkWell(
               onTap: () {
-                Get.toNamed(AppRoutes.caseDetailsScreen);
+                Get.toNamed(AppRoutes.caseDetailsScreen, arguments: index);
               },
-              child: _maincomment());
+              child: _maincomment(controller.caseListNew[index]));
         },
       ),
     );
   }
 
-  Widget _maincomment() {
+  Widget _maincomment(EstablishCaseModel model) {
     return Card(
       elevation: 4,
       child: Row(
@@ -93,8 +95,8 @@ class CaseListScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const MyText(
-                  'Case_123456',
+                MyText(
+                  model.caseLable!,
                 ).paddingSymmetric(horizontal: 4, vertical: 4),
                 const Icon(
                   size: 15,

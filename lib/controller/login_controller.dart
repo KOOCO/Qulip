@@ -122,8 +122,8 @@ class LoginController extends BaseController {
             password: doc["Password"],
             points: doc["Points"]));
 
-        debugPrint(
-            "LoginModel inProgress >> $isCompleted >> ${doc["UserName"]} >> ${doc["Password"]} >> ${doc["Points"]} >> ${list.length}");
+        // debugPrint(
+        // "LoginModel inProgress >> $isCompleted >> ${doc["UserName"]} >> ${doc["Password"]} >> ${doc["Points"]} >> ${list.length}");
       }
     }).whenComplete(() => isCompleted = true);
 
