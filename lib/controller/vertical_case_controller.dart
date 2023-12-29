@@ -29,61 +29,59 @@ class VerticalCaseController extends BaseController {
   final txtTechnicalDescription = TextEditingController();
   final selectedDirection = WordStrings.selectDirection.toString().obs;
 
-  createVerticalForm(VerticalFormModel formModel, int index) async {
-    await _db
-        .collection("Veritcal_Data")
-        .doc(DateTime.now().millisecondsSinceEpoch.toString())
-        .set(formModel.toJson())
-        .whenComplete(() {
-    });
-  }
-
   Future<void> storeVeritcalFormData(RxList<VerticalFormModel> tempList) async {
-
     debugPrint("Himadri >> List size ?? ${tempList.length}");
     final index = tempList.length - 1;
 
-    if (tempList[index].upperPoint!.isEmpty) {
-      MySnackBar.errorSnackbar(WordStrings.errUpperPointEmpty);
-      return;
-    }
+    // if (tempList[index].upperPoint!.isEmpty) {
+    //   MySnackBar.errorSnackbar(WordStrings.errUpperPointEmpty);
+    //   return;
+    // }
 
-    if (tempList[index].lowerPoint!.isEmpty) {
-      MySnackBar.errorSnackbar(WordStrings.errLowerPointEmpty);
-      return;
-    }
+    // if (tempList[index].lowerPoint!.isEmpty) {
+    //   MySnackBar.errorSnackbar(WordStrings.errLowerPointEmpty);
+    //   return;
+    // }
 
-    if (tempList[index].titlDirection!.isEmpty || tempList[index].titlDirection! == WordStrings.selectDirection.toString()) {
-      MySnackBar.errorSnackbar(WordStrings.errselectDirection);
-      return;
-    }
+    // if (tempList[index].titlDirection!.isEmpty || tempList[index].titlDirection! == WordStrings.selectDirection.toString()) {
+    //   MySnackBar.errorSnackbar(WordStrings.errselectDirection);
+    //   return;
+    // }
 
-    if (tempList[index].leftPoint!.isEmpty) {
-      MySnackBar.errorSnackbar(WordStrings.errLeftPointEmpty);
-      return;
-    }
+    // if (tempList[index].leftPoint!.isEmpty) {
+    //   MySnackBar.errorSnackbar(WordStrings.errLeftPointEmpty);
+    //   return;
+    // }
 
-    if (tempList[index].rightPoint!.isEmpty) {
-      MySnackBar.errorSnackbar(WordStrings.errRightPointEmpty);
-      return;
-    }
+    // if (tempList[index].rightPoint!.isEmpty) {
+    //   MySnackBar.errorSnackbar(WordStrings.errRightPointEmpty);
+    //   return;
+    // }
 
-    if (tempList[index].description!.isEmpty) {
-      MySnackBar.errorSnackbar(WordStrings.errTechDesc);
-      return;
-    }
+    // if (tempList[index].description!.isEmpty) {
+    //   MySnackBar.errorSnackbar(WordStrings.errTechDesc);
+    //   return;
+    // }
 
-    if (tempList[index].filePath!.isEmpty) {
-      MySnackBar.errorSnackbar(WordStrings.errImage);
-      return;
-    }
+    // if (tempList[index].filePath!.isEmpty) {
+    //   MySnackBar.errorSnackbar(WordStrings.errImage);
+    //   return;
+    // }
 
     setLoading(true);
-    for(var item in verticalFinalList ){
+    for (var item in verticalFinalList) {
       await createVerticalForm(item, index);
     }
-    setLoading(false);
-    MySnackBar.successSnackbar("Horizontal Form completed");
-    Get.toNamed(AppRoutes.horizontalCase1Screen);
+  }
+
+  createVerticalForm(VerticalFormModel formModel, int index) async {
+    await _db
+        .collection("vertical_form_data")
+        .doc(DateTime.now().millisecondsSinceEpoch.toString())
+        .set(formModel.toJson())
+        .whenComplete(() {
+      setLoading(false);
+      Get.toNamed(AppRoutes.horizontalCase1Screen);
+    });
   }
 }

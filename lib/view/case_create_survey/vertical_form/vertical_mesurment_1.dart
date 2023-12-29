@@ -12,6 +12,7 @@ import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_dropdown_area.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
+import 'package:qulip/controller/establish_case_controller.dart';
 import 'package:qulip/controller/vertical_case_controller.dart';
 import 'package:qulip/models/createcase/vertical/vertical_form_model.dart';
 import 'package:qulip/utils/dailog_helper.dart';
@@ -21,6 +22,7 @@ class VerticalMeasurement1 extends StatelessWidget {
   VerticalMeasurement1({super.key});
 
   final controller = Get.put(VerticalCaseController());
+  final caseController = Get.put(EstablishCaseController());
 
   var dataObj = VerticalFormModel(
       upperPoint: "",
@@ -43,8 +45,8 @@ class VerticalMeasurement1 extends StatelessWidget {
         backgroundColor: stdwhite,
         foregroundColor: yasRed,
         centerTitle: true,
-        title: const MyText(
-          WordStrings.surveyFormVerticallLbl,
+        title: MyText(
+          "${caseController.txtCaseName.value.text}_${WordStrings.surveyFormVerticallLbl}",
           fontFamily: FontFamilyConstant.sinkinSans,
           fontSize: 18,
           fontColor: yasRed,
@@ -147,7 +149,7 @@ class VerticalMeasurement1 extends StatelessWidget {
             color: yasRed,
           ),
           title: MyText(
-            "Number $index",
+            "Number ${index + 1}",
             fontFamily: FontFamilyConstant.sinkinSans,
             fontSize: 14,
             fontColor: yasRed,
@@ -168,10 +170,7 @@ class VerticalMeasurement1 extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           MyTextField(
-            onSubmit: (value){
-              tempList[index] = dataObj;
-            },
-            onChanged: (value) {
+            onSubmit: (value) {
               tempList[index].upperPoint = value;
               calculateHighDifference(index);
             },
@@ -186,12 +185,10 @@ class VerticalMeasurement1 extends StatelessWidget {
             height: 15,
           ),
           MyTextField(
-            onSubmit: (value){
-              tempList[index] = dataObj;
-            },
-            onChanged: (value) {
+            onSubmit: (value) {
               tempList[index].lowerPoint = value;
               calculateHighDifference(index);
+              tempList[index] = dataObj;
             },
             fullBorder: true,
             hasFloatingLabel: false,
@@ -270,9 +267,10 @@ class VerticalMeasurement1 extends StatelessWidget {
             height: 15,
           ),
           MyTextField(
-            onChanged: (value) {
+            onSubmit: (value) {
               tempList[index].leftPoint = value;
               calculateTiltValue(index);
+              // tempList[index] = dataObj;
             },
             fullBorder: true,
             hasFloatingLabel: false,
@@ -280,18 +278,11 @@ class VerticalMeasurement1 extends StatelessWidget {
             keyboard: TextInputType.number,
             labelText: WordStrings.leftPointLbl,
             hintText: WordStrings.leftPointLbl,
-            onSubmit: (value) {
-              tempList[index] = dataObj;
-            },
           ),
           const SizedBox(
             height: 15,
           ),
           MyTextField(
-            onChanged: (value) {
-              tempList[index].rightPoint = value;
-              calculateTiltValue(index);
-            },
             fullBorder: true,
             hasFloatingLabel: false,
             controller: TextEditingController(text: tempList[index].rightPoint),
@@ -299,7 +290,9 @@ class VerticalMeasurement1 extends StatelessWidget {
             labelText: WordStrings.rightPointLbl,
             hintText: WordStrings.rightPointLbl,
             onSubmit: (value) {
-            tempList[index] = dataObj;
+              tempList[index].rightPoint = value;
+              calculateTiltValue(index);
+              tempList[index] = dataObj;
             },
           ),
           const SizedBox(
@@ -513,11 +506,10 @@ class VerticalMeasurement1 extends StatelessWidget {
   }
 
   Future<String?> uploadImage(File pickedImg, int index) async {
-    var imageName =
-        "Vertical_Mesurement_Form_${DateTime.now().millisecondsSinceEpoch}";
+    var imageName = "VMS_${DateTime.now().millisecondsSinceEpoch}";
     var ref = FirebaseStorage.instance
         .ref()
-        .child('vertical_mesurment')
+        .child('vertical_data')
         .child("$imageName.jpg");
     await ref.putFile(pickedImg);
 
@@ -614,15 +606,15 @@ class VerticalMeasurement1 extends StatelessWidget {
       return;
     }
 
-    if (tempList[index].description!.isEmpty) {
-      MySnackBar.errorSnackbar(WordStrings.errTechDesc);
-      return;
-    }
+    // if (tempList[index].description!.isEmpty) {
+    //   MySnackBar.errorSnackbar(WordStrings.errTechDesc);
+    //   return;
+    // }
 
-    if (tempList[index].filePath!.isEmpty) {
-      MySnackBar.errorSnackbar(WordStrings.errImage);
-      return;
-    }
+    // if (tempList[index].filePath!.isEmpty) {
+    //   MySnackBar.errorSnackbar(WordStrings.errImage);
+    //   return;
+    // }
 
     tempList[index] = dataObj;
     debugPrint("Himadri >> OldObj >> ${dataObj.toJson()}");

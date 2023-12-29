@@ -2,8 +2,8 @@ import 'package:get/get.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
-class WeentialSurveyData2Model {
-  WeentialSurveyData2Model(
+class WeentialDataModel {
+  WeentialDataModel(
       {this.id,
       required this.wsLocation,
       required this.wsSituation,
@@ -11,17 +11,17 @@ class WeentialSurveyData2Model {
       required this.wsCrackedWidth,
       required this.wsFlaw,
       required this.wsTechDescr,
-      required this.wsImages});
+      required this.wsImagesList});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['Location'] = wsLocation;
-    data['Situation'] = wsSituation;
-    data['CrackedLength'] = wsCrackedLength;
-    data['CrackedWidth'] = wsCrackedWidth;
-    data['Flaw'] = wsFlaw;
-    data['Description'] = wsTechDescr;
-    data['Images'] = wsImages;
+    data['location'] = wsLocation;
+    data['situation'] = wsSituation;
+    data['crackedLength'] = wsCrackedLength;
+    data['crackedWidth'] = wsCrackedWidth;
+    data['flaw'] = wsFlaw;
+    data['description'] = wsTechDescr;
+    data['imagesList'] = wsImagesList;
 
     return data;
   }
@@ -33,5 +33,5 @@ class WeentialSurveyData2Model {
   String? wsCrackedWidth;
   String? wsFlaw;
   String? wsTechDescr;
-  List<String>? wsImages = <String>[].obs;
+  List<String>? wsImagesList = <String>[].obs;
 }

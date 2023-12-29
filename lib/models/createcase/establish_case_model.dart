@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:qulip/models/createcase/weential_data_model.dart';
 
 @JsonSerializable()
 class EstablishCaseModel {
@@ -17,7 +18,8 @@ class EstablishCaseModel {
       required this.wsWallType,
       required this.wsFlatTopMaterial,
       required this.wsFloorMaterial,
-      required this.wsTechDescription});
+      required this.wsTechDescription,
+      required this.wsWeentileDataList});
 
   EstablishCaseModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -35,6 +37,7 @@ class EstablishCaseModel {
     wsFlatTopMaterial = json['flatTopMaterial'];
     wsFloorMaterial = json['floorMaterial'];
     wsTechDescription = json['techDescription'];
+    // wsWeentileDataList = json['weentialList'] as List<WeentialDataModel>;
   }
 
   Map<String, dynamic> toJson() {
@@ -53,6 +56,7 @@ class EstablishCaseModel {
     data['flatTopMaterial'] = wsFlatTopMaterial;
     data['floorMaterial'] = wsFloorMaterial;
     data['techDescription'] = wsTechDescription;
+    data['weentialList'] = wsWeentileDataList;
     return data;
   }
 
@@ -71,4 +75,5 @@ class EstablishCaseModel {
   String? wsFlatTopMaterial;
   String? wsFloorMaterial;
   String? wsTechDescription;
+  List<WeentialDataModel>? wsWeentileDataList;
 }

@@ -9,6 +9,7 @@ import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_text.dart';
+import 'package:qulip/controller/establish_case_controller.dart';
 import 'package:qulip/controller/horizontal_case_controller.dart';
 import 'package:qulip/routes/app_routes.dart';
 
@@ -16,6 +17,7 @@ class HorizontalMeasurement2 extends StatelessWidget {
   HorizontalMeasurement2({super.key});
 
   final controller = Get.put(HorizontalCaseController());
+  final caseController = Get.put(EstablishCaseController());
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +28,8 @@ class HorizontalMeasurement2 extends StatelessWidget {
         backgroundColor: stdwhite,
         foregroundColor: yasRed,
         centerTitle: true,
-        title: const MyText(
-          WordStrings.surveyFormVerticallLbl,
+        title: MyText(
+          "${caseController.txtCaseName.value.text}_${WordStrings.surveyFormHorizonatllLbl}",
           fontFamily: FontFamilyConstant.sinkinSans,
           fontSize: 18,
           fontColor: yasRed,

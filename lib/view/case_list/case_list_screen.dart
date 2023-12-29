@@ -34,6 +34,19 @@ class CaseListScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Visibility(
+          //   visible: controller.caseListNew.isEmpty ? true : false,
+          //   child: Container(
+          //     height: MediaQuery.of(context).size.height,
+          //     // width: MediaQuery.of(context).size.width,
+          //     child: Center(
+          //       child: const MyText(
+          //         "No records found",
+          //         textAlign: TextAlign.center,
+          //       ).paddingSymmetric(horizontal: 4, vertical: 4),
+          //     ),
+          //   ),
+          // ),
           _forumTabBar().paddingSymmetric(vertical: 14.h),
           Obx(
             () => _forumTabBarItem(),
@@ -71,16 +84,27 @@ class CaseListScreen extends StatelessWidget {
 
   Widget _forumTabBarItem() {
     return Expanded(
-      child: ListView.builder(
-        itemCount: controller.caseListNew.length,
-        itemBuilder: (context, index) {
-          return InkWell(
-              onTap: () {
-                Get.toNamed(AppRoutes.caseDetailsScreen, arguments: index);
+      child: controller.caseListNew.isEmpty
+          ? Center(
+              child: const MyText(
+                WordStrings.noRecordsMsg,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                fontColor: yasRed,
+                textAlign: TextAlign.center,
+              ).paddingSymmetric(horizontal: 4, vertical: 4),
+            )
+          : ListView.builder(
+              itemCount: controller.caseListNew.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.caseDetailsScreen,
+                          arguments: index);
+                    },
+                    child: _maincomment(controller.caseListNew[index]));
               },
-              child: _maincomment(controller.caseListNew[index]));
-        },
-      ),
+            ),
     );
   }
 

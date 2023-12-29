@@ -1,17 +1,20 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
+import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_dropdown_area.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
+import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/datetime_helper.dart';
 import 'package:qulip/utils/storage_helper.dart';
-import 'package:qulip/utils/string_helper.dart';
 import 'package:qulip/utils/text_style_helper.dart';
 
 class SurveyFormStep1 extends StatelessWidget {
@@ -393,31 +396,62 @@ class SurveyFormStep1 extends StatelessWidget {
                 height: Get.height * 0.05,
                 borderRadius: 2,
                 onTap: () async {
-                  // "${controller.txtCaseName.value.text}_${getCaseNumber()}",
-                  final now = DateTime.now();
-                  final caseId =
-                      "${now.caseGeneratorDateFormate()}_${controller.txtCaseName.value.text}";
+                  if (controller.selectedStructure.value ==
+                      WordStrings.selectStructure.toString()) {
+                    MySnackBar.errorSnackbar(WordStrings.errStructure);
+                    return;
+                  }
 
-                  final caseModel = EstablishCaseModel(
-                      id: caseId,
-                      createdAt: now.caseGeneratorDateFormate(),
-                      userId: userId,
-                      caseLable: caseId,
-                      caseName: controller.txtCaseName.value.text,
-                      caseAddress: controller.txtCaseAddress.value.text,
-                      caseDate: controller.txtCaseDate.value.text,
-                      caseEquipmentNo:
-                          controller.txtCaseEquipmentName.value.text,
-                      caseWeather: controller.txtCaseWeather.value.text,
-                      wsStructureType: controller.selectedStructure.value,
-                      wsUseFor: controller.selectedUse.value,
-                      wsWallType: controller.selectedWall.value,
-                      wsFlatTopMaterial:
-                          controller.selectedFlatTopMaterial.value,
-                      wsFloorMaterial: controller.selectedFloor.value,
-                      wsTechDescription:
-                          controller.txtSupplimentryDesc.value.text);
-                  controller.storeWeentialStep1Data(caseModel);
+                  if (controller.selectedUse.value == WordStrings.selectUse.toString()) {
+                    MySnackBar.errorSnackbar(WordStrings.errUse);
+                    return;
+                  }
+
+                  if (controller.selectedWall.value == WordStrings.selectWall.toString()) {
+                    MySnackBar.errorSnackbar(WordStrings.errWall);
+                    return;
+                  }
+
+                  if (controller.selectedFlatTopMaterial.value ==
+                      WordStrings.selectFTop.toString()) {
+                    MySnackBar.errorSnackbar(WordStrings.errFTop);
+                    return;
+                  }
+
+                  if (controller.selectedFloor.value ==
+                      WordStrings.selectFloor.toString()) {
+                    MySnackBar.errorSnackbar(WordStrings.errFloor);
+                    return;
+                  }
+                  
+                  Get.toNamed(AppRoutes.surveyForm2CreateScreen);
+
+                  
+                  // "${controller.txtCaseName.value.text}_${getCaseNumber()}",
+                  // final now = DateTime.now();
+                  // controller.caseId.value =
+                  //     "${now.caseGeneratorDateFormate()}_${controller.txtCaseName.value.text}";
+
+                  // final caseModel = EstablishCaseModel(
+                  //   id: controller.caseId.value,
+                  //   createdAt: now.caseGeneratorDateFormate(),
+                  //   userId: userId,
+                  //   caseLable: controller.caseId.value,
+                  //   caseName: controller.txtCaseName.value.text,
+                  //   caseAddress: controller.txtCaseAddress.value.text,
+                  //   caseDate: controller.txtCaseDate.value.text,
+                  //   caseEquipmentNo: controller.txtCaseEquipmentName.value.text,
+                  //   caseWeather: controller.txtCaseWeather.value.text,
+                  //   wsStructureType: controller.selectedStructure.value,
+                  //   wsUseFor: controller.selectedUse.value,
+                  //   wsWallType: controller.selectedWall.value,
+                  //   wsFlatTopMaterial: controller.selectedFlatTopMaterial.value,
+                  //   wsFloorMaterial: controller.selectedFloor.value,
+                  //   wsTechDescription:
+                  //       controller.txtSupplimentryDesc.value.text,
+                  //   wsWeentileDataList: [],
+                  // );
+                  // controller.storeWeentialStep1Data(caseModel);
                 },
               )
             ],
