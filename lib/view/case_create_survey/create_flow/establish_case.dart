@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,11 +9,7 @@ import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
-import 'package:qulip/models/createcase/establish_case_model.dart';
-import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/datetime_helper.dart';
-import 'package:qulip/utils/storage_helper.dart';
-import 'package:qulip/utils/string_helper.dart';
 
 class CreateCaseScreen extends StatelessWidget {
   CreateCaseScreen({super.key});
@@ -124,16 +119,7 @@ class CreateCaseScreen extends StatelessWidget {
               height: Get.height * 0.05,
               borderRadius: 2,
               onTap: () async {
-                final caseModel = EstablishCaseModel(
-                    id: "${controller.txtCaseName.value.text}_${getCaseNumber()}",
-                    userId: StorageHelper.read(StorageKeys.userId).toString(),
-                    caseName: controller.txtCaseName.value.text,
-                    caseAddress: controller.txtCaseAddress.value.text,
-                    caseDate: controller.txtCaseDate.value.text,
-                    caseEquipmentNo: controller.txtCaseEquipmentName.value.text,
-                    caseWeather: controller.txtCaseWeather.value.text);
-                // Get.toNamed(AppRoutes.surveyForm1CreateScreen);
-                controller.storeCaseEstablishData(caseModel);
+                controller.storeCaseEstablishData();
               },
             ).paddingOnly(top: Get.height * 0.04),
           ],
