@@ -9,6 +9,7 @@ import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_button_with_icon.dart';
 import 'package:qulip/common/widgets/my_image.dart';
 import 'package:qulip/common/widgets/my_text.dart';
+import 'package:qulip/controller/establish_case_controller.dart';
 import 'package:qulip/controller/login_controller.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/storage_helper.dart';
@@ -17,7 +18,7 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   final controller = Get.put(LoginController());
-  int points = 0;
+  final points = 0.obs;
 
   Future showWarning(BuildContext context) async => showDialog(
       context: context,
@@ -66,7 +67,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    StorageHelper.read(StorageKeys.point).then((value) => {points = value});
+    StorageHelper.read(StorageKeys.point)
+        .then((value) => {points.value = value});
+    StorageHelper.read(StorageKeys.userId).then((value) {
+      debugPrint("User Id $value");
+    });
     return WillPopScope(
       onWillPop: () async {
         final shouldPop = await showWarning(context);
@@ -141,14 +146,14 @@ class HomeScreen extends StatelessWidget {
                           fontSize: 12,
                           fontColor: stdgrey,
                         ),
-                        MyText(
-                          "$points ${WordStrings.pointLblHome}",
-                          // "${controller.userData.value.points} ${WordStrings.pointLblHome}",
-                          fontWeight: FontWeight.w600,
-                          fontFamily: FontFamilyConstant.sinkinSansMedium,
-                          fontSize: 14,
-                          fontColor: yasRed,
-                        ),
+                        Obx(() => MyText(
+                              "$points ${WordStrings.pointLblHome}",
+                              // "${controller.userData.value.points} ${WordStrings.pointLblHome}",
+                              fontWeight: FontWeight.w600,
+                              fontFamily: FontFamilyConstant.sinkinSansMedium,
+                              fontSize: 14,
+                              fontColor: yasRed,
+                            )),
                       ]).paddingSymmetric(horizontal: 20.w),
                 ],
               ),

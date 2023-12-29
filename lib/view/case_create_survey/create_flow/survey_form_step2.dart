@@ -1,3 +1,4 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,13 +12,14 @@ import 'package:qulip/common/widgets/my_dropdown_area.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
-import 'package:qulip/models/createcase/weential_data_model.dart';
+import 'package:qulip/models/createcase/weential/weential_data_model.dart';
+import 'package:qulip/utils/dailog_helper.dart';
 import 'package:qulip/utils/text_style_helper.dart';
 
 class SurveyFormStep2 extends StatelessWidget {
   SurveyFormStep2({super.key});
 
-  final controller = Get.put(EstablishCaseController());
+  final controller = Get.find<EstablishCaseController>();
 
   var dataObj = WeentialDataModel(
     wsLocation: WordStrings.selectLocation.toString(),
@@ -108,7 +110,8 @@ class SurveyFormStep2 extends StatelessWidget {
             onTap: () async {
               controller.surveyModelFinalList.value =
                   tempList.map((v) => v).toList();
-              controller.storWeentialListToFirestore(tempList);
+
+              controller.storeWeentialStep2();
             },
           ).paddingAll(10).marginOnly(bottom: 10),
         ],
@@ -143,7 +146,7 @@ class SurveyFormStep2 extends StatelessWidget {
             color: yasRed,
           ),
           title: MyText(
-            "Number ${index + 1}",
+            "${WordStrings.numberLbl}  ${index + 1}",
             fontFamily: FontFamilyConstant.sinkinSans,
             fontSize: 14,
             fontColor: yasRed,
@@ -393,7 +396,7 @@ class SurveyFormStep2 extends StatelessWidget {
                 Obx(
                   () => InkWell(
                     onTap: () {
-                      controller.takePhoto(context, tempList[index], index);
+                      takePhoto(context, tempList[index], index);
                     },
                     child: Visibility(
                       child: Align(
@@ -427,6 +430,24 @@ class SurveyFormStep2 extends StatelessWidget {
     );
   }
 
+  Future<void> takePhoto(
+      BuildContext context, WeentialDataModel data, tempListIndex) async {
+    DialogBox.selectImage(
+      context,
+      onComplete: (filePath) async {
+        if (filePath.isNotEmpty) {
+          controller.setLoading(true);
+          final uFile = File(filePath);
+          controller.uploadWSImage(uFile, tempListIndex).then((url) {
+            controller.setLoading(false);
+            tempList[tempListIndex].wsImagesList!.add(url!);
+            tempList[tempListIndex] = dataObj;
+          });
+        }
+      },
+    );
+  }
+
   Widget _buildImageList(List<String> imageList, int tempListIndex) {
     return Expanded(
       child: ListView.builder(
@@ -455,12 +476,31 @@ class SurveyFormStep2 extends StatelessWidget {
       child: Obx(
         () => InkWell(
           child: Stack(children: [
-            Center(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(5)),
-                child: Image.network(
-                  fit: BoxFit.contain,
-                  tempList[tempListIndex].wsImagesList![imageIndex],
+            SizedBox(
+              child: Center(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(5)),
+                  child: Image.network(
+                    // width: Get.width * 0.25,
+                    fit: BoxFit.fill,
+                    tempList[tempListIndex].wsImagesList![imageIndex],
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return SizedBox(
+                        width: Get.width * 0.25,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: yasRed,
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
@@ -470,9 +510,19 @@ class SurveyFormStep2 extends StatelessWidget {
                 child: Obx(
                   () => InkWell(
                     onTap: () {
-                      tempList[tempListIndex]
-                          .wsImagesList!
-                          .removeAt(imageIndex);
+                      controller.setLoading(true);
+                      controller
+                          .deleteImage(
+                              tempList[tempListIndex].wsImagesList![imageIndex])
+                          .then(
+                        (_) {
+                          tempList[tempListIndex]
+                              .wsImagesList!
+                              .removeAt(imageIndex);
+                          // tempList.remove(dataObj);
+                          controller.setLoading(false);
+                        },
+                      );
                     },
                     child: Visibility(
                       visible: tempList[tempListIndex]
@@ -481,9 +531,9 @@ class SurveyFormStep2 extends StatelessWidget {
                           ? true
                           : false,
                       child: const Icon(
-                        Icons.cancel,
+                        Icons.delete_rounded,
                         color: Colors.red,
-                        size: 18,
+                        size: 20,
                       ).paddingAll(10),
                     ),
                   ),
@@ -514,26 +564,6 @@ class SurveyFormStep2 extends StatelessWidget {
       MySnackBar.errorSnackbar(WordStrings.errFlaw);
       return;
     }
-
-    // if (tempList[index].wsCrackedLength!.isEmpty) {
-    //   MySnackBar.errorSnackbar(WordStrings.errCrackLength);
-    //   return;
-    // }
-
-    // if (tempList[index].wsCrackedWidth!.isEmpty) {
-    //   MySnackBar.errorSnackbar(WordStrings.errCrackWidth);
-    //   return;
-    // }
-
-    // if (tempList[index].wsTechDescr!.isEmpty) {
-    //   MySnackBar.errorSnackbar(WordStrings.errTechDesc);
-    //   return;
-    // }
-
-    // if (tempList[index].wsImages!.isEmpty) {
-    //   MySnackBar.errorSnackbar(WordStrings.errImage);
-    //   return;
-    // }
 
     tempList[index] = dataObj;
     debugPrint("Himadri >> OldObj >> ${dataObj.toJson()}");

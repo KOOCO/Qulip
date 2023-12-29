@@ -1,35 +1,33 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
-import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
-import 'package:qulip/controller/horizontal_case_controller.dart';
-import 'package:qulip/routes/app_routes.dart';
+import 'package:qulip/models/createcase/establish_case_model.dart';
+import 'package:qulip/utils/datetime_helper.dart';
+import 'package:qulip/utils/storage_helper.dart';
 
 class HorizontalMeasurement2 extends StatelessWidget {
   HorizontalMeasurement2({super.key});
 
-  final controller = Get.put(HorizontalCaseController());
-  final caseController = Get.put(EstablishCaseController());
+  final controller = Get.find<EstablishCaseController>();
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(
-        "Himadri >> List size>> New Screen ${controller.finalList.length} >> ${controller.photoList.length} >> ${controller.photoList.isEmpty}");
+    StorageHelper.read(StorageKeys.userId).then((value) {
+      controller.userId.value = value;
+    });
     return Scaffold(
       appBar: AppBar(
         backgroundColor: stdwhite,
         foregroundColor: yasRed,
         centerTitle: true,
         title: MyText(
-          "${caseController.txtCaseName.value.text}_${WordStrings.surveyFormHorizonatllLbl}",
+          "${controller.txtCaseName.value.text}_${WordStrings.surveyFormHorizonatllLbl}",
           fontFamily: FontFamilyConstant.sinkinSans,
           fontSize: 18,
           fontColor: yasRed,
@@ -54,7 +52,6 @@ class HorizontalMeasurement2 extends StatelessWidget {
           Obx(
             () => _buildListView(context),
           ),
-          // Image.network(fit: BoxFit.fill, "https://picsum.photos/250?image=9"),
           MyButton(
             label: WordStrings.btnSaveLbl,
             style: const TextStyle(
@@ -74,12 +71,32 @@ class HorizontalMeasurement2 extends StatelessWidget {
             height: Get.height * 0.05,
             borderRadius: 2,
             onTap: () async {
-              controller
-                  .storeHorizontalFormData(controller.finalList)
-                  .then((_) {
-                MySnackBar.successSnackbar("Horizontal Form completed");
-                Get.toNamed(AppRoutes.homeScreen);
-              });
+              final now = DateTime.now();
+              controller.caseId.value =
+                  "${now.caseGeneratorDateFormate()}_${controller.txtCaseName.value.text}";
+
+              final caseModel = EstablishCaseModel(
+                id: controller.caseId.value,
+                createdAt: now.caseGeneratorDateFormate(),
+                userId: controller.userId.value,
+                caseLable: controller.caseId.value,
+                caseName: controller.txtCaseName.value.text,
+                caseAddress: controller.txtCaseAddress.value.text,
+                caseDate: controller.txtCaseDate.value.text,
+                caseEquipmentNo: controller.txtCaseEquipmentName.value.text,
+                caseWeather: controller.txtCaseWeather.value.text,
+                wsStructureType: controller.selectedStructure.value,
+                wsUseFor: controller.selectedUse.value,
+                wsWallType: controller.selectedWall.value,
+                wsFlatTopMaterial: controller.selectedFlatTopMaterial.value,
+                wsFloorMaterial: controller.selectedFloor.value,
+                wsTechDescription: controller.txtSupplimentryDesc.value.text,
+                wsWeentileDataList: [],
+                verticalMSDataList: [],
+                horizontalMSDataList: [],
+              );
+              debugPrint("Himadri Final data :: ${caseModel.toJson()}");
+              controller.createCase(caseModel);
             },
           ).paddingAll(10).marginOnly(bottom: 10),
         ],
@@ -90,7 +107,7 @@ class HorizontalMeasurement2 extends StatelessWidget {
   Widget _buildListView(BuildContext context) {
     return Expanded(
       child: ListView.builder(
-        itemCount: controller.finalList.length,
+        itemCount: controller.horizontalfinalList.length,
         itemBuilder: (context, index) {
           return _buildList(context, index);
         },
@@ -114,7 +131,7 @@ class HorizontalMeasurement2 extends StatelessWidget {
             color: yasRed,
           ),
           title: MyText(
-            "Number ${index + 1}",
+            "${WordStrings.numberLbl}  ${index + 1}",
             fontFamily: FontFamilyConstant.sinkinSans,
             fontSize: 14,
             fontColor: yasRed,
@@ -142,7 +159,7 @@ class HorizontalMeasurement2 extends StatelessWidget {
             fontColor: yasRed,
           ).paddingOnly(left: 2, right: 2, bottom: 4),
           MyText(
-            controller.finalList[index].mesuringPoint!,
+            controller.horizontalfinalList[index].mesuringPoint!,
             fontWeight: FontWeight.bold,
             fontFamily: FontFamilyConstant.sinkinSansMedium,
             fontColor: yasRed,
@@ -167,7 +184,7 @@ class HorizontalMeasurement2 extends StatelessWidget {
                 Obx(
                   () => InkWell(
                     onTap: () {
-                      controller.takePhoto(context, index);
+                      controller.takePhotoHS(context, index);
                     },
                     child: Visibility(
                       visible: controller.photoList[index] == "" ? true : false,
@@ -205,7 +222,8 @@ class HorizontalMeasurement2 extends StatelessWidget {
                                     .deleteImage(controller.photoList[index])
                                     .then((_) {
                                   controller.photoList[index] = "";
-                                  controller.finalList[index].imageUri = "";
+                                  controller
+                                      .horizontalfinalList[index].imageUri = "";
                                   debugPrint(
                                       'Successfully deleted storage item $index');
                                 });

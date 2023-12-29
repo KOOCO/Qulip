@@ -9,15 +9,13 @@ import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
-import 'package:qulip/controller/horizontal_case_controller.dart';
-import 'package:qulip/models/createcase/horizontal/horizontal_mesurement_datamodel.dart';
+import 'package:qulip/models/createcase/horizontal/horizontal_form_model.dart';
 import 'package:qulip/routes/app_routes.dart';
 
 class HorizontalMeasurement1 extends StatelessWidget {
   HorizontalMeasurement1({super.key});
 
-  final controller = Get.put(HorizontalCaseController());
-  final caseController = Get.put(EstablishCaseController());
+  final controller = Get.find<EstablishCaseController>();
   var dataObj = HorizontalDataModel(
       mesuringPoint: "BM",
       backView: "",
@@ -37,7 +35,7 @@ class HorizontalMeasurement1 extends StatelessWidget {
         foregroundColor: yasRed,
         centerTitle: true,
         title: MyText(
-          "${caseController.txtCaseName.value.text}_${WordStrings.surveyFormHorizonatllLbl}",
+          "${controller.txtCaseName.value.text}_${WordStrings.surveyFormHorizonatllLbl}",
           fontFamily: FontFamilyConstant.sinkinSans,
           fontSize: 18,
           fontColor: yasRed,
@@ -103,7 +101,8 @@ class HorizontalMeasurement1 extends StatelessWidget {
             height: Get.height * 0.05,
             borderRadius: 2,
             onTap: () async {
-              controller.finalList.value = tempList.map((v) => v).toList();
+              controller.horizontalfinalList.value =
+                  tempList.map((v) => v).toList();
               Get.toNamed(AppRoutes.horizontalCase2Screen);
             },
           ).paddingAll(10).marginOnly(bottom: 10),
@@ -139,7 +138,7 @@ class HorizontalMeasurement1 extends StatelessWidget {
             color: yasRed,
           ),
           title: MyText(
-            "Number ${index + 1}",
+            "${WordStrings.numberLbl}  ${index + 1}",
             fontFamily: FontFamilyConstant.sinkinSans,
             fontSize: 14,
             fontColor: yasRed,

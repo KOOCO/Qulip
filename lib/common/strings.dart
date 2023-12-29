@@ -269,9 +269,9 @@ class WordStrings {
   static const String bottomHistory = '歷史紀錄';
   static const String bottomFav = '最愛';
 
-
   //New strings
-  static const String noRecordsMsg = 'No records found';
+  static const String noRecordsMsg = '未找到記錄';
+  static const String numberLbl = '編號';
 
   // static const apiKey = "3aaa230be8a34174820f6308f3b176a3";
   // static const apiSecret = "94bd22c3369f4a5fbaede97a0b59e2c1";

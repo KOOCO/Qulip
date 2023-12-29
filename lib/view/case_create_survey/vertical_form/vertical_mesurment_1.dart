@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -13,7 +12,6 @@ import 'package:qulip/common/widgets/my_dropdown_area.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
-import 'package:qulip/controller/vertical_case_controller.dart';
 import 'package:qulip/models/createcase/vertical/vertical_form_model.dart';
 import 'package:qulip/utils/dailog_helper.dart';
 import 'package:qulip/utils/text_style_helper.dart';
@@ -21,8 +19,7 @@ import 'package:qulip/utils/text_style_helper.dart';
 class VerticalMeasurement1 extends StatelessWidget {
   VerticalMeasurement1({super.key});
 
-  final controller = Get.put(VerticalCaseController());
-  final caseController = Get.put(EstablishCaseController());
+  final caseController = Get.find<EstablishCaseController>();
 
   var dataObj = VerticalFormModel(
       upperPoint: "",
@@ -112,9 +109,9 @@ class VerticalMeasurement1 extends StatelessWidget {
             height: Get.height * 0.05,
             borderRadius: 2,
             onTap: () async {
-              controller.verticalFinalList.value =
+              caseController.verticalFinalList.value =
                   tempList.map((v) => v).toList();
-              controller.storeVeritcalFormData(tempList);
+              caseController.storeVeritcalFormData();
             },
           ).paddingAll(10).marginOnly(bottom: 10),
         ],
@@ -149,7 +146,7 @@ class VerticalMeasurement1 extends StatelessWidget {
             color: yasRed,
           ),
           title: MyText(
-            "Number ${index + 1}",
+            "${WordStrings.numberLbl} ${index + 1}",
             fontFamily: FontFamilyConstant.sinkinSans,
             fontSize: 14,
             fontColor: yasRed,
@@ -232,7 +229,7 @@ class VerticalMeasurement1 extends StatelessWidget {
                   child: MyDropDownArea(
                     iconColor: lightGrey,
                     isExpanded: false,
-                    items: controller.tileDirectionList.map((element) {
+                    items: caseController.tileDirectionList.map((element) {
                       return DropdownMenuItem<String>(
                         value: element,
                         child: MyText(
@@ -242,7 +239,7 @@ class VerticalMeasurement1 extends StatelessWidget {
                       );
                     }).toList(),
                     selectedItemBuilder: (context) {
-                      return controller.tileDirectionList
+                      return caseController.tileDirectionList
                           .map(
                             (element) => Container(
                               height: 25,
@@ -455,6 +452,22 @@ class VerticalMeasurement1 extends StatelessWidget {
                 child: Image.network(
                   fit: BoxFit.contain,
                   tempList[tempListIndex].filePath![imageIndex],
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return SizedBox(
+                      width: Get.width * 0.25,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: yasRed,
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
@@ -464,7 +477,19 @@ class VerticalMeasurement1 extends StatelessWidget {
                 child: Obx(
                   () => InkWell(
                     onTap: () {
-                      tempList[tempListIndex].filePath!.removeAt(imageIndex);
+                      caseController.setLoading(true);
+                      caseController
+                          .deleteImage(
+                              tempList[tempListIndex].filePath![imageIndex])
+                          .then(
+                        (_) {
+                          tempList[tempListIndex]
+                              .filePath!
+                              .removeAt(imageIndex);
+                          tempList.add(dataObj);
+                          caseController.setLoading(false);
+                        },
+                      );
                     },
                     child: Visibility(
                       visible: tempList[tempListIndex]
@@ -491,29 +516,16 @@ class VerticalMeasurement1 extends StatelessWidget {
       context,
       onComplete: (filePath) async {
         if (filePath.isNotEmpty) {
-          controller.setLoading(true);
-          debugPrint("FilePath $filePath");
+          caseController.setLoading(true);
           final uFile = File(filePath);
-          uploadImage(uFile, tempListIndex).then((url) {
-            controller.setLoading(false);
+          caseController.uploadVMSImage(uFile, tempListIndex).then((url) {
             tempList[tempListIndex].filePath!.add(url!);
-            debugPrint("Himadri : Download url>> >>> $url");
             tempList[tempListIndex] = dataObj;
+            caseController.setLoading(false);
           });
         }
       },
     );
-  }
-
-  Future<String?> uploadImage(File pickedImg, int index) async {
-    var imageName = "VMS_${DateTime.now().millisecondsSinceEpoch}";
-    var ref = FirebaseStorage.instance
-        .ref()
-        .child('vertical_data')
-        .child("$imageName.jpg");
-    await ref.putFile(pickedImg);
-
-    return await ref.getDownloadURL();
   }
 
   void calculateHighDifference(int index) {
@@ -605,16 +617,6 @@ class VerticalMeasurement1 extends StatelessWidget {
       MySnackBar.errorSnackbar(WordStrings.errRightPointEmpty);
       return;
     }
-
-    // if (tempList[index].description!.isEmpty) {
-    //   MySnackBar.errorSnackbar(WordStrings.errTechDesc);
-    //   return;
-    // }
-
-    // if (tempList[index].filePath!.isEmpty) {
-    //   MySnackBar.errorSnackbar(WordStrings.errImage);
-    //   return;
-    // }
 
     tempList[index] = dataObj;
     debugPrint("Himadri >> OldObj >> ${dataObj.toJson()}");

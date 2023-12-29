@@ -12,7 +12,7 @@ import 'package:qulip/controller/case_list_controller.dart';
 class CaseDetailScreen extends StatelessWidget {
   CaseDetailScreen({super.key});
 
-  final controller = Get.put(CaseListController());
+  final controller = Get.find<CaseListController>();
 
   @override
   Widget build(BuildContext context) {

@@ -9,15 +9,16 @@ class CaseListController extends BaseController {
   final _db = FirebaseFirestore.instance;
   List caseList = [];
   var caseListNew = <EstablishCaseModel>[].obs;
+  var isProcessComplete = false;
 
   Future<List> getData() async {
-    await _db.collection('/case_survey').get().then((value) {
+    // setLoading(true);
+    await _db.collection('case_survey').get().then((value) {
       final result = (value.docs)
           .map((x) => EstablishCaseModel.fromJson(x.data()))
           .toList();
       caseListNew.addAll(result);
-      debugPrint("Himadri :: ${caseListNew.length}");
-    });
+    }).whenComplete(() => isProcessComplete = true);
 
     return caseList;
     // final cRef = _db.collection('/case_survey');
