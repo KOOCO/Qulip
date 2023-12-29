@@ -115,21 +115,25 @@ class LoginController extends BaseController {
   checkUserExists(UserDBModel uModel) async {
     bool isCompleted = false;
     List<UserDBModel> list = [];
-    await _db.collection('User').get().then((QuerySnapshot querySnapshot) {
+    await _db.collection('user').get().then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
         list.add(UserDBModel(
-            username: doc["UserName"],
-            password: doc["Password"],
-            points: doc["Points"]));
+            username: doc["userName"],
+            password: doc["password"],
+            points: doc["points"],
+            userId: doc["userId"]));
 
-        debugPrint(
-            "LoginModel inProgress >> $isCompleted >> ${doc["UserName"]} >> ${doc["Password"]} >> ${doc["Points"]} >> ${list.length}");
+        // debugPrint(
+        // "LoginModel inProgress >> $isCompleted >> ${doc["UserName"]} >> ${doc["Password"]} >> ${doc["Points"]} >> ${list.length}");
       }
     }).whenComplete(() => isCompleted = true);
+    final docId = _db.collection('user').doc().id;
+    debugPrint("UserID For :: $docId");
 
     if (isCompleted) {
       if (list.firstWhereOrNull((it) => (it.username == uModel.username &&
               it.password == uModel.password &&
+              it.userId == uModel.userId &&
               it.points == uModel.points)) !=
           null) {
         txtPhone.clear();
@@ -138,18 +142,20 @@ class LoginController extends BaseController {
         debugPrint('LoginModel Already exists! >> ');
       } else {
         debugPrint('LoginModel Added!');
-        storeUserInDb(uModel);
+        // uModel.userId = docId;
+        storeUserInDb(uModel, docId);
       }
     }
   }
 
   //FireStore method
-  storeUserInDb(UserDBModel uModel) async {
-    await _db
-        .collection("user")
-        .add(uModel.toJson())
-        .then((value) => StorageHelper.write(StorageKeys.userId, value.id))
-        .whenComplete(() {
+  storeUserInDb(UserDBModel uModel, String id) async {
+    StorageHelper.write(StorageKeys.userId, id);
+    await _db.collection("user").add(uModel.toJson()).then((value) {
+      debugPrint("UserID ${value.id}");
+    }).whenComplete(() {
+      // _db.collection("user").doc().set({'userId': id});
+      setLoading(false);
       txtPhone.clear();
       txtPassword.clear();
       Get.toNamed(AppRoutes.homeScreen);

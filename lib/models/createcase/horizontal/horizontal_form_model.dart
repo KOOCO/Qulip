@@ -23,6 +23,15 @@ class HorizontalDataModel {
     return data;
   }
 
+  HorizontalDataModel.fromJson(Map<String, dynamic> json) {
+    mesuringPoint = json['mPoint'];
+    backView = json['backView'];
+    forwardView = json['forwardView'];
+    hypothesis = json['hypothesis'];
+    levelElevation = json['levelElevation'];
+    imageUri = json['imageUri'];
+  }
+
   String? id;
   String? mesuringPoint;
   String? backView;

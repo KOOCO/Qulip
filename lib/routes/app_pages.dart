@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:qulip/controller/horizontal_case_controller.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/view/case_create_survey/horizontal_form/horizontal_mesurment_1.dart';
 import 'package:qulip/view/case_create_survey/horizontal_form/horizontal_mesurment_2.dart';

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -8,16 +9,13 @@ import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_dropdown_area.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
-import 'package:qulip/models/createcase/establish_case_model.dart';
-import 'package:qulip/utils/datetime_helper.dart';
 import 'package:qulip/utils/storage_helper.dart';
-import 'package:qulip/utils/string_helper.dart';
 import 'package:qulip/utils/text_style_helper.dart';
 
 class SurveyFormStep1 extends StatelessWidget {
   SurveyFormStep1({super.key});
 
-  final controller = Get.put(EstablishCaseController());
+  final controller = Get.find<EstablishCaseController>();
   final enteredText = ''.obs;
   var userId = "";
   @override
@@ -393,30 +391,34 @@ class SurveyFormStep1 extends StatelessWidget {
                 height: Get.height * 0.05,
                 borderRadius: 2,
                 onTap: () async {
-                  // "${controller.txtCaseName.value.text}_${getCaseNumber()}",
-                  final now = DateTime.now();
-                  final caseId =
-                      "${now.caseGeneratorDateFormate()}_${controller.txtCaseName.value.text}";
+                  controller.storeWeentialStep1();
 
-                  final caseModel = EstablishCaseModel(
-                      id: caseId,
-                      createdAt: now.caseGeneratorDateFormate(),
-                      userId: userId,
-                      caseName: controller.txtCaseName.value.text,
-                      caseAddress: controller.txtCaseAddress.value.text,
-                      caseDate: controller.txtCaseDate.value.text,
-                      caseEquipmentNo:
-                          controller.txtCaseEquipmentName.value.text,
-                      caseWeather: controller.txtCaseWeather.value.text,
-                      wsStructureType: controller.selectedStructure.value,
-                      wsUseFor: controller.selectedUse.value,
-                      wsWallType: controller.selectedWall.value,
-                      wsFlatTopMaterial:
-                          controller.selectedFlatTopMaterial.value,
-                      wsFloorMaterial: controller.selectedFloor.value,
-                      wsTechDescription:
-                          controller.txtSupplimentryDesc.value.text);
-                  controller.storeWeentialStep1Data(caseModel);
+                  
+                  // "${controller.txtCaseName.value.text}_${getCaseNumber()}",
+                  // final now = DateTime.now();
+                  // controller.caseId.value =
+                  //     "${now.caseGeneratorDateFormate()}_${controller.txtCaseName.value.text}";
+
+                  // final caseModel = EstablishCaseModel(
+                  //   id: controller.caseId.value,
+                  //   createdAt: now.caseGeneratorDateFormate(),
+                  //   userId: userId,
+                  //   caseLable: controller.caseId.value,
+                  //   caseName: controller.txtCaseName.value.text,
+                  //   caseAddress: controller.txtCaseAddress.value.text,
+                  //   caseDate: controller.txtCaseDate.value.text,
+                  //   caseEquipmentNo: controller.txtCaseEquipmentName.value.text,
+                  //   caseWeather: controller.txtCaseWeather.value.text,
+                  //   wsStructureType: controller.selectedStructure.value,
+                  //   wsUseFor: controller.selectedUse.value,
+                  //   wsWallType: controller.selectedWall.value,
+                  //   wsFlatTopMaterial: controller.selectedFlatTopMaterial.value,
+                  //   wsFloorMaterial: controller.selectedFloor.value,
+                  //   wsTechDescription:
+                  //       controller.txtSupplimentryDesc.value.text,
+                  //   wsWeentileDataList: [],
+                  // );
+                  // controller.storeWeentialStep1Data(caseModel);
                 },
               )
             ],

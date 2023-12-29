@@ -12,19 +12,20 @@ import 'package:qulip/controller/case_list_controller.dart';
 class CaseDetailScreen extends StatelessWidget {
   CaseDetailScreen({super.key});
 
-  final controller = Get.put(CaseListController());
-  // List<String> list = ["Himadri", "Viral", "Sunny", "Ruhi", "Ridham"];
+  final controller = Get.find<CaseListController>();
 
   @override
   Widget build(BuildContext context) {
-    controller.getData();
+    var index = Get.arguments;
+    var modelData = controller.caseListNew[index];
+    // debugPrint("Himadri :: Details Index :: ${index} >> ${modelData.toJson()}");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: stdwhite,
         foregroundColor: yasRed,
         centerTitle: true,
-        title: const MyText(
-          WordStrings.caseDetailLbl,
+        title: MyText(
+          modelData.caseLable!,
           fontFamily: FontFamilyConstant.sinkinSans,
           fontSize: 18,
           fontColor: yasRed,
@@ -36,10 +37,10 @@ class CaseDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                MyText(
+                const MyText(
                   WordStrings.caseNoLbl,
                   fontFamily: FontFamilyConstant.sinkinSans,
                   fontSize: 16,
@@ -47,7 +48,7 @@ class CaseDetailScreen extends StatelessWidget {
                   fontColor: yasRed,
                 ),
                 MyText(
-                  "A123",
+                  modelData.caseName!,
                   fontFamily: FontFamilyConstant.sinkinSans,
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
@@ -60,10 +61,10 @@ class CaseDetailScreen extends StatelessWidget {
               thickness: 1,
               color: Colors.grey.shade400,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                MyText(
+                const MyText(
                   WordStrings.caseAddresslLbl,
                   fontFamily: FontFamilyConstant.sinkinSans,
                   fontSize: 16,
@@ -71,7 +72,7 @@ class CaseDetailScreen extends StatelessWidget {
                   fontColor: yasRed,
                 ),
                 MyText(
-                  "48, Parasmani Society",
+                  modelData.caseAddress!,
                   fontFamily: FontFamilyConstant.sinkinSans,
                   fontWeight: FontWeight.w400,
                   maxLines: 2,
@@ -85,10 +86,10 @@ class CaseDetailScreen extends StatelessWidget {
               thickness: 1,
               color: Colors.grey.shade400,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                MyText(
+                const MyText(
                   WordStrings.caseDatelLbl,
                   fontFamily: FontFamilyConstant.sinkinSans,
                   fontSize: 16,
@@ -96,7 +97,7 @@ class CaseDetailScreen extends StatelessWidget {
                   fontColor: yasRed,
                 ),
                 MyText(
-                  "12/Dec/2023",
+                  modelData.caseDate!,
                   fontFamily: FontFamilyConstant.sinkinSans,
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
@@ -109,10 +110,10 @@ class CaseDetailScreen extends StatelessWidget {
               thickness: 1,
               color: Colors.grey.shade400,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                MyText(
+                const MyText(
                   WordStrings.caseEquipmentNamelLbl,
                   fontFamily: FontFamilyConstant.sinkinSans,
                   fontSize: 16,
@@ -120,7 +121,7 @@ class CaseDetailScreen extends StatelessWidget {
                   fontColor: yasRed,
                 ),
                 MyText(
-                  "TOPCONE LBL",
+                  modelData.caseEquipmentNo!,
                   fontFamily: FontFamilyConstant.sinkinSans,
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
@@ -133,10 +134,10 @@ class CaseDetailScreen extends StatelessWidget {
               thickness: 1,
               color: Colors.grey.shade400,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                MyText(
+                const MyText(
                   WordStrings.caseWeatherlLbl,
                   fontFamily: FontFamilyConstant.sinkinSans,
                   fontSize: 16,
@@ -144,7 +145,7 @@ class CaseDetailScreen extends StatelessWidget {
                   fontColor: yasRed,
                 ),
                 MyText(
-                  "Clear",
+                  modelData.caseWeather!,
                   fontFamily: FontFamilyConstant.sinkinSans,
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
