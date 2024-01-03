@@ -15,6 +15,12 @@ class CaseListScreen extends StatelessWidget {
 
   final controller = Get.put(CaseListController());
 
+  List<String> listOfFilterToggle = [
+    WordStrings.allLbl,
+    WordStrings.sixMonthLbl,
+    WordStrings.threeMonthLbl
+  ];
+
   @override
   Widget build(BuildContext context) {
     // controller.setLoading(true);
@@ -60,13 +66,10 @@ class CaseListScreen extends StatelessWidget {
       totalSwitches: 3,
       borderWidth: 1,
       cornerRadius: 20.0,
-      labels: const [
-        WordStrings.allLbl,
-        WordStrings.sixMonthLbl,
-        WordStrings.threeMonthLbl
-      ],
+      labels: listOfFilterToggle,
       onToggle: (index) {
-        print('switc to: $index');
+        print("Selected Filter: ${listOfFilterToggle[index!]}");
+        controller.filterData(listOfFilterToggle[index!]);
       },
     );
   }

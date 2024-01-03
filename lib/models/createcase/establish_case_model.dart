@@ -43,14 +43,23 @@ class EstablishCaseModel {
     wsFlatTopMaterial = json['flatTopMaterial'];
     wsFloorMaterial = json['floorMaterial'];
     wsTechDescription = json['techDescription'];
-    for (var i in json['weentialList']) {
-      wsWeentileDataList.add(WeentialDataModel.fromJson(i));
+
+    if (json['weentialList'] != null) {
+      for (var i in json['weentialList']) {
+        wsWeentileDataList.add(WeentialDataModel.fromJson(i));
+      }
     }
-    for (var i in json['verticalMsList']) {
-      verticalMSDataList.add(VerticalFormModel.fromJson(i));
+
+    if (json['verticalMsList'] != null) {
+      for (var i in json['verticalMsList']) {
+        verticalMSDataList.add(VerticalFormModel.fromJson(i));
+      }
     }
-    for (var i in json['horizontalMSDataList']) {
-      horizontalMSDataList.add(HorizontalDataModel.fromJson(i));
+
+    if (json['horizontalMSDataList'] != null) {
+      for (var i in json['horizontalMSDataList']) {
+        horizontalMSDataList.add(HorizontalDataModel.fromJson(i));
+      }
     }
   }
 
