@@ -8,6 +8,7 @@ import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_button_with_icon.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/controller/case_list_controller.dart';
+import 'package:qulip/routes/app_routes.dart';
 
 class CaseDetailScreen extends StatelessWidget {
   CaseDetailScreen({super.key});
@@ -183,6 +184,10 @@ class CaseDetailScreen extends StatelessWidget {
             Column(
               children: [
                 MyButtonWithIcon(
+                  onTap: (){
+                    Get.toNamed(AppRoutes.surveyListScreen,
+                          arguments: index);
+                  },
                   image: AssetImages.surveyLogo,
                   label: WordStrings.surveyformLblCaseDetails,
                   style: const TextStyle(
@@ -202,7 +207,6 @@ class CaseDetailScreen extends StatelessWidget {
                   ),
                   height: Get.height * 0.06,
                   borderRadius: 2,
-                  onTap: () async {},
                 ).paddingSymmetric(horizontal: 20, vertical: 5),
                 MyButtonWithIcon(
                   image: AssetImages.verticalLogo,

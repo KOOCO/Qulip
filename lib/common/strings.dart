@@ -551,4 +551,7 @@ class WordStrings {
   static const String bottomproperty = 'Property';
   static const String bottomHistory = 'History';
   static const String bottomFav = 'Favourites';
+
+  // Survey List Form
+  static const String lblCivilAffairsGuide = 'Civil Affairs Guide Together';
 }
