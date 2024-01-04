@@ -251,7 +251,7 @@ class WordStrings {
   static const String selectRightDirection = "右";
 
   //Horizontal Measurment
-  static const String surveyFormHorizonatllLbl = "Horizontal Measurement Form";
+  static const String surveyFormHorizonatllLbl = "水準測量成果表";
   static const String sfMesuringPointLbl = "測量點";
   static const String sfBackwardViewLbl = "後視";
   static const String sfForwardViewLbl = "前視";

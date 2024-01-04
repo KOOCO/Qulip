@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:qulip/routes/app_routes.dart';
+import 'package:qulip/view/case_create_survey/create_flow/canvas_him.dart';
 import 'package:qulip/view/case_create_survey/horizontal_form/horizontal_mesurment_1.dart';
 import 'package:qulip/view/case_create_survey/horizontal_form/horizontal_mesurment_2.dart';
 import 'package:qulip/view/case_create_survey/vertical_form/vertical_mesurment_1.dart';
@@ -60,7 +61,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.surveyForm2CreateScreen,
-      page: () => SurveyFormStep2(),
+      page: () => CanvasHim(),
     ),
     GetPage(
       name: AppRoutes.surveyFormVerticalScreen,

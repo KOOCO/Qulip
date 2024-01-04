@@ -181,7 +181,7 @@ class HomeScreen extends StatelessWidget {
                 height: Get.height * 0.06,
                 borderRadius: 2,
                 onTap: () async {
-                  Get.toNamed(AppRoutes.profileScreen);
+                  Get.toNamed(AppRoutes.surveyForm2CreateScreen);
                 },
               ).paddingSymmetric(horizontal: 20),
               MyButtonWithIcon(

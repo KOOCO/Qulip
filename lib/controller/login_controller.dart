@@ -143,16 +143,16 @@ class LoginController extends BaseController {
       } else {
         debugPrint('LoginModel Added!');
         // uModel.userId = docId;
-        storeUserInDb(uModel, docId);
+        storeUserInDb(uModel);
       }
     }
   }
 
   //FireStore method
-  storeUserInDb(UserDBModel uModel, String id) async {
-    StorageHelper.write(StorageKeys.userId, id);
+  storeUserInDb(UserDBModel uModel) async {
     await _db.collection("user").add(uModel.toJson()).then((value) {
       debugPrint("UserID ${value.id}");
+      StorageHelper.write(StorageKeys.userId, value.id);
     }).whenComplete(() {
       // _db.collection("user").doc().set({'userId': id});
       setLoading(false);
