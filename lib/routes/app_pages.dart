@@ -9,7 +9,10 @@ import 'package:qulip/view/case_create_survey/create_flow/survey_form_step1.dart
 import 'package:qulip/view/case_create_survey/create_flow/survey_form_step2.dart';
 import 'package:qulip/view/case_list/case_detail_screen.dart';
 import 'package:qulip/view/case_list/case_list_screen.dart';
-import 'package:qulip/view/case_list/survey_list_screen.dart';
+import 'package:qulip/view/case_list/case_signature.dart';
+import 'package:qulip/view/case_list/horizontal_view_form.dart';
+import 'package:qulip/view/case_list/survey_view_form.dart';
+import 'package:qulip/view/case_list/vertical_view_form.dart';
 import 'package:qulip/view/home_flow/home_screen.dart';
 import 'package:qulip/view/home_flow/profile_screen.dart';
 import 'package:qulip/view/home_flow/system_info_screen.dart';
@@ -53,8 +56,20 @@ class AppPages {
       page: () => CaseDetailScreen(),
     ),
     GetPage(
-      name: AppRoutes.surveyListScreen,
-      page: () => SurveyListScreen(),
+      name: AppRoutes.surveyViewScreen,
+      page: () => SurveyViewForm(),
+    ),
+    GetPage(
+      name: AppRoutes.verticalViewScreen,
+      page: () => VerticalViewScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.horizontalViewScreen,
+      page: () => HorizontalViewScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.signatureScreen,
+      page: () => SignatureScreen(),
     ),
     GetPage(
       name: AppRoutes.caseCreateScreen,
@@ -66,7 +81,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.surveyForm2CreateScreen,
-      page: () => CanvasHim(),
+      page: () => SurveyFormStep2(),
     ),
     GetPage(
       name: AppRoutes.surveyFormVerticalScreen,

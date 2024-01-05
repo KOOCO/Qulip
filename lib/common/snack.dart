@@ -5,7 +5,7 @@ import 'package:qulip/common/colors.dart';
 class MySnackBar {
   static void errorSnackbar(String message) {
     Get.snackbar(
-      'Note :',
+      '提醒 :',
       message,
       colorText: whiteTxt,
       icon: const Icon(Icons.error_outline, color: stdBlack),
@@ -16,7 +16,7 @@ class MySnackBar {
 
   static void successSnackbar(String message) {
     Get.snackbar(
-      'Alert :',
+      '警告 :',
       message,
       colorText: whiteTxt,
       icon: const Icon(Icons.error_outline, color: Colors.white),

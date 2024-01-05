@@ -96,7 +96,7 @@ class SystemInfoScreen extends StatelessWidget {
                   fontColor: stdgrey,
                 ),
                 MyText(
-                  'Qulip Technology',
+                  'Qulip Technology Inc.',
                   fontWeight: FontWeight.normal,
                   fontFamily: FontFamilyConstant.sinkinSansMedium,
                   fontSize: 12,

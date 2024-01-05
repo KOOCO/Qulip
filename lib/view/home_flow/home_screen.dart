@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +11,6 @@ import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_button_with_icon.dart';
 import 'package:qulip/common/widgets/my_image.dart';
 import 'package:qulip/common/widgets/my_text.dart';
-import 'package:qulip/controller/establish_case_controller.dart';
 import 'package:qulip/controller/login_controller.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/storage_helper.dart';
@@ -17,64 +18,85 @@ import 'package:qulip/utils/storage_helper.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  final controller = Get.put(LoginController());
+  final controller = Get.find<LoginController>();
   final points = 0.obs;
+  final link = "".obs;
 
-  Future showWarning(BuildContext context) async => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            title: const MyText(
-              WordStrings.exitAppTitle,
-              fontSize: 18,
-              fontColor: yasRed,
-              fontWeight: FontWeight.bold,
-            ),
-            content: const MyText(
-              WordStrings.exitAppMsg,
-              fontSize: 14,
-              fontColor: stdBlack,
-            ),
-            actions: [
-              Row(
-                children: [
-                  MyButton(
-                    label: WordStrings.btnNo,
-                    style: const TextStyle(
-                      color: whiteTxt,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    height: Get.height * 0.03,
-                    width: Get.width * 0.2,
-                    borderRadius: 2,
-                    onTap: () => Navigator.of(context).pop(false),
-                  )..paddingOnly(left: 4, right: 4),
-                  const Spacer(),
-                  MyButton(
-                    label: WordStrings.btnYes,
-                    style: const TextStyle(
-                      color: whiteTxt,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    height: Get.height * 0.03,
-                    width: Get.width * 0.2,
-                    borderRadius: 2,
-                    onTap: () => SystemNavigator.pop(),
-                  ).paddingOnly(left: 4, right: 4),
+  Future showWarning(
+          BuildContext context, String message, bool isLogout) async =>
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: const MyText(
+                  WordStrings.exitAppTitle,
+                  fontSize: 18,
+                  fontColor: yasRed,
+                  fontWeight: FontWeight.bold,
+                ),
+                content: MyText(
+                  message,
+                  fontSize: 14,
+                  fontColor: stdBlack,
+                ),
+                actions: [
+                  Row(
+                    children: [
+                      MyButton(
+                        label: WordStrings.btnYes,
+                        style: const TextStyle(
+                          color: whiteTxt,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        height: Get.height * 0.03,
+                        width: Get.width * 0.2,
+                        borderRadius: 2,
+                        onTap: () {
+                          if (isLogout) {
+                            controller.setLoading(true);
+                            Timer(
+                              const Duration(seconds: 2),
+                              () {
+                                controller.setLoading(false);
+                                StorageHelper.logout();
+                                Navigator.of(context).pop(true);
+                                Get.offAllNamed(AppRoutes.loginScreen);
+                              },
+                            );
+                          } else {
+                            Navigator.of(context).pop(false);
+                          }
+                        },
+                      )..paddingOnly(left: 4, right: 4),
+                      const Spacer(),
+                      MyButton(
+                        label: WordStrings.btnNo,
+                        style: const TextStyle(
+                          color: whiteTxt,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        height: Get.height * 0.03,
+                        width: Get.width * 0.2,
+                        borderRadius: 2,
+                        onTap: () => SystemNavigator.pop(),
+                      ).paddingOnly(left: 4, right: 4),
+                    ],
+                  ).paddingOnly(left: 10, right: 10, top: 4, bottom: 10),
                 ],
-              ).paddingOnly(left: 10, right: 10, top: 4, bottom: 10),
-            ],
-          ));
+              ));
 
   @override
   Widget build(BuildContext context) {
+    // getData();
     StorageHelper.read(StorageKeys.point)
         .then((value) => {points.value = value});
-    StorageHelper.read(StorageKeys.userId).then((value) {
-      debugPrint("User Id $value");
+
+    StorageHelper.read(StorageKeys.profileLink).then((value) {
+      link.value = value;
     });
     return WillPopScope(
       onWillPop: () async {
-        final shouldPop = await showWarning(context);
+        final shouldPop =
+            await showWarning(context, WordStrings.exitAppMsg, false);
         return shouldPop ?? false;
       },
       child: Scaffold(
@@ -100,9 +122,7 @@ class HomeScreen extends StatelessWidget {
                     const Expanded(child: SizedBox()),
                     InkWell(
                         onTap: () {
-                          StorageHelper.logout();
-                          Navigator.of(context).pop(true);
-                          Get.offAllNamed(AppRoutes.loginScreen);
+                          showWarning(context, WordStrings.logoutAppMsg, true);
                         },
                         child: const Icon(
                           Icons.login_rounded,
@@ -181,7 +201,7 @@ class HomeScreen extends StatelessWidget {
                 height: Get.height * 0.06,
                 borderRadius: 2,
                 onTap: () async {
-                  Get.toNamed(AppRoutes.surveyForm2CreateScreen);
+                  Get.toNamed(AppRoutes.profileScreen, arguments: link.value);
                 },
               ).paddingSymmetric(horizontal: 20),
               MyButtonWithIcon(
@@ -261,5 +281,10 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void getData() async {
+    points.value = await StorageHelper.read(StorageKeys.point);
+    link.value = await StorageHelper.read(StorageKeys.profileLink);
   }
 }

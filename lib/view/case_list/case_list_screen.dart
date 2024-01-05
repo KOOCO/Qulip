@@ -68,8 +68,8 @@ class CaseListScreen extends StatelessWidget {
       cornerRadius: 20.0,
       labels: listOfFilterToggle,
       onToggle: (index) {
-        print("Selected Filter: ${listOfFilterToggle[index!]}");
-        controller.filterData(listOfFilterToggle[index!]);
+        debugPrint("Selected Filter: ${listOfFilterToggle[index!]}");
+        controller.filterData(listOfFilterToggle[index]);
       },
     );
   }

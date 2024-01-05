@@ -18,6 +18,7 @@ class HorizontalMeasurement2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // controller.userId.value = await StorageHelper.read(StorageKeys.userId);
     StorageHelper.read(StorageKeys.userId).then((value) {
       controller.userId.value = value;
     });
@@ -76,25 +77,26 @@ class HorizontalMeasurement2 extends StatelessWidget {
                   "${now.caseGeneratorDateFormate()}_${controller.txtCaseName.value.text}";
 
               final caseModel = EstablishCaseModel(
-                id: controller.caseId.value,
-                createdAt: now.caseGeneratorDateFormate(),
-                userId: controller.userId.value,
-                caseLable: controller.caseId.value,
-                caseName: controller.txtCaseName.value.text,
-                caseAddress: controller.txtCaseAddress.value.text,
-                caseDate: controller.txtCaseDate.value.text,
-                caseEquipmentNo: controller.txtCaseEquipmentName.value.text,
-                caseWeather: controller.txtCaseWeather.value.text,
-                wsStructureType: controller.selectedStructure.value,
-                wsUseFor: controller.selectedUse.value,
-                wsWallType: controller.selectedWall.value,
-                wsFlatTopMaterial: controller.selectedFlatTopMaterial.value,
-                wsFloorMaterial: controller.selectedFloor.value,
-                wsTechDescription: controller.txtSupplimentryDesc.value.text,
-                wsWeentileDataList: [],
-                verticalMSDataList: [],
-                horizontalMSDataList: [],
-              );
+                  id: controller.caseId.value,
+                  createdAt: now.caseGeneratorDateFormate(),
+                  userId: controller.userId.value,
+                  caseLable: controller.caseId.value,
+                  caseName: controller.txtCaseName.value.text,
+                  caseAddress: controller.txtCaseAddress.value.text,
+                  caseDate: controller.txtCaseDate.value.text,
+                  caseEquipmentNo: controller.txtCaseEquipmentName.value.text,
+                  caseWeather: controller.txtCaseWeather.value.text,
+                  wsStructureType: controller.selectedStructure.value,
+                  wsUseFor: controller.selectedUse.value,
+                  wsWallType: controller.selectedWall.value,
+                  wsFlatTopMaterial: controller.selectedFlatTopMaterial.value,
+                  wsFloorMaterial: controller.selectedFloor.value,
+                  wsTechDescription: controller.txtSupplimentryDesc.value.text,
+                  wsWeentileDataList: [],
+                  verticalMSDataList: [],
+                  horizontalMSDataList: [],
+                  isPdfExported: false,
+                  signatureUrl: "");
               debugPrint("Himadri Final data :: ${caseModel.toJson()}");
               controller.createCase(caseModel);
             },

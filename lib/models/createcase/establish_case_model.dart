@@ -25,6 +25,8 @@ class EstablishCaseModel {
     required this.wsWeentileDataList,
     required this.verticalMSDataList,
     required this.horizontalMSDataList,
+    required this.isPdfExported,
+    required this.signatureUrl,
   });
 
   EstablishCaseModel.fromJson(Map<String, dynamic> json) {
@@ -43,6 +45,8 @@ class EstablishCaseModel {
     wsFlatTopMaterial = json['flatTopMaterial'];
     wsFloorMaterial = json['floorMaterial'];
     wsTechDescription = json['techDescription'];
+    isPdfExported = json['isPdfExported'];
+    signatureUrl = json['signatureUrl'];
 
     if (json['weentialList'] != null) {
       for (var i in json['weentialList']) {
@@ -82,6 +86,8 @@ class EstablishCaseModel {
     data['weentialList'] = wsWeentileDataList;
     data['verticalMsList'] = verticalMSDataList;
     data['horizontalMSDataList'] = horizontalMSDataList;
+    data['isPdfExported'] = isPdfExported;
+    data['signatureUrl'] = signatureUrl;
     return data;
   }
 
@@ -100,6 +106,8 @@ class EstablishCaseModel {
   String? wsFlatTopMaterial;
   String? wsFloorMaterial;
   String? wsTechDescription;
+  String? signatureUrl;
+  bool? isPdfExported;
   List<WeentialDataModel> wsWeentileDataList = [];
   List<VerticalFormModel> verticalMSDataList = [];
   List<HorizontalDataModel> horizontalMSDataList = [];

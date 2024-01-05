@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:qulip/apis/api_repository.dart';
+import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/controller/base_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
@@ -11,6 +14,8 @@ class CaseListController extends BaseController {
   //List caseList = [];
   var caseListNew = <EstablishCaseModel>[].obs;
   var isProcessComplete = false;
+  final isPDFExported = false.obs;
+  final signUrl = "".obs;
 
   Future getData() async {
     // setLoading(true);
@@ -58,7 +63,7 @@ class CaseListController extends BaseController {
 
           // Parse the formatted date string into a DateTime object
           DateTime date = DateTime.parse(formattedDateString);
-          return date.isAfter(sixMonthsAgo);
+          return date.isBefore(sixMonthsAgo);
         }).toList();
         caseListNew.clear();
         caseListNew.addAll(filteredList);
@@ -75,7 +80,7 @@ class CaseListController extends BaseController {
       }).whenComplete(() {
         isProcessComplete = true;
 
-        // Subtract 6 months from the current date
+        // Subtract 3 months from the current date
         DateTime sixMonthsAgo =
             currentDate.subtract(const Duration(days: 30 * 3));
 
@@ -89,7 +94,7 @@ class CaseListController extends BaseController {
 
           // Parse the formatted date string into a DateTime object
           DateTime date = DateTime.parse(formattedDateString);
-          return date.isAfter(sixMonthsAgo);
+          return date.isBefore(sixMonthsAgo);
         }).toList();
         caseListNew.clear();
         caseListNew.addAll(filteredList);
@@ -97,5 +102,41 @@ class CaseListController extends BaseController {
     } else {
       getData();
     }
+  }
+
+  void getPoints(String mobile, String caseId) {
+    setLoading(true);
+    ApiRepo.getPoints(
+      phone: mobile,
+      onComplete: (success, response) async {
+        setLoading(false);
+        if (success) {
+          isExportUpdate(caseId);
+          MySnackBar.successSnackbar(response['message']);
+        } else {
+          setLoading(false);
+        }
+      },
+    );
+  }
+
+  void isExportUpdate(String caseId) async {
+    await _db
+        .collection("case_survey")
+        .doc(caseId)
+        .update({'isPdfExported': true}).whenComplete(() {
+      isPDFExported.value = true;
+      setLoading(false);
+    });
+  }
+
+  void setSignature(String caseId, String signUrlTemp) async {
+    await _db
+        .collection("case_survey")
+        .doc(caseId)
+        .update({'signatureUrl': signUrlTemp}).whenComplete(() {
+      setLoading(false);
+      signUrl.value = signUrlTemp;
+    });
   }
 }

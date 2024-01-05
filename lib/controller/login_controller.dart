@@ -93,17 +93,22 @@ class LoginController extends BaseController {
         if (success) {
           userData.value.points = response['points'];
           userData.value.link = response['link'];
+          StorageHelper.write(StorageKeys.phoneNumber, txtPhone.text);
           StorageHelper.write(StorageKeys.isLogin, true);
           StorageHelper.write(StorageKeys.userData, userData);
           StorageHelper.write(StorageKeys.point, response['points']);
           StorageHelper.write(StorageKeys.profileLink, response['link']);
+          StorageHelper.write(StorageKeys.userId, response['uid']);
 
-          final userDbModel = UserDBModel(
-            username: txtPhone.text,
-            password: txtPassword.text,
-            points: userData.value.points,
-          );
-          checkUserExists(userDbModel);
+          // final userDbModel = UserDBModel(
+          //   username: txtPhone.text,
+          //   password: txtPassword.text,
+          //   points: userData.value.points,
+          // );
+          setLoading(false);
+          MySnackBar.successSnackbar("成功"); //response['message']);
+          Get.toNamed(AppRoutes.homeScreen);
+          // checkUserExists(userDbModel);
         } else {
           setLoading(false);
           MySnackBar.errorSnackbar(WordStrings.somethingwentWrong);
@@ -127,25 +132,25 @@ class LoginController extends BaseController {
         // "LoginModel inProgress >> $isCompleted >> ${doc["UserName"]} >> ${doc["Password"]} >> ${doc["Points"]} >> ${list.length}");
       }
     }).whenComplete(() => isCompleted = true);
-    final docId = _db.collection('user').doc().id;
-    debugPrint("UserID For :: $docId");
+    // final docId = _db.collection('user').doc().id;
+    // debugPrint("UserID For :: $docId");
 
-    if (isCompleted) {
-      if (list.firstWhereOrNull((it) => (it.username == uModel.username &&
-              it.password == uModel.password &&
-              it.userId == uModel.userId &&
-              it.points == uModel.points)) !=
-          null) {
-        txtPhone.clear();
-        txtPassword.clear();
-        Get.toNamed(AppRoutes.homeScreen);
-        debugPrint('LoginModel Already exists! >> ');
-      } else {
-        debugPrint('LoginModel Added!');
-        // uModel.userId = docId;
-        storeUserInDb(uModel);
-      }
-    }
+    // if (isCompleted) {
+    //   if (list.firstWhereOrNull((it) => (it.username == uModel.username &&
+    //           it.password == uModel.password &&
+    //           it.userId == uModel.userId &&
+    //           it.points == uModel.points)) !=
+    //       null) {
+    //     txtPhone.clear();
+    //     txtPassword.clear();
+    //     Get.toNamed(AppRoutes.homeScreen);
+    //     debugPrint('LoginModel Already exists! >> ');
+    //   } else {
+    //     debugPrint('LoginModel Added!');
+    //     // uModel.userId = docId;
+    //     storeUserInDb(uModel);
+    //   }
+    // }
   }
 
   //FireStore method
@@ -160,18 +165,5 @@ class LoginController extends BaseController {
       txtPassword.clear();
       Get.toNamed(AppRoutes.homeScreen);
     });
-  }
-
-  void getPoints(String mobile) {
-    setLoading(true);
-    ApiRepo.getPoints(
-      phone: mobile,
-      onComplete: (success, response) async {
-        setLoading(false);
-        if (success) {
-          MySnackBar.successSnackbar(response['message']);
-        }
-      },
-    );
   }
 }

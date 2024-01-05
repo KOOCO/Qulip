@@ -91,7 +91,7 @@ class VerticalMeasurement1 extends StatelessWidget {
             },
           ).paddingAll(10),
           MyButton(
-            label: WordStrings.establishLbl,
+            label: WordStrings.nextLbl,
             style: const TextStyle(
               color: whiteTxt,
               fontWeight: FontWeight.bold,

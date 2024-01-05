@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -393,7 +392,6 @@ class SurveyFormStep1 extends StatelessWidget {
                 onTap: () async {
                   controller.storeWeentialStep1();
 
-                  
                   // "${controller.txtCaseName.value.text}_${getCaseNumber()}",
                   // final now = DateTime.now();
                   // controller.caseId.value =

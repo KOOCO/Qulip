@@ -7,11 +7,14 @@ class AppRoutes {
   static const sysInfoScreen = '/sysInfoScreen';
   static const caseListScreen = '/caseListScreen';
   static const caseDetailsScreen = '/caseDetailsScreen';
-  static const surveyListScreen = '/surveyListScreen';
   static const caseCreateScreen = '/caseCreateScreen';
   static const surveyForm1CreateScreen = '/surveyForm1CreateScreen';
   static const surveyForm2CreateScreen = '/surveyForm2CreateScreen';
   static const surveyFormVerticalScreen = '/surveyFormVerticalScreen';
   static const horizontalCase1Screen = '/horizontalCase1Screen';
   static const horizontalCase2Screen = '/horizontalCase2Screen';
+  static const surveyViewScreen = '/surveyViewScreen';
+  static const verticalViewScreen = '/verticalViewScreen';
+  static const horizontalViewScreen = '/horizontalViewScreen';
+  static const signatureScreen = '/signatureScreen';
 }
