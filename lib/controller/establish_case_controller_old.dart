@@ -35,6 +35,7 @@ class EstablishCaseControllerOld extends BaseController {
   final selectedWall = WordStrings.selectWall.toString().obs;
   final selectedFlatTopMaterial = WordStrings.selectFTop.toString().obs;
   final selectedFloor = WordStrings.selectFloor.toString().obs;
+  final techDescription = "".obs;
 
   final List<String> structureList = [
     WordStrings.selectStructure,
@@ -260,7 +261,7 @@ class EstablishCaseControllerOld extends BaseController {
       BuildContext context, WeentialDataModel data, tempListIndex) async {
     DialogBox.selectImage(
       context,
-      onComplete: (filePath) async {
+      onComplete: (filePath, xFile) async {
         if (filePath.isNotEmpty) {
           setLoading(true);
           final uFile = File(filePath);

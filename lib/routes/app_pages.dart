@@ -1,12 +1,14 @@
 import 'package:get/get.dart';
 import 'package:qulip/routes/app_routes.dart';
-import 'package:qulip/view/case_create_survey/create_flow/canvas_him.dart';
+import 'package:qulip/view/case_create_survey/create_flow/suvery_canvas.dart';
 import 'package:qulip/view/case_create_survey/horizontal_form/horizontal_mesurment_1.dart';
 import 'package:qulip/view/case_create_survey/horizontal_form/horizontal_mesurment_2.dart';
+import 'package:qulip/view/case_create_survey/vertical_form/vertical_canvas_1.dart';
 import 'package:qulip/view/case_create_survey/vertical_form/vertical_mesurment_1.dart';
 import 'package:qulip/view/case_create_survey/create_flow/establish_case.dart';
 import 'package:qulip/view/case_create_survey/create_flow/survey_form_step1.dart';
 import 'package:qulip/view/case_create_survey/create_flow/survey_form_step2.dart';
+import 'package:qulip/view/case_create_survey/view_canvas.dart';
 import 'package:qulip/view/case_list/case_detail_screen.dart';
 import 'package:qulip/view/case_list/case_list_screen.dart';
 import 'package:qulip/view/case_list/case_signature.dart';
@@ -14,6 +16,7 @@ import 'package:qulip/view/case_list/horizontal_view_form.dart';
 import 'package:qulip/view/case_list/survey_view_form.dart';
 import 'package:qulip/view/case_list/vertical_view_form.dart';
 import 'package:qulip/view/home_flow/home_screen.dart';
+import 'package:qulip/view/home_flow/pdf_preview.dart';
 import 'package:qulip/view/home_flow/profile_screen.dart';
 import 'package:qulip/view/home_flow/system_info_screen.dart';
 import 'package:qulip/view/login_flow/login_screen.dart';
@@ -69,7 +72,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.signatureScreen,
-      page: () => SignatureScreen(),
+      page: () => const SignatureScreen(),
     ),
     GetPage(
       name: AppRoutes.caseCreateScreen,
@@ -95,5 +98,22 @@ class AppPages {
       name: AppRoutes.horizontalCase2Screen,
       page: () => HorizontalMeasurement2(),
     ),
+    GetPage(
+      name: AppRoutes.pdfPreview,
+      page: () => PdfPreviewPage(),
+    ),
+    GetPage(
+      name: AppRoutes.surveyCanvasView,
+      page: () => const SurveyCanvas(),
+    ),
+    GetPage(
+      name: AppRoutes.verticalCanvas1View,
+      page: () => VerticalCanvas1(),
+    ),
+    GetPage(
+      name: AppRoutes.viewCanvasImage,
+      page: () => ViewCanvas(),
+    ),
+
   ];
 }

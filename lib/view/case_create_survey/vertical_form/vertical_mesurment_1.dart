@@ -13,6 +13,7 @@ import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
 import 'package:qulip/models/createcase/vertical/vertical_form_model.dart';
+import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/dailog_helper.dart';
 import 'package:qulip/utils/text_style_helper.dart';
 
@@ -55,7 +56,8 @@ class VerticalMeasurement1 extends StatelessWidget {
               color: yasRed,
             ),
             onPressed: () {
-              //controller.takePhoto(context);
+              Get.toNamed(AppRoutes.viewCanvasImage,
+                  arguments: caseController.canvasVertical1Url);
             },
           )
         ],
@@ -175,6 +177,7 @@ class VerticalMeasurement1 extends StatelessWidget {
             hasFloatingLabel: false,
             controller: TextEditingController(text: tempList[index].upperPoint),
             keyboard: TextInputType.number,
+            maxLength: 6,
             labelText: WordStrings.upperPointLbl,
             hintText: WordStrings.upperPointLbl,
           ),
@@ -189,6 +192,7 @@ class VerticalMeasurement1 extends StatelessWidget {
             },
             fullBorder: true,
             hasFloatingLabel: false,
+            maxLength: 6,
             controller: TextEditingController(text: tempList[index].lowerPoint),
             keyboard: TextInputType.number,
             labelText: WordStrings.lowerPointLbl,
@@ -269,6 +273,7 @@ class VerticalMeasurement1 extends StatelessWidget {
               calculateTiltValue(index);
               // tempList[index] = dataObj;
             },
+            maxLength: 6,
             fullBorder: true,
             hasFloatingLabel: false,
             controller: TextEditingController(text: tempList[index].leftPoint),
@@ -284,6 +289,7 @@ class VerticalMeasurement1 extends StatelessWidget {
             hasFloatingLabel: false,
             controller: TextEditingController(text: tempList[index].rightPoint),
             keyboard: TextInputType.number,
+            maxLength: 6,
             labelText: WordStrings.rightPointLbl,
             hintText: WordStrings.rightPointLbl,
             onSubmit: (value) {
@@ -514,7 +520,7 @@ class VerticalMeasurement1 extends StatelessWidget {
   Future<void> takePhoto(BuildContext context, int tempListIndex) async {
     DialogBox.selectImage(
       context,
-      onComplete: (filePath) async {
+      onComplete: (filePath, xFile) async {
         if (filePath.isNotEmpty) {
           caseController.setLoading(true);
           final uFile = File(filePath);
@@ -532,18 +538,20 @@ class VerticalMeasurement1 extends StatelessWidget {
     final upperPoint = tempList[index].upperPoint!;
     final lowerPoint = tempList[index].lowerPoint!;
     if (upperPoint.isNotEmpty && lowerPoint.isNotEmpty) {
-      if (int.parse(lowerPoint) >= int.parse(upperPoint)) {
+      if (double.parse(lowerPoint) >= double.parse(upperPoint)) {
         MySnackBar.errorSnackbar(WordStrings.errUpperPointMustValid);
-        tempList[index].highDifference = 0;
+        tempList[index].highDifference = 0.0;
       } else {
+        final result = (double.parse(upperPoint) - double.parse(lowerPoint));
         tempList[index].highDifference =
-            (int.parse(upperPoint) - int.parse(lowerPoint));
+            double.parse(result.toStringAsFixed(3));
       }
     } else {
-      tempList[index].highDifference = 0;
+      tempList[index].highDifference = 0.0;
     }
-    calculateSlope(
-        tempList[index].tiltValue!, tempList[index].highDifference!, index);
+    final tilt = double.parse(tempList[index].tiltValue!.toString());
+    final highDiff = double.parse(tempList[index].highDifference!.toString());
+    calculateSlope(tilt, highDiff, index);
   }
 
   void calculateTiltValue(int index) {
@@ -558,37 +566,36 @@ class VerticalMeasurement1 extends StatelessWidget {
 
     if (leftPoint.isNotEmpty && rightPoint.isNotEmpty) {
       if (tiltDirection == WordStrings.selectLeftDirection.toString()) {
-        if (int.parse(rightPoint) >= int.parse(leftPoint)) {
+        if (double.parse(rightPoint) >= double.parse(leftPoint)) {
           MySnackBar.errorSnackbar(WordStrings.errRightPointMustValid);
-          tempList[index].tiltValue = 0;
+          tempList[index].tiltValue = 0.0;
         } else {
-          tempList[index].tiltValue =
-              int.parse(leftPoint) - int.parse(rightPoint);
+          final result = double.parse(leftPoint) - double.parse(rightPoint);
+          tempList[index].tiltValue = double.parse(result.toStringAsFixed(3));
         }
       } else {
-        if (int.parse(leftPoint) >= int.parse(rightPoint)) {
+        if (double.parse(leftPoint) >= double.parse(rightPoint)) {
           MySnackBar.errorSnackbar(WordStrings.errLeftPointMustValid);
-          tempList[index].tiltValue = 0;
+          tempList[index].tiltValue = 0.0;
         } else {
-          tempList[index].tiltValue =
-              int.parse(rightPoint) - int.parse(leftPoint);
+          final result = double.parse(rightPoint) - double.parse(leftPoint);
+          tempList[index].tiltValue = double.parse(result.toStringAsFixed(3));
         }
       }
     } else {
-      tempList[index].tiltValue = 0;
+      tempList[index].tiltValue = 0.0;
     }
-    calculateSlope(
-        tempList[index].tiltValue!, tempList[index].highDifference!, index);
+    final tilt = double.parse(tempList[index].tiltValue!.toString());
+    final highDiff = double.parse(tempList[index].highDifference!.toString());
+    calculateSlope(tilt, highDiff, index);
   }
 
-  void calculateSlope(int tiltValue, int highDifference, int index) {
+  void calculateSlope(double tiltValue, double highDifference, int index) {
     final result = tiltValue / highDifference;
-    debugPrint("Himadri >> ${result.toStringAsFixed(2)}");
-    tempList[index].slope = double.parse(result.toStringAsFixed(2));
+    tempList[index].slope = double.parse(result.toStringAsFixed(3));
   }
 
   void addVerticalValidatationForm() {
-    debugPrint("Himadri >> List size ?? ${tempList.length}");
     final index = tempList.length - 1;
 
     if (tempList[index].upperPoint!.isEmpty) {

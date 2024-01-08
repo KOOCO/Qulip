@@ -271,13 +271,32 @@ class HorizontalViewScreen extends StatelessWidget {
                 fontColor: stdDarkGray,
                 textAlign: TextAlign.center,
               ).paddingSymmetric(horizontal: 4, vertical: 4),
-              const MyText(
-                "",
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontColor: stdDarkGray,
-                textAlign: TextAlign.center,
-              ).paddingSymmetric(horizontal: 4, vertical: 4),
+              Visibility(
+                visible: controller.signUrl.value.isEmpty ? false : true,
+                child: Image.network(
+                  controller.signUrl.value,
+                  fit: BoxFit.fill,
+                  width: 150,
+                  height: 65,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return SizedBox(
+                      width: 150,
+                      height: 65,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: yasRed,
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -406,57 +425,60 @@ class HorizontalViewScreen extends StatelessWidget {
 
   Widget numberItemView(
       EstablishCaseModel modelData, HorizontalDataModel data, int index) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Container(
-        decoration: const BoxDecoration(
-          color: cardBg,
+    return Visibility(
+      visible: data.imageUri!.isEmpty ? false : true,
+      child: Card(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            MyText(
-              "${WordStrings.numberLbl} ${index + 1}",
-              fontWeight: FontWeight.w600,
-              fontFamily: FontFamilyConstant.sinkinSans,
-              fontSize: 14,
-              fontColor: yasRed,
-            ).paddingOnly(bottom: 15),
-            Center(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(5)),
-                child: Image.network(
-                  width: Get.width,
-                  height: 400,
-                  fit: BoxFit.fill,
-                  data.imageUri ?? "",
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return SizedBox(
-                      width: Get.width,
-                      height: 100,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: yasRed,
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
+        clipBehavior: Clip.antiAlias,
+        child: Container(
+          decoration: const BoxDecoration(
+            color: cardBg,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              MyText(
+                "${WordStrings.numberLbl} ${index + 1}",
+                fontWeight: FontWeight.w600,
+                fontFamily: FontFamilyConstant.sinkinSans,
+                fontSize: 14,
+                fontColor: yasRed,
+              ).paddingOnly(bottom: 15),
+              Center(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(5)),
+                  child: Image.network(
+                    width: Get.width,
+                    height: 400,
+                    fit: BoxFit.fill,
+                    data.imageUri ?? "",
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return SizedBox(
+                        width: Get.width,
+                        height: 100,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: yasRed,
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-          ],
-        ).paddingAll(6),
+            ],
+          ).paddingAll(6),
+        ),
       ),
     );
   }

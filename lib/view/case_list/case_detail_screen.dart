@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,16 +12,19 @@ import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/controller/case_list_controller.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/storage_helper.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class CaseDetailScreen extends StatelessWidget {
   CaseDetailScreen({super.key});
 
   final controller = Get.find<CaseListController>();
+  var newIndex = 0;
   // final signUrl = "".obs;
 
   @override
   Widget build(BuildContext context) {
     var index = Get.arguments;
+    newIndex = index;
     var modelData = controller.caseListNew[index];
     controller.isPDFExported.value = modelData.isPdfExported ?? false;
     controller.signUrl.value = modelData.signatureUrl ?? "";
@@ -312,7 +317,7 @@ class CaseDetailScreen extends StatelessWidget {
             ).marginOnly(bottom: 15),
             Obx(
               () => Visibility(
-                visible: controller.isPDFExported.value ? false : true,
+                visible: controller.isPDFExported.value ? true : true,
                 child: MyButton(
                   label: WordStrings.btnExprotLbl,
                   style: const TextStyle(
@@ -332,6 +337,12 @@ class CaseDetailScreen extends StatelessWidget {
                   height: Get.height * 0.05,
                   borderRadius: 2,
                   onTap: () async {
+                    // Get.toNamed(AppRoutes.pdfPreview, arguments: newIndex);
+                    // Navigator.of(context)
+                    //     .push(MaterialPageRoute(builder: (context) {
+                    //   return PdfPreviewPage();
+                    // }));
+
                     showWarningForExport(context,
                         WordStrings.viewExportDialogMsg, modelData.caseLable!);
                   },
@@ -398,4 +409,19 @@ class CaseDetailScreen extends StatelessWidget {
                   ).paddingOnly(left: 10, right: 10, top: 4, bottom: 10),
                 ],
               ));
+
+  Future<void> createPDF() async {
+    final pdf = pw.Document();
+
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) => pw.Center(
+          child: pw.Text('Hello World!'),
+        ),
+      ),
+    );
+
+    final file = File('himadri.pdf');
+    await file.writeAsBytes(await pdf.save());
+  }
 }

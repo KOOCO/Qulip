@@ -19,7 +19,7 @@ class SurveyFormStep1 extends StatelessWidget {
   var userId = "";
   @override
   Widget build(BuildContext context) {
-    StorageHelper.read(StorageKeys.userId).then((value) => {userId = value});
+    StorageHelper.read(StorageKeys.userId).then((value) => {userId = value.toString()});
     return Scaffold(
       appBar: AppBar(
         backgroundColor: stdwhite,
@@ -346,6 +346,7 @@ class SurveyFormStep1 extends StatelessWidget {
                 cursorColor: yasRed,
                 onChanged: (value) {
                   enteredText.value = value;
+                  controller.techDescriptionStr.value = value;
                 },
                 decoration: InputDecoration(
                     alignLabelWithHint: true,
@@ -390,6 +391,8 @@ class SurveyFormStep1 extends StatelessWidget {
                 height: Get.height * 0.05,
                 borderRadius: 2,
                 onTap: () async {
+                  debugPrint(
+                      "Himadri >> ${controller.techDescriptionStr.value}");
                   controller.storeWeentialStep1();
 
                   // "${controller.txtCaseName.value.text}_${getCaseNumber()}",

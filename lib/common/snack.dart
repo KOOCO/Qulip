@@ -16,7 +16,7 @@ class MySnackBar {
 
   static void successSnackbar(String message) {
     Get.snackbar(
-      '警告 :',
+      '提示: 成功 :',
       message,
       colorText: whiteTxt,
       icon: const Icon(Icons.error_outline, color: Colors.white),

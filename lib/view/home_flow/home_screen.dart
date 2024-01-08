@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
 import 'package:qulip/common/strings.dart';
@@ -93,6 +94,10 @@ class HomeScreen extends StatelessWidget {
     StorageHelper.read(StorageKeys.profileLink).then((value) {
       link.value = value;
     });
+    StorageHelper.read(StorageKeys.userId).then((value) {
+      debugPrint("User Id : $value");
+    });
+
     return WillPopScope(
       onWillPop: () async {
         final shouldPop =
@@ -202,6 +207,7 @@ class HomeScreen extends StatelessWidget {
                 borderRadius: 2,
                 onTap: () async {
                   Get.toNamed(AppRoutes.profileScreen, arguments: link.value);
+                  
                 },
               ).paddingSymmetric(horizontal: 20),
               MyButtonWithIcon(

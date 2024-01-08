@@ -91,7 +91,7 @@ class VerticalViewScreen extends StatelessWidget {
                   ],
                 ).paddingOnly(top: 10, bottom: 10),
                 buildTopFormView(modelData),
-                buildOutDoorPlan().paddingOnly(bottom: 15),
+                buildOutDoorPlan(modelData).paddingOnly(bottom: 15),
                 buildTiltTable().paddingOnly(bottom: 15),
                 buildNumberList(modelData)
               ],
@@ -270,13 +270,32 @@ class VerticalViewScreen extends StatelessWidget {
                 fontColor: stdDarkGray,
                 textAlign: TextAlign.center,
               ).paddingSymmetric(horizontal: 4, vertical: 4),
-              const MyText(
-                "",
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontColor: stdDarkGray,
-                textAlign: TextAlign.center,
-              ).paddingSymmetric(horizontal: 4, vertical: 4),
+              Visibility(
+                visible: controller.signUrl.value.isEmpty ? false : true,
+                child: Image.network(
+                  controller.signUrl.value,
+                  fit: BoxFit.fill,
+                  width: 150,
+                  height: 65,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return SizedBox(
+                      width: 150,
+                      height: 65,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: yasRed,
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -284,7 +303,7 @@ class VerticalViewScreen extends StatelessWidget {
     ).paddingOnly(bottom: 15);
   }
 
-  Widget buildOutDoorPlan() {
+  Widget buildOutDoorPlan(EstablishCaseModel modelData) {
     return Container(
       width: Get.width,
       height: 250.h,
@@ -297,14 +316,36 @@ class VerticalViewScreen extends StatelessWidget {
         ),
       ),
       child: Center(
-        child: const MyText(
-          WordStrings.viewOutdoorkLbl,
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          fontColor: stdDarkGray,
-          textAlign: TextAlign.center,
-        ).paddingSymmetric(horizontal: 4, vertical: 4),
+        child: Image.network(
+          width: double.infinity,
+          fit: BoxFit.fill,
+          modelData.vertical1Canvas.toString(),
+          loadingBuilder: (BuildContext context, Widget child,
+              ImageChunkEvent? loadingProgress) {
+            if (loadingProgress == null) return child;
+            return SizedBox(
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: yasRed,
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              ),
+            );
+          },
+        ),
       ),
+      // Center(
+      //   child: const MyText(
+      //     WordStrings.viewOutdoorkLbl,
+      //     fontSize: 16,
+      //     fontWeight: FontWeight.w600,
+      //     fontColor: stdDarkGray,
+      //     textAlign: TextAlign.center,
+      //   ).paddingSymmetric(horizontal: 4, vertical: 4),
+      // ),
     );
   }
 

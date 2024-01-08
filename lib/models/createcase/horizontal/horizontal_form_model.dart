@@ -28,7 +28,8 @@ class HorizontalDataModel {
     backView = json['backView'];
     forwardView = json['forwardView'];
     hypothesis = json['hypothesis'];
-    levelElevation = json['levelElevation'];
+    final elev = json['levelElevation'];
+    levelElevation = double.parse(elev.toString());
     imageUri = json['imageUri'];
   }
 
@@ -38,6 +39,6 @@ class HorizontalDataModel {
   String? forwardView;
   String? hypothesis = "";
   String? imageUri = "";
-  int levelElevation = 0;
+  double levelElevation = 0;
   String? caseWeather;
 }
