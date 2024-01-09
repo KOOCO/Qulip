@@ -57,4 +57,19 @@ class VerticalFormModel {
   double? slope;
   String? description;
   List<String> filePath = [];
+
+  String getIndex(int index) {
+    switch (index) {
+      case 0:
+        final no = index++;
+        return no.toString();
+      case 1:
+        return highDifference.toString();
+      case 2:
+        return "$titlDirection - $tiltValue";
+      case 3:
+        return slope.toString();
+    }
+    return '';
+  }
 }

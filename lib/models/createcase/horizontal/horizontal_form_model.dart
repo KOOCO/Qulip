@@ -41,4 +41,19 @@ class HorizontalDataModel {
   String? imageUri = "";
   double levelElevation = 0;
   String? caseWeather;
+
+  String getIndex(int index) {
+    switch (index) {
+      case 0:
+        return mesuringPoint!;
+      case 1:
+        return backView.toString();
+      case 2:
+        return forwardView.toString();
+      case 3:
+        return hypothesis.toString();
+    }
+    return '';
+  }
+  
 }
