@@ -40,17 +40,17 @@ class HorizontalMeasurement1 extends StatelessWidget {
           fontSize: 18,
           fontColor: yasRed,
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.image,
-              color: yasRed,
-            ),
-            onPressed: () {
-              //controller.takePhoto(context);
-            },
-          )
-        ],
+        // actions: <Widget>[
+        //   IconButton(
+        //     icon: const Icon(
+        //       Icons.image,
+        //       color: yasRed,
+        //     ),
+        //     onPressed: () {
+        //       //controller.takePhoto(context);
+        //     },
+        //   )
+        // ],
       ),
       backgroundColor: stdwhite,
       body: Column(
@@ -181,6 +181,7 @@ class HorizontalMeasurement1 extends StatelessWidget {
             },
             fullBorder: true,
             hasFloatingLabel: false,
+            maxLength: 6,
             controller: TextEditingController(text: tempList[index].backView),
             keyboard: TextInputType.number,
             labelText: WordStrings.sfBackwardViewLbl,
@@ -199,8 +200,11 @@ class HorizontalMeasurement1 extends StatelessWidget {
                   tempList[index].hypothesis =
                       calculateHypo(tempList[index]).toString();
                   tempList[index] = dataObj;
-                  debugPrint(
-                      "Himadri >> Level hypo ${tempList[index].hypothesis} >>$index");
+                }
+                if (index > 2) {
+                  tempList[index].levelElevation =
+                      calculateLevelElevation(tempList[index]);
+                  tempList[index] = dataObj;
                 }
               }
             },
@@ -209,6 +213,7 @@ class HorizontalMeasurement1 extends StatelessWidget {
             controller:
                 TextEditingController(text: tempList[index].forwardView),
             keyboard: TextInputType.number,
+            maxLength: 6,
             labelText: WordStrings.sfForwardViewLbl,
             hintText: WordStrings.sfForwardViewLbl,
           ),
@@ -225,8 +230,8 @@ class HorizontalMeasurement1 extends StatelessWidget {
                   tempList[index].levelElevation =
                       calculateLevelElevation(tempList[index]);
                   tempList[index] = dataObj;
-                  debugPrint(
-                      "Himadri >> Level Elevation ${tempList[index].levelElevation} >> $index");
+                  // debugPrint(
+                  // "Himadri >> Level Elevation ${tempList[index].levelElevation} >>${tempList[index].mesuringPoint} >> $index");
                 }
               },
               fullBorder: true,
@@ -234,22 +239,9 @@ class HorizontalMeasurement1 extends StatelessWidget {
               controller: TextEditingController(
                   text: tempList[index].hypothesis.toString()),
               keyboard: TextInputType.number,
+              maxLength: 6,
               labelText: WordStrings.sfHypothesisLbl,
               hintText: WordStrings.sfHypothesisLbl,
-            ),
-          ),
-          Obx(
-            () => MyText(
-              "${WordStrings.sfLevelElevationLbl} : ${tempList[index].levelElevation}",
-              fontWeight: FontWeight.w600,
-              fontFamily: FontFamilyConstant.sinkinSansMedium,
-              fontColor: stdBlack,
-            ).paddingOnly(left: 6, right: 2),
-          ),
-          Visibility(
-            visible: (index >= 1) ? true : false,
-            child: const SizedBox(
-              height: 15,
             ),
           ),
           Obx(
@@ -262,6 +254,20 @@ class HorizontalMeasurement1 extends StatelessWidget {
                 fontColor: stdBlack,
               ).paddingOnly(left: 6, right: 2),
             ),
+          ),
+          Visibility(
+            visible: (index >= 1) ? true : false,
+            child: const SizedBox(
+              height: 15,
+            ),
+          ),
+          Obx(
+            () => MyText(
+              "${WordStrings.sfLevelElevationLbl} : ${tempList[index].levelElevation}",
+              fontWeight: FontWeight.w600,
+              fontFamily: FontFamilyConstant.sinkinSansMedium,
+              fontColor: stdBlack,
+            ).paddingOnly(left: 6, right: 2),
           ),
           const SizedBox(
             height: 15,
@@ -291,9 +297,18 @@ class HorizontalMeasurement1 extends StatelessWidget {
 
     tempList[index] = dataObj;
     debugPrint("Himadri >> OldObj >> ${dataObj.toJson()}");
+    var mPoint = "";
+    if (tempList.length == 1) {
+      mPoint = "BM1";
+    } else if (tempList.length == 2) {
+      mPoint = "L1";
+    } else {
+      mPoint = "TP${tempList.length - 2}";
+    }
     dataObj = HorizontalDataModel(
-        mesuringPoint:
-            (tempList.length == 1) ? "BM1" : "TP${tempList.length - 1}",
+        mesuringPoint: mPoint,
+        // mesuringPoint:
+        //     (tempList.length == 1) ? "BM1" : "TP${tempList.length - 1}",
         backView: "",
         forwardView: "",
         hypothesis: "",
@@ -303,11 +318,11 @@ class HorizontalMeasurement1 extends StatelessWidget {
     tempList.add(dataObj);
   }
 
-  int calculateHypo(HorizontalDataModel data) {
+  double calculateHypo(HorizontalDataModel data) {
     final forwardValue = data.forwardView;
     final levelElevation = data.levelElevation;
     if (forwardValue!.isNotEmpty) {
-      final fValue = int.parse(forwardValue);
+      final fValue = double.parse(forwardValue);
       final result = levelElevation - fValue;
       return result;
     } else {
@@ -315,12 +330,24 @@ class HorizontalMeasurement1 extends StatelessWidget {
     }
   }
 
-  int calculateLevelElevation(HorizontalDataModel data) {
+  double calculateLevelElevation(HorizontalDataModel data) {
     final backwardValue = data.backView;
     final hypoValue = data.hypothesis;
     if (backwardValue!.isNotEmpty && hypoValue!.isNotEmpty) {
-      final bValue = int.parse(backwardValue);
-      final hValue = int.parse(hypoValue);
+      final bValue = double.parse(backwardValue);
+      final hValue = double.parse(hypoValue);
+      return bValue + hValue;
+    } else {
+      return 0;
+    }
+  }
+
+  double calculateLevelElevationForTp(HorizontalDataModel data) {
+    final backwardValue = data.backView;
+    final hypoValue = data.hypothesis;
+    if (backwardValue!.isNotEmpty && hypoValue!.isNotEmpty) {
+      final bValue = double.parse(backwardValue);
+      final hValue = double.parse(hypoValue);
       return bValue + hValue;
     } else {
       return 0;

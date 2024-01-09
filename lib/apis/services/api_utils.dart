@@ -135,32 +135,30 @@ class ApiUtils {
 
       switch (dioError.type) {
         case DioExceptionType.unknown:
-          errorDescription =
-              'Connection to API server failed due to internet connection';
+          errorDescription = '由於網路連接，與 API 伺服器的連接失敗’';
           break;
         case DioExceptionType.cancel:
-          errorDescription = 'Request to API server was cancelled';
+          errorDescription = '對 API 伺服器的請求被取消';
           break;
         case DioExceptionType.connectionTimeout:
-          errorDescription = 'Connection timeout with API server';
+          errorDescription = '與 API 伺服器的連線逾時';
           break;
         case DioExceptionType.receiveTimeout:
-          errorDescription = 'Receive timeout in connection with API server';
+          errorDescription = '接收與 API 伺服器連接逾時';
           break;
         case DioExceptionType.badResponse:
-          errorDescription =
-              'Received invalid status code: ${dioError.response?.statusCode}';
+          errorDescription = '收到無效狀態代碼: ${dioError.response?.statusCode}';
           break;
         case DioExceptionType.sendTimeout:
-          errorDescription = 'Send timeout in connection with API server';
+          errorDescription = '與 API 伺服器連接發送逾時';
           break;
         case DioExceptionType.badCertificate:
-          errorDescription = 'Receive timeout in connection with API server';
+          errorDescription = '接收與 API 伺服器連接逾時';
         case DioExceptionType.connectionError:
-          errorDescription = 'Connection timeout with API server';
+          errorDescription = '與 API 伺服器的連線逾時';
       }
     } else {
-      errorDescription = 'Unexpected error occured';
+      errorDescription = '發生意外錯誤';
     }
     Log.loga(title, 'handleError:: errorDescription >> $errorDescription');
     return errorDescription;

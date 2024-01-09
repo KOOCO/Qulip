@@ -180,7 +180,7 @@ class WordStrings {
   static const String leftPointLbl = "左點";
   static const String rightPointLbl = "右點";
   static const String tiltValueLbl = "傾斜值";
-  static const String slopeLbl = "傾斜路";
+  static const String slopeLbl = "傾斜率";
   static const String diagramLbl = "示意圖";
   static const String newMeasuringPointNumber = '新增測點編號';
   static const String errUpperPointEmpty = "請輸入上點";
@@ -247,11 +247,11 @@ class WordStrings {
 
   // Tilt Direction List
   static const String selectDirection = "請選擇傾斜方向";
-  static const String selectLeftDirection = "左";
-  static const String selectRightDirection = "右";
+  static const String selectLeftDirection = "向左";
+  static const String selectRightDirection = "向右";
 
   //Horizontal Measurment
-  static const String surveyFormHorizonatllLbl = "Horizontal Measurement Form";
+  static const String surveyFormHorizonatllLbl = "水準測量成果表.";
   static const String sfMesuringPointLbl = "測量點";
   static const String sfBackwardViewLbl = "後視";
   static const String sfForwardViewLbl = "前視";
@@ -269,12 +269,58 @@ class WordStrings {
   static const String bottomHistory = '歷史紀錄';
   static const String bottomFav = '最愛';
 
-  //New strings
   static const String noRecordsMsg = '未找到記錄';
   static const String numberLbl = '編號';
+  static const String clearImg = "清除";
+  //Survey Forms
 
-  // static const apiKey = "3aaa230be8a34174820f6308f3b176a3";
-  // static const apiSecret = "94bd22c3369f4a5fbaede97a0b59e2c1";
+  static const String logoutAppMsg = "你確定要登出帳號?";
+  static const String verticalMesurementTabCsDetails = "垂直測量成果表";
+  static const String surveyCsDetails = "建物現況調查表";
+
+  static const String viewMesuringPointLbl = "測點高(M)";
+  static const String viewTiltValueCMLbl = "傾斜值 (CM)";
+  static const String viewTiltLbl = "傾斜率";
+  static const String viewTiltDirectionLbl = "傾斜方向";
+  static const String viewTiltValueLbl = "傾斜值";
+  static const String viewNoLbl = "編號";
+  static const String viewRemarkLbl = "備註";
+  static const String viewIndoorkLbl = "室內平面圖";
+  static const String viewOutdoorkLbl = "室外平面圖";
+  static const String viewDiagramLbl = "傾斜示意圖";
+  static const String viewHoriMesuringPointLbl = "測點";
+  static const String viewHoriRearViewLbl = "後視 (M)";
+  static const String viewHoriAheadLbl = "前視 (M)";
+  static const String viewHoriAssuHighLbl = "假設高程 (M)";
+  static const String viewExportDialogMsg = "請確認是否下載該文件？ 點擊確認按鈕，將扣點數1點";
+  static const String lblCivilAffairsGuide = '土木公會表頭';
+
+  // English Strings
+  // static const String noRecordsMsg = '未找到記錄';
+  // static const String numberLbl = '編號';
+  // static const String logoutAppMsg =
+  //     "Are you sure you want to logout from app?";
+  // static const String verticalMesurementTabCsDetails =
+  //     "Vertical Measurment Tab";
+  // static const String surveyCsDetails = "Survey Form for Building";
+
+  // static const String viewMesuringPointLbl = "High Mesu.(m)";
+  // static const String viewTiltValueCMLbl = "Tilt (CM)";
+  // static const String viewTiltLbl = "Tilt";
+  // static const String viewTiltDirectionLbl = "Tilt Direction";
+  // static const String viewTiltValueLbl = "Tilt Value";
+  // static const String viewNoLbl = "No";
+  // static const String viewRemarkLbl = "Remark";
+  // static const String viewIndoorkLbl = "Indoor Plan";
+  // static const String viewOutdoorkLbl = "Outdoor Plan";
+  // static const String viewDiagramLbl = "Satery diagram";
+  // static const String viewHoriMesuringPointLbl = "Measuring point";
+  // static const String viewHoriRearViewLbl = "Rear view (m)";
+  // static const String viewHoriAheadLbl = "Ahead (m)";
+  // static const String viewHoriAssuHighLbl = "Assuming high (m)";
+  // static const String viewExportDialogMsg =
+  //     "Can you please confirm whether to download the file? Click the confirmation button to get the number of deductions 1 point.";
+  // static const String clearImg = "Clear";
 
   // //Common
   // static const String selectImageLbl = "Select From";
@@ -477,10 +523,10 @@ class WordStrings {
 
   // // //Horizontal Measurment
   // static const String sfMesuringPointLbl = "測量點";
-  // static const String sfBackwardViewLbl = "後視";
-  // static const String sfForwardViewLbl = "前視";
-  // static const String sfHypothesisLbl = "假設高程";
-  // static const String sfLevelElevationLbl = "水準高程";
+  // static const String sfBackwardViewLbl = "Back"; //"後視";
+  // static const String sfForwardViewLbl = "Forward"; //前視";
+  // static const String sfHypothesisLbl = "Hypo"; //"假設高程";
+  // static const String sfLevelElevationLbl = "Level ele"; //水準高程";
   // static const String errBackwardViewEmpty = "請輸入後視";
   // static const String errForwardViewEmpty = "請輸入前視";
   // static const String errHypothesisEmpty = "請輸入假設高程";
@@ -551,4 +597,6 @@ class WordStrings {
   // static const String bottomproperty = 'Property';
   // static const String bottomHistory = 'History';
   // static const String bottomFav = 'Favourites';
+
+  // static const String lblCivilAffairsGuide = '土木公會表頭';
 }

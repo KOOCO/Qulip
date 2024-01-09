@@ -1,4 +1,4 @@
 class ApiEndPoints {
   static const login = '/login/';
-  static const point = '/points';
+  static const point = '/points/';
 }
