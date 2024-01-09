@@ -94,9 +94,6 @@ class HomeScreen extends StatelessWidget {
     StorageHelper.read(StorageKeys.profileLink).then((value) {
       link.value = value;
     });
-    StorageHelper.read(StorageKeys.userId).then((value) {
-      debugPrint("User Id : $value");
-    });
 
     return WillPopScope(
       onWillPop: () async {
@@ -207,7 +204,6 @@ class HomeScreen extends StatelessWidget {
                 borderRadius: 2,
                 onTap: () async {
                   Get.toNamed(AppRoutes.profileScreen, arguments: link.value);
-                  
                 },
               ).paddingSymmetric(horizontal: 20),
               MyButtonWithIcon(

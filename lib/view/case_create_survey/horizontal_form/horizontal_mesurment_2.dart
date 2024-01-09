@@ -80,7 +80,7 @@ class HorizontalMeasurement2 extends StatelessWidget {
 
               final caseModel = EstablishCaseModel(
                   id: controller.caseId.value,
-                  createdAt: now.caseGeneratorDateFormate(),
+                  createdAt: now,
                   userId: controller.userId.value,
                   caseLable: controller.caseId.value,
                   caseName: controller.txtCaseName.value.text,

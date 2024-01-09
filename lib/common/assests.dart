@@ -15,4 +15,5 @@ class AssetImages {
   static const String surveyLogo = 'assets/images/survey_form_building.png';
   static const String horizontalLogo = 'assets/images/vertical_measurement.png';
   static const String verticalLogo = 'assets/images/horizontal_measurement.png';
+  static const String pdfIcon = 'assets/icons/pdf_header.png';
 }
