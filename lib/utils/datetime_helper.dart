@@ -4,7 +4,7 @@ class DateTimeHelper {
   static String defaultpattern = 'dd-MM-y hh:mm a';
   static const String dateOnly = 'dd-MM-y';
   static const String caseDateFormate = 'yyyyMMddhhmmss';
-  static const String date2Only = 'dd-MM-yyyy';
+  static const String date2Only = 'dd/MM/yyyy';
   static const String timeOnly = 'hh:mm a';
   static const String time24Only = 'H:m:s';
   static const String serverDob = 'yyyy-MM-dd';

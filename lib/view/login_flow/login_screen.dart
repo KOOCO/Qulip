@@ -14,7 +14,7 @@ import 'package:qulip/routes/app_routes.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
-  final controller = Get.put(LoginController());
+  final controller = Get.find<LoginController>(); //put(LoginController());
 
   @override
   Widget build(BuildContext context) {

@@ -221,7 +221,7 @@ class DialogBox {
 
   static Future<void> selectImage(
     BuildContext context, {
-    required Function(String filePath)? onComplete,
+    required Function(String filePath, XFile file)? onComplete,
   }) {
     return showDialog(
       context: context,
@@ -287,7 +287,7 @@ class DialogBox {
 
   static Future<void> takePhoto({
     required ImageSource source,
-    required Function(String filePath)? onComplete,
+    required Function(String filePath, XFile file)? onComplete,
   }) async {
     try {
       final pickedImage = await ImagePicker().pickImage(
@@ -330,7 +330,7 @@ class DialogBox {
       // Get.back();
       final bytes = File(pickedImage.path).readAsBytesSync();
       debugPrint(bytes.toString());
-      onComplete?.call(pickedImage.path);
+      onComplete?.call(pickedImage.path, pickedImage);
     } catch (e) {
       debugPrint(e.toString());
     }

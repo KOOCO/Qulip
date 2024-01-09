@@ -13,6 +13,7 @@ import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
 import 'package:qulip/models/createcase/weential/weential_data_model.dart';
+import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/dailog_helper.dart';
 import 'package:qulip/utils/text_style_helper.dart';
 
@@ -56,7 +57,8 @@ class SurveyFormStep2 extends StatelessWidget {
               color: yasRed,
             ),
             onPressed: () {
-              //controller.takePhoto(context);
+              Get.toNamed(AppRoutes.viewCanvasImage,
+                  arguments: controller.canvasSurveyUrl);
             },
           )
         ],
@@ -434,7 +436,7 @@ class SurveyFormStep2 extends StatelessWidget {
       BuildContext context, WeentialDataModel data, tempListIndex) async {
     DialogBox.selectImage(
       context,
-      onComplete: (filePath) async {
+      onComplete: (filePath, xFile) async {
         if (filePath.isNotEmpty) {
           controller.setLoading(true);
           final uFile = File(filePath);

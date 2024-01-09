@@ -33,11 +33,13 @@ class VerticalFormModel {
   VerticalFormModel.fromJson(Map<String, dynamic> json) {
     upperPoint = json['upperPoint'];
     lowerPoint = json['lowerPoint'];
-    highDifference = json['highDifference'];
+    var highDif = json['highDifference'];
+    highDifference = double.parse(highDif.toString());
     titlDirection = json['titlDirection'];
     leftPoint = json['leftPoint'];
     rightPoint = json['rightPoint'];
-    tiltValue = json['tiltValue'];
+    var tiltV = json['tiltValue'];
+    tiltValue = double.parse(tiltV.toString());
     slope = json['slope'];
     description = json['description'];
     for (var i in json['filePath']) {
@@ -47,11 +49,11 @@ class VerticalFormModel {
 
   String? upperPoint;
   String? lowerPoint;
-  int? highDifference;
+  double? highDifference;
   String? titlDirection;
   String? leftPoint;
   String? rightPoint;
-  int? tiltValue;
+  double? tiltValue;
   double? slope;
   String? description;
   List<String> filePath = [];

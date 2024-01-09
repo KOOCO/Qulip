@@ -5,21 +5,16 @@ import 'package:qulip/common/colors.dart';
 import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_text.dart';
-import 'package:qulip/routes/app_routes.dart';
-import 'package:qulip/utils/storage_helper.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
 
   // final controller = Get.put(LoginController());
-  final link = "https://civiltw-c0bb2554960c.herokuapp.com/".obs;
+  var link = "";
   @override
   Widget build(BuildContext context) {
-    debugPrint("Link >> 111 ${link.value}");
-    StorageHelper.read(StorageKeys.profileLink).then((value) => {
-          link.value = value,
-        });
+    link = Get.arguments;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: stdwhite,
@@ -33,7 +28,7 @@ class ProfileScreen extends StatelessWidget {
         ),
       ),
       backgroundColor: transparentGrey,
-      body: Obx(() => WebViewWidget(
+      body: WebViewWidget(
           controller: WebViewController()
             ..setJavaScriptMode(JavaScriptMode.unrestricted)
             ..setBackgroundColor(const Color(0x00000000))
@@ -46,18 +41,18 @@ class ProfileScreen extends StatelessWidget {
                 onPageFinished: (String url) {},
                 onWebResourceError: (WebResourceError error) {},
                 onNavigationRequest: (NavigationRequest request) {
-                  if (request.url.startsWith(
-                      "https://civiltw-c0bb2554960c.herokuapp.com/main")) {
-                    MySnackBar.successSnackbar(
-                        WordStrings.profileUpdateSuccess);
-                    Get.toNamed(AppRoutes.homeScreen);
-                    return NavigationDecision.prevent;
-                  }
+                  // if (request.url.startsWith(
+                  //     "https://civiltw-c0bb2554960c.herokuapp.com/main")) {
+                  //   MySnackBar.successSnackbar(
+                  //       WordStrings.profileUpdateSuccess);
+                  //   Get.toNamed(AppRoutes.homeScreen);
+                  //   return NavigationDecision.prevent;
+                  // }
                   return NavigationDecision.navigate;
                 },
               ),
             )
-            ..loadRequest(Uri.parse(link.value)))),
+            ..loadRequest(Uri.parse(link))),
       // body: SingleChildScrollView(
       //   child: Column(
       //     crossAxisAlignment: CrossAxisAlignment.start,

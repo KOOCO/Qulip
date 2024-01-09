@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -21,7 +22,7 @@ class WeentialDataModel {
     wsFlaw = json['flaw'];
     wsTechDescr = json['description'];
     for (var i in json['imagesList']) {
-      wsImagesList!.add(i);
+      wsImagesList.add(i);
     }
   }
 
@@ -45,5 +46,5 @@ class WeentialDataModel {
   String? wsCrackedWidth;
   String? wsFlaw;
   String? wsTechDescr;
-  List<String>? wsImagesList = <String>[].obs;
+  List<String> wsImagesList = <String>[].obs;
 }

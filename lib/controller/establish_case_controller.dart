@@ -37,6 +37,11 @@ class EstablishCaseController extends BaseController {
   final selectedWall = WordStrings.selectWall.toString().obs;
   final selectedFlatTopMaterial = WordStrings.selectFTop.toString().obs;
   final selectedFloor = WordStrings.selectFloor.toString().obs;
+  final canvasSurveyUrl = "".obs;
+  final canvasVertical1Url = "".obs;
+  final canvasVertical2Url = "".obs;
+  final canvasHorizontalUrl = "".obs;
+  final techDescriptionStr = "".obs;
 
   final List<String> structureList = [
     WordStrings.selectStructure,
@@ -235,7 +240,8 @@ class EstablishCaseController extends BaseController {
       return;
     }
 
-    Get.toNamed(AppRoutes.surveyForm2CreateScreen);
+    Get.toNamed(AppRoutes.surveyCanvasView);
+    // Get.toNamed(AppRoutes.surveyForm2CreateScreen);
   }
 
   Future<void> storeWeentialStep2() async {
@@ -259,7 +265,7 @@ class EstablishCaseController extends BaseController {
       return;
     }
 
-    Get.toNamed(AppRoutes.surveyFormVerticalScreen);
+    Get.toNamed(AppRoutes.verticalCanvas1View);
   }
 
   Future<void> storeVeritcalFormData() async {
@@ -297,7 +303,7 @@ class EstablishCaseController extends BaseController {
   Future<void> takePhotoHS(BuildContext context, int index) async {
     DialogBox.selectImage(
       context,
-      onComplete: (filePath) async {
+      onComplete: (filePath, xFile) async {
         if (filePath.isNotEmpty) {
           setLoading(true);
           debugPrint("FilePath $filePath");

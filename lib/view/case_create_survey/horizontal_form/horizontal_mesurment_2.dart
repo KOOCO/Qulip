@@ -8,6 +8,7 @@ import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
+import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/datetime_helper.dart';
 import 'package:qulip/utils/storage_helper.dart';
 
@@ -15,11 +16,12 @@ class HorizontalMeasurement2 extends StatelessWidget {
   HorizontalMeasurement2({super.key});
 
   final controller = Get.find<EstablishCaseController>();
+  // Get.put(EstablishCaseController()); //
 
   @override
   Widget build(BuildContext context) {
     StorageHelper.read(StorageKeys.userId).then((value) {
-      controller.userId.value = value;
+      controller.userId.value = value.toString();
     });
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +41,8 @@ class HorizontalMeasurement2 extends StatelessWidget {
               color: yasRed,
             ),
             onPressed: () {
-              //controller.takePhoto(context);
+              Get.toNamed(AppRoutes.viewCanvasImage,
+                  arguments: controller.canvasVertical1Url);
             },
           )
         ],
@@ -76,25 +79,33 @@ class HorizontalMeasurement2 extends StatelessWidget {
                   "${now.caseGeneratorDateFormate()}_${controller.txtCaseName.value.text}";
 
               final caseModel = EstablishCaseModel(
-                id: controller.caseId.value,
-                createdAt: now.caseGeneratorDateFormate(),
-                userId: controller.userId.value,
-                caseLable: controller.caseId.value,
-                caseName: controller.txtCaseName.value.text,
-                caseAddress: controller.txtCaseAddress.value.text,
-                caseDate: controller.txtCaseDate.value.text,
-                caseEquipmentNo: controller.txtCaseEquipmentName.value.text,
-                caseWeather: controller.txtCaseWeather.value.text,
-                wsStructureType: controller.selectedStructure.value,
-                wsUseFor: controller.selectedUse.value,
-                wsWallType: controller.selectedWall.value,
-                wsFlatTopMaterial: controller.selectedFlatTopMaterial.value,
-                wsFloorMaterial: controller.selectedFloor.value,
-                wsTechDescription: controller.txtSupplimentryDesc.value.text,
-                wsWeentileDataList: [],
-                verticalMSDataList: [],
-                horizontalMSDataList: [],
-              );
+                  id: controller.caseId.value,
+                  createdAt: now.caseGeneratorDateFormate(),
+                  userId: controller.userId.value,
+                  caseLable: controller.caseId.value,
+                  caseName: controller.txtCaseName.value.text,
+                  caseAddress: controller.txtCaseAddress.value.text,
+                  caseDate: controller.txtCaseDate.value.text,
+                  caseEquipmentNo: controller.txtCaseEquipmentName.value.text,
+                  caseWeather: controller.txtCaseWeather.value.text,
+                  wsStructureType: controller.selectedStructure.value,
+                  wsUseFor: controller.selectedUse.value,
+                  wsWallType: controller.selectedWall.value,
+                  wsFlatTopMaterial: controller.selectedFlatTopMaterial.value,
+                  wsFloorMaterial: controller.selectedFloor.value,
+                  wsTechDescription: controller.techDescriptionStr.value,
+                  wsCanvas: controller.canvasSurveyUrl.value.toString(),
+                  vertical1Canvas:
+                      controller.canvasVertical1Url.value.toString(),
+                  vertical2Canvas:
+                      controller.canvasVertical2Url.value.toString(),
+                  horizontalCanvas:
+                      controller.canvasHorizontalUrl.value.toString(),
+                  wsWeentileDataList: [],
+                  verticalMSDataList: [],
+                  horizontalMSDataList: [],
+                  isPdfExported: false,
+                  signatureUrl: "");
               debugPrint("Himadri Final data :: ${caseModel.toJson()}");
               controller.createCase(caseModel);
             },

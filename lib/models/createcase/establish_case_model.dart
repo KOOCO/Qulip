@@ -22,9 +22,15 @@ class EstablishCaseModel {
     required this.wsFlatTopMaterial,
     required this.wsFloorMaterial,
     required this.wsTechDescription,
+    required this.wsCanvas,
+    required this.vertical1Canvas,
+    required this.vertical2Canvas,
+    required this.horizontalCanvas,
     required this.wsWeentileDataList,
     required this.verticalMSDataList,
     required this.horizontalMSDataList,
+    required this.isPdfExported,
+    required this.signatureUrl,
   });
 
   EstablishCaseModel.fromJson(Map<String, dynamic> json) {
@@ -43,6 +49,12 @@ class EstablishCaseModel {
     wsFlatTopMaterial = json['flatTopMaterial'];
     wsFloorMaterial = json['floorMaterial'];
     wsTechDescription = json['techDescription'];
+    wsCanvas = json['wsCanvas'];
+    vertical1Canvas = json['vertical1Canvas'];
+    vertical2Canvas = json['vertical2Canvas'];
+    horizontalCanvas = json['horizontalCanvas'];
+    isPdfExported = json['isPdfExported'];
+    signatureUrl = json['signatureUrl'];
 
     if (json['weentialList'] != null) {
       for (var i in json['weentialList']) {
@@ -79,9 +91,15 @@ class EstablishCaseModel {
     data['flatTopMaterial'] = wsFlatTopMaterial;
     data['floorMaterial'] = wsFloorMaterial;
     data['techDescription'] = wsTechDescription;
+    data['wsCanvas'] = wsCanvas;
+    data['vertical1Canvas'] = vertical1Canvas;
+    data['vertical2Canvas'] = vertical2Canvas;
+    data['horizontalCanvas'] = horizontalCanvas;
     data['weentialList'] = wsWeentileDataList;
     data['verticalMsList'] = verticalMSDataList;
     data['horizontalMSDataList'] = horizontalMSDataList;
+    data['isPdfExported'] = isPdfExported;
+    data['signatureUrl'] = signatureUrl;
     return data;
   }
 
@@ -100,6 +118,12 @@ class EstablishCaseModel {
   String? wsFlatTopMaterial;
   String? wsFloorMaterial;
   String? wsTechDescription;
+  String? wsCanvas;
+  String? vertical1Canvas;
+  String? vertical2Canvas;
+  String? horizontalCanvas;
+  String? signatureUrl;
+  bool? isPdfExported;
   List<WeentialDataModel> wsWeentileDataList = [];
   List<VerticalFormModel> verticalMSDataList = [];
   List<HorizontalDataModel> horizontalMSDataList = [];
