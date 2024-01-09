@@ -2,7 +2,7 @@ class WordStrings {
   static const apiKey = "3aaa230be8a34174820f6308f3b176a3";
   static const apiSecret = "94bd22c3369f4a5fbaede97a0b59e2c1";
 
-  //Common
+  // //Common
   static const String selectImageLbl = "選擇從";
   static const String galleryImageLbl = "Gallery";
   static const String cameraImageLbl = "相機";
@@ -294,6 +294,21 @@ class WordStrings {
   static const String viewHoriAssuHighLbl = "假設高程 (M)";
   static const String viewExportDialogMsg = "請確認是否下載該文件？ 點擊確認按鈕，將扣點數1點";
   static const String lblCivilAffairsGuide = '土木公會表頭';
+
+  static const String pdfcName = "Name";
+  static const String pdfcAddress = "地址：";
+  static const String pdfcDate = "日期:";
+  static const String pdfENo = "设备编号:";
+  static const String pdfWeather = "天氣:";
+  static const String pdfSurvey = "调查详情";
+  static const String pdfStructure = "構造";
+  static const String pdfUse = "用途";
+  static const String pdfWall = "牆面";
+  static const String pdfFlatTopMaterial = "請選擇平面材質";
+  static const String pdfFloor = "地坪材質";
+  static const String pdfRemark = "備註";
+  static const String pdfVerticalMeasurement = "垂直测量";
+  static const String pdfHorizontalMeasurement = "水平测量";
 
   // English Strings
   // static const String noRecordsMsg = '未找到記錄';
@@ -599,4 +614,19 @@ class WordStrings {
   // static const String bottomFav = 'Favourites';
 
   // static const String lblCivilAffairsGuide = '土木公會表頭';
+
+  // static const String pdfcName = "Name";
+  // static const String pdfcAddress = "Address:";
+  // static const String pdfcDate = "Date:";
+  // static const String pdfENo = "Equ No:";
+  // static const String pdfWeather = "Weather:";
+  // static const String pdfSurvey = "Survey Details";
+  // static const String pdfStructure = "Structure";
+  // static const String pdfUse = "Use";
+  // static const String pdfWall = "Wall";
+  // static const String pdfFlatTopMaterial = "Flat top material";
+  // static const String pdfFloor = "Floor material";
+  // static const String pdfRemark = "Remark";
+  // static const String pdfVerticalMeasurement = "Vertical Measurement";
+  // static const String pdfHorizontalMeasurement = "Horizontal Measurement";
 }

@@ -19,28 +19,32 @@ class CaseListController extends BaseController {
 
   Future getData() async {
     // setLoading(true);
-    await _db.collection('case_survey').get().then((value) {
+    await _db
+        .collection('case_survey')
+        .orderBy('createdAt', descending: false)
+        .get()
+        .then((value) {
       final result = (value.docs)
           .map((x) => EstablishCaseModel.fromJson(x.data()))
           .toList();
       caseListNew.clear();
       caseListNew.addAll(result);
     }).whenComplete(() => isProcessComplete = true);
-
-    //return caseList;
-    // final cRef = _db.collection('/case_survey');
-    // QuerySnapshot querySnapshot = await cRef.get();
-    // final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    // debugPrint("Himadri :: ${allData.length}");
   }
 
   Future filterData(String selectedFilter) async {
-    DateTime currentDate = DateTime.now();
+    DateTime now = DateTime.now();
+    var now_6m = DateTime(now.year, now.month - 6, now.day);
+    var now_3m = DateTime(now.year, now.month - 3, now.day);
 
     if (selectedFilter == WordStrings.sixMonthLbl) {
       // List of before 6 months from now
 
-      await _db.collection('case_survey').get().then((value) {
+      await _db
+          .collection('case_survey')
+          .orderBy('createdAt', descending: false)
+          .get()
+          .then((value) {
         final result = (value.docs)
             .map((x) => EstablishCaseModel.fromJson(x.data()))
             .toList();
@@ -49,29 +53,23 @@ class CaseListController extends BaseController {
       }).whenComplete(() {
         isProcessComplete = true;
 
-        // Subtract 6 months from the current date
-        DateTime sixMonthsAgo =
-            currentDate.subtract(const Duration(days: 30 * 6));
-
         var filteredList = caseListNew.where((caseItem) {
-          // Convert the integer to a string
-          String dateString = caseItem.createdAt!;
-
-          // Ensure the correct format for a 24-hour clock (HH instead of hh)
-          String formattedDateString =
-              "${dateString.substring(0, 8)} ${dateString.substring(8, 10)}:${dateString.substring(10, 12)}:${dateString.substring(12, 14)}";
-
-          // Parse the formatted date string into a DateTime object
-          DateTime date = DateTime.parse(formattedDateString);
-          return date.isBefore(sixMonthsAgo);
+          DateTime? cDate = caseItem.createdAt;
+          // debugPrint(
+          //     "Six month before >> ${caseItem.createdAt} >> ${cDate!.isBefore(now_6m)}  >> $now_6m");
+          return cDate!.isBefore(now_6m);
         }).toList();
+        // debugPrint("Six month before >> ${filteredList.toString()}");
+
         caseListNew.clear();
         caseListNew.addAll(filteredList);
       });
     } else if (selectedFilter == WordStrings.threeMonthLbl) {
-      // List of before 3 months from now
-
-      await _db.collection('case_survey').get().then((value) {
+      await _db
+          .collection('case_survey')
+          .orderBy('createdAt', descending: false)
+          .get()
+          .then((value) {
         final result = (value.docs)
             .map((x) => EstablishCaseModel.fromJson(x.data()))
             .toList();
@@ -80,22 +78,13 @@ class CaseListController extends BaseController {
       }).whenComplete(() {
         isProcessComplete = true;
 
-        // Subtract 3 months from the current date
-        DateTime sixMonthsAgo =
-            currentDate.subtract(const Duration(days: 30 * 3));
-
         var filteredList = caseListNew.where((caseItem) {
-          // Convert the integer to a string
-          String dateString = caseItem.createdAt!;
-
-          // Ensure the correct format for a 24-hour clock (HH instead of hh)
-          String formattedDateString =
-              "${dateString.substring(0, 8)} ${dateString.substring(8, 10)}:${dateString.substring(10, 12)}:${dateString.substring(12, 14)}";
-
-          // Parse the formatted date string into a DateTime object
-          DateTime date = DateTime.parse(formattedDateString);
-          return date.isBefore(sixMonthsAgo);
+          DateTime? cDate = caseItem.createdAt;
+          // debugPrint(
+          //     "Three month before >> ${caseItem.createdAt} >> ${cDate!.isBefore(now_3m)} >> $now_3m");
+          return cDate!.isBefore(now_3m);
         }).toList();
+
         caseListNew.clear();
         caseListNew.addAll(filteredList);
       });

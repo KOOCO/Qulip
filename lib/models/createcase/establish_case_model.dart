@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:qulip/models/createcase/horizontal/horizontal_form_model.dart';
@@ -36,7 +37,7 @@ class EstablishCaseModel {
   EstablishCaseModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['userId'];
-    createdAt = json['createdAt'];
+    createdAt = json['createdAt'].toDate();
     caseName = json['caseName'];
     caseLable = json['caseLabel'];
     caseAddress = json['caseAddress'];
@@ -78,7 +79,7 @@ class EstablishCaseModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['userId'] = userId;
-    data['createdAt'] = createdAt;
+    data['createdAt'] = Timestamp.fromDate(DateTime.now());
     data['caseName'] = caseName;
     data['caseLabel'] = caseLable;
     data['caseAddress'] = caseAddress;
@@ -104,7 +105,7 @@ class EstablishCaseModel {
   }
 
   String? id;
-  String? createdAt;
+  DateTime? createdAt;
   String? userId;
   String? caseName;
   String? caseLable;
