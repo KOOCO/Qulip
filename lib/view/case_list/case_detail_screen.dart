@@ -349,9 +349,9 @@ class CaseDetailScreen extends StatelessWidget {
                   height: Get.height * 0.05,
                   borderRadius: 2,
                   onTap: () async {
-                    // Get.toNamed(AppRoutes.pdfPreview, arguments: newIndex);
-                    showWarningForExport(
-                        context, WordStrings.viewExportDialogMsg, modelData);
+                    Get.toNamed(AppRoutes.pdfPreview, arguments: newIndex);
+                    // showWarningForExport(
+                    // context, WordStrings.viewExportDialogMsg, modelData);
                   },
                 ).paddingAll(40),
               ),
@@ -482,7 +482,7 @@ Future<File> createPDF(EstablishCaseModel modelData) async {
       ttf,
       ttf,
     ),
-    header: (context) => _buildHeader(context, modelData, byteList),
+    // header: (context) => _buildHeader(context, modelData, byteList),
     footer: _buildFooter,
     build: (context) => [
       _buildSurveyContent(context, modelData, wsCanvasImage),
@@ -604,7 +604,7 @@ pw.Widget _buildSurveyContent(
         ),
         pw.Divider(borderStyle: pw.BorderStyle.solid),
         pw.Padding(
-          padding: const pw.EdgeInsets.only(top: 20),
+          padding: const pw.EdgeInsets.only(top: 16),
         ),
         pw.Row(
           crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -626,9 +626,6 @@ pw.Widget _buildSurveyContent(
             ),
           ],
         ),
-        pw.Padding(
-          padding: const pw.EdgeInsets.only(top: 4),
-        ),
         pw.Row(
           crossAxisAlignment: pw.CrossAxisAlignment.center,
           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -649,9 +646,6 @@ pw.Widget _buildSurveyContent(
             ),
           ],
         ),
-        pw.Padding(
-          padding: const pw.EdgeInsets.only(top: 4),
-        ),
         pw.Row(
           crossAxisAlignment: pw.CrossAxisAlignment.center,
           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -671,9 +665,6 @@ pw.Widget _buildSurveyContent(
                   ),
             ),
           ],
-        ),
-        pw.Padding(
-          padding: const pw.EdgeInsets.only(top: 4),
         ),
         pw.Row(
           crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -696,13 +687,7 @@ pw.Widget _buildSurveyContent(
           ],
         ),
       ]),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
-      ),
       _Category(title: WordStrings.pdfSurvey),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
-      ),
       pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -722,9 +707,6 @@ pw.Widget _buildSurveyContent(
                 ),
           ),
         ],
-      ),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
       ),
       pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -746,9 +728,6 @@ pw.Widget _buildSurveyContent(
           ),
         ],
       ),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
-      ),
       pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -768,9 +747,6 @@ pw.Widget _buildSurveyContent(
                 ),
           ),
         ],
-      ),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
       ),
       pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -792,9 +768,6 @@ pw.Widget _buildSurveyContent(
           ),
         ],
       ),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
-      ),
       pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -814,9 +787,6 @@ pw.Widget _buildSurveyContent(
                 ),
           ),
         ],
-      ),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
       ),
       pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -838,9 +808,6 @@ pw.Widget _buildSurveyContent(
           ),
         ],
       ),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
-      ),
       pw.Center(
         child: pw.Image(image, height: 250, alignment: pw.Alignment.center),
       ),
@@ -860,9 +827,6 @@ pw.Widget _buildVerticalContent(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
       _Category(title: WordStrings.pdfVerticalMeasurement),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
-      ),
       pw.ListView.builder(
         itemCount: modelData.verticalMSDataList.length,
         itemBuilder: (context, index) {
@@ -870,7 +834,6 @@ pw.Widget _buildVerticalContent(
               context, modelData.verticalMSDataList[index], index);
         },
       ),
-      pw.Padding(padding: const pw.EdgeInsets.only(bottom: 10)),
       pw.TableHelper.fromTextArray(
         border: null,
         cellAlignment: pw.Alignment.centerLeft,
@@ -941,7 +904,6 @@ pw.Widget _buildHorizontalContent(
               context, modelData.horizontalMSDataList[index], index);
         },
       ),
-      pw.Padding(padding: const pw.EdgeInsets.only(bottom: 10)),
       pw.TableHelper.fromTextArray(
         border: null,
         cellAlignment: pw.Alignment.centerLeft,
@@ -1013,9 +975,7 @@ pw.Widget _buildHorizontalNumber(
                   fontWeight: pw.FontWeight.normal,
                 ),
           ),
-          pw.Padding(
-            padding: const pw.EdgeInsets.only(top: 10),
-          ),
+
           // pw.Center(
           //   child: pw.ClipRRect(
           //     child: pw.Image(v, height: 250, alignment: pw.Alignment.center),

@@ -89,7 +89,7 @@ class _VerticalCanvas1State extends State<VerticalCanvas1> {
                   ],
                 ),
               ),
-              SizedBox(
+              Container(
                 height: MediaQuery.of(context).size.height * 0.65,
                 child: file == null
                     ? ImagePainter.asset(

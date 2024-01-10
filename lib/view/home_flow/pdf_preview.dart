@@ -93,7 +93,7 @@ class PdfPreviewPage extends StatelessWidget {
         ttf,
         ttf,
       ),
-      header: (context) => _buildHeader(context, modelData, byteList),
+      // header: (context) => _buildHeader(context, modelData, byteList),
       footer: _buildFooter,
       build: (context) => [
         _buildSurveyContent(context, modelData, wsCanvasImage),
@@ -111,9 +111,9 @@ pw.PageTheme _buildTheme(
   return pw.PageTheme(
     pageFormat: pageFormat,
     theme: pw.ThemeData.withFont(
-      base: base,
-      bold: bold,
-    ),
+        // base: base,
+        // bold: bold,
+        ),
   );
 }
 
@@ -194,9 +194,9 @@ pw.Widget _buildSurveyContent(
             ),
           ],
         ),
-        pw.Padding(
-          padding: const pw.EdgeInsets.only(top: 4),
-        ),
+        // pw.Padding(
+        //   padding: const pw.EdgeInsets.only(top: 4),
+        // ),
         pw.Row(
           crossAxisAlignment: pw.CrossAxisAlignment.center,
           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -217,9 +217,9 @@ pw.Widget _buildSurveyContent(
             ),
           ],
         ),
-        pw.Padding(
-          padding: const pw.EdgeInsets.only(top: 4),
-        ),
+        // pw.Padding(
+        //   padding: const pw.EdgeInsets.only(top: 4),
+        // ),
         pw.Row(
           crossAxisAlignment: pw.CrossAxisAlignment.center,
           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -240,9 +240,9 @@ pw.Widget _buildSurveyContent(
             ),
           ],
         ),
-        pw.Padding(
-          padding: const pw.EdgeInsets.only(top: 4),
-        ),
+        // pw.Padding(
+        //   padding: const pw.EdgeInsets.only(top: 4),
+        // ),
         pw.Row(
           crossAxisAlignment: pw.CrossAxisAlignment.center,
           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -264,13 +264,7 @@ pw.Widget _buildSurveyContent(
           ],
         ),
       ]),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
-      ),
       _Category(title: WordStrings.pdfSurvey),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
-      ),
       pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -314,9 +308,6 @@ pw.Widget _buildSurveyContent(
           ),
         ],
       ),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
-      ),
       pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -336,9 +327,6 @@ pw.Widget _buildSurveyContent(
                 ),
           ),
         ],
-      ),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
       ),
       pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -360,9 +348,6 @@ pw.Widget _buildSurveyContent(
           ),
         ],
       ),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
-      ),
       pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -382,9 +367,6 @@ pw.Widget _buildSurveyContent(
                 ),
           ),
         ],
-      ),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
       ),
       pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -406,11 +388,8 @@ pw.Widget _buildSurveyContent(
           ),
         ],
       ),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
-      ),
       pw.Center(
-        child: pw.Image(image, height: 250, alignment: pw.Alignment.center),
+        child: pw.Image(image, height: 200, alignment: pw.Alignment.center),
       ),
     ],
   );
@@ -428,9 +407,6 @@ pw.Widget _buildVerticalContent(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
       _Category(title: WordStrings.pdfVerticalMeasurement),
-      pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 10),
-      ),
       pw.ListView.builder(
         itemCount: modelData.verticalMSDataList.length,
         itemBuilder: (context, index) {
@@ -438,7 +414,6 @@ pw.Widget _buildVerticalContent(
               context, modelData.verticalMSDataList[index], index);
         },
       ),
-      pw.Padding(padding: const pw.EdgeInsets.only(bottom: 10)),
       pw.TableHelper.fromTextArray(
         border: null,
         cellAlignment: pw.Alignment.centerLeft,
@@ -484,10 +459,14 @@ pw.Widget _buildVerticalContent(
         ),
       ),
       pw.Center(
-        child: pw.Image(image, height: 250, alignment: pw.Alignment.center),
+        child: pw.Image(image, height: 200, alignment: pw.Alignment.center),
       ),
     ],
   );
+}
+
+Future<pw.ImageProvider> imageUri(HorizontalDataModel data) async {
+  return await networkImage(data.imageUri!);
 }
 
 pw.Widget _buildHorizontalContent(
@@ -498,6 +477,8 @@ pw.Widget _buildHorizontalContent(
     WordStrings.viewHoriAheadLbl,
     WordStrings.viewHoriAssuHighLbl,
   ];
+  pw.ImageProvider dummyProvider = image;
+
   return pw.Column(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
@@ -505,11 +486,12 @@ pw.Widget _buildHorizontalContent(
       pw.ListView.builder(
         itemCount: modelData.horizontalMSDataList.length,
         itemBuilder: (context, index) {
-          return _buildHorizontalNumber(
-              context, modelData.horizontalMSDataList[index], index);
+          // imageUri(modelData.horizontalMSDataList[index])
+          //     .then((value) => dummyProvider = value);
+          return _buildHorizontalNumber(context,
+              modelData.horizontalMSDataList[index], dummyProvider, index);
         },
       ),
-      pw.Padding(padding: const pw.EdgeInsets.only(bottom: 10)),
       pw.TableHelper.fromTextArray(
         border: null,
         cellAlignment: pw.Alignment.centerLeft,
@@ -561,8 +543,8 @@ pw.Widget _buildHorizontalContent(
   );
 }
 
-pw.Widget _buildHorizontalNumber(
-    pw.Context context, HorizontalDataModel modelData, int index) {
+pw.Widget _buildHorizontalNumber(pw.Context context,
+    HorizontalDataModel modelData, pw.ImageProvider image, int index) {
   return pw.Container(
     decoration: const pw.BoxDecoration(
       borderRadius: pw.BorderRadius.all(pw.Radius.circular(8)),
@@ -581,14 +563,15 @@ pw.Widget _buildHorizontalNumber(
                   fontWeight: pw.FontWeight.normal,
                 ),
           ),
-          pw.Padding(
-            padding: const pw.EdgeInsets.only(top: 10),
-          ),
-          // pw.Center(
-          //   child: pw.ClipRRect(
-          //     child: pw.Image(v, height: 250, alignment: pw.Alignment.center),
-          //   ),
-          // )
+          // pw.Padding(
+          //   padding: const pw.EdgeInsets.only(top: 10),
+          // ),
+          pw.Center(
+            child: pw.ClipRRect(
+              child:
+                  pw.Image(image, height: 200, alignment: pw.Alignment.center),
+            ),
+          )
         ],
       ),
     ),
@@ -614,9 +597,6 @@ pw.Widget _buildVerticalNumber(
               style: pw.Theme.of(context).defaultTextStyle.copyWith(
                     fontWeight: pw.FontWeight.normal,
                   ),
-            ),
-            pw.Padding(
-              padding: const pw.EdgeInsets.only(top: 10),
             ),
             pw.Row(
               crossAxisAlignment: pw.CrossAxisAlignment.center,
