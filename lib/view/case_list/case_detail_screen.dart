@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:printing/printing.dart';
 import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
@@ -20,6 +22,7 @@ import 'package:qulip/models/createcase/horizontal/horizontal_form_model.dart';
 import 'package:qulip/models/createcase/vertical/vertical_form_model.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:qulip/utils/storage_helper.dart';
 
 class CaseDetailScreen extends StatelessWidget {
   CaseDetailScreen({super.key});
@@ -324,7 +327,7 @@ class CaseDetailScreen extends StatelessWidget {
             ).marginOnly(bottom: 15),
             Obx(
               () => Visibility(
-                visible: controller.isPDFExported.value ? true : true,
+                visible: controller.isPDFExported.value ? false : true,
                 child: MyButton(
                   label: WordStrings.btnExprotLbl,
                   style: const TextStyle(
@@ -345,7 +348,6 @@ class CaseDetailScreen extends StatelessWidget {
                   borderRadius: 2,
                   onTap: () async {
                     // Get.toNamed(AppRoutes.pdfPreview, arguments: newIndex);
-
                     showWarningForExport(
                         context, WordStrings.viewExportDialogMsg, modelData);
                   },
@@ -388,17 +390,26 @@ class CaseDetailScreen extends StatelessWidget {
                         borderRadius: 2,
                         onTap: () async {
                           Get.back();
-                          controller.setLoading(true);
-                          createPDF(modelData).then((value) {
-                            controller.setLoading(false);
-                          });
-
-                          // StorageHelper.read(StorageKeys.phoneNumber).then(
-                          //     (value) => controller.getPoints(value, modelData.caseLable!));
+                          Get.toNamed(AppRoutes.pdfPreview,
+                              arguments: modelData.pdfUrl!);
+                          // controller.setLoading(true);
+                          // StorageHelper.read(StorageKeys.phoneNumber)
+                          //     .then((value) {
+                          //   controller
+                          //       .getPoints(value, modelData.caseLable!)
+                          //       .then((value) {
                           //     createPDF(modelData).then((value) {
                           //       controller.setLoading(false);
-                          //       Get.back();
+                          //       controller
+                          //           .uploadPdf(
+                          //               value, "${modelData.caseLable}.pdf")
+                          //           .then((value) {
+                          //         controller.setpdfurl(
+                          //             modelData.caseLable!, value!);
+                          //       });
                           //     });
+                          //   });
+                          // });
                         },
                       )..paddingOnly(left: 4, right: 4),
                       const Spacer(),
@@ -422,7 +433,7 @@ class CaseDetailScreen extends StatelessWidget {
               ));
 }
 
-Future<void> createPDF(EstablishCaseModel modelData) async {
+Future<File> createPDF(EstablishCaseModel modelData) async {
   final pdf = pw.Document();
   final ByteData bytes = await rootBundle.load(AssetImages.pdfIcon);
   final Uint8List byteList = bytes.buffer.asUint8List();
@@ -451,12 +462,51 @@ Future<void> createPDF(EstablishCaseModel modelData) async {
     ],
   ));
 
-  final appDocDir = await getDownloadsDirectory();
-  final appDocPath = appDocDir!.path;
-  final file = File('$appDocPath/document.pdf');
-  debugPrint('Save as file ${file.path} ...');
-  await file.writeAsBytes(await pdf.save());
-  await OpenFile.open(file.path);
+  Directory? directory;
+  final plugin = DeviceInfoPlugin();
+  final android = await plugin.androidInfo;
+  const permission = Permission.storage;
+  final status = android.version.sdkInt < 33
+      ? await permission.status
+      : PermissionStatus.granted;
+  debugPrint('>>>Status $status');
+
+  /// here it is coming as PermissionStatus.granted
+  if (status != PermissionStatus.granted) {
+    await permission.request();
+    if (await permission.status.isGranted) {
+      directory = await getExternalStorageDirectory();
+
+      ///perform other stuff to download file
+    } else if (status == PermissionStatus.permanentlyDenied) {
+      await openAppSettings();
+    } else {
+      await permission.request();
+    }
+    debugPrint('>>> ${await permission.status}');
+  }
+
+  directory = await getExternalStorageDirectory();
+
+  // if (directory != null) {
+  final saveFile = File(
+    '${directory?.path}/${modelData.caseLable}.pdf',
+  );
+
+  debugPrint(saveFile.path);
+  if (!await saveFile.exists()) {
+    await saveFile.create(recursive: true);
+  }
+
+  // }
+  return await saveFile.writeAsBytes(await pdf.save());
+
+  // final appDocDir = await getDownloadsDirectory();
+  // final appDocPath = appDocDir!.path;
+  // final file = File('$appDocPath/document.pdf');
+  // debugPrint('Save as file ${file.path} ...');
+  // await file.writeAsBytes(await pdf.save());
+  // await OpenFile.open(file.path);
 }
 
 pw.PageTheme _buildTheme(

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -16,6 +19,7 @@ class CaseListController extends BaseController {
   var isProcessComplete = false;
   final isPDFExported = false.obs;
   final signUrl = "".obs;
+  final pdfUrl = "".obs;
 
   Future getData() async {
     // setLoading(true);
@@ -93,30 +97,23 @@ class CaseListController extends BaseController {
     }
   }
 
-  void getPoints(String mobile, String caseId) {
+  Future<bool> getPoints(String mobile, String caseId) async {
     setLoading(true);
     ApiRepo.getPoints(
       phone: mobile,
       onComplete: (success, response) async {
         setLoading(false);
         if (success) {
-          isExportUpdate(caseId);
-          MySnackBar.successSnackbar(response['message']);
+          // isExportUpdate(caseId);
+          // MySnackBar.successSnackbar(response['message']);
+          return true;
         } else {
           setLoading(false);
+          return false;
         }
       },
     );
-  }
-
-  void isExportUpdate(String caseId) async {
-    await _db
-        .collection("case_survey")
-        .doc(caseId)
-        .update({'isPdfExported': true}).whenComplete(() {
-      isPDFExported.value = true;
-      setLoading(false);
-    });
+    return false;
   }
 
   void setSignature(String caseId, String signUrlTemp) async {
@@ -127,5 +124,20 @@ class CaseListController extends BaseController {
       setLoading(false);
       signUrl.value = signUrlTemp;
     });
+  }
+
+  void setpdfurl(String caseId, String pdfURL) async {
+    await _db
+        .collection("case_survey")
+        .doc(caseId)
+        .update({'pdfUrl': pdfURL, 'isPdfExported': true}).whenComplete(() {
+      pdfUrl.value = pdfURL;
+    });
+  }
+
+  Future<String?> uploadPdf(File pdfFile, String filename) async {
+    var ref = FirebaseStorage.instance.ref().child('casepdf').child(filename);
+    await ref.putFile(pdfFile);
+    return await ref.getDownloadURL();
   }
 }

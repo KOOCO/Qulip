@@ -9,7 +9,8 @@ import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/controller/case_list_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
 import 'package:qulip/models/createcase/horizontal/horizontal_form_model.dart';
-import 'package:qulip/models/createcase/vertical/vertical_form_model.dart';
+import 'package:qulip/routes/app_routes.dart';
+import 'package:qulip/view/case_list/pdf_viewer_screen.dart';
 
 class HorizontalViewScreen extends StatelessWidget {
   HorizontalViewScreen({super.key});
@@ -43,7 +44,14 @@ class HorizontalViewScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 MyButton(
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(AppRoutes.pdfPreview,arguments: modelData.pdfUrl!);
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) =>
+                    //             PdfViewPage(url: modelData.pdfUrl!)));
+                  },
                   label: WordStrings.lblCivilAffairsGuide,
                   style: const TextStyle(
                     color: whiteTxt,

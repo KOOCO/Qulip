@@ -1,3 +1,4 @@
+import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 import 'package:get/get.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/view/case_create_survey/create_flow/suvery_canvas.dart';
@@ -13,6 +14,7 @@ import 'package:qulip/view/case_list/case_detail_screen.dart';
 import 'package:qulip/view/case_list/case_list_screen.dart';
 import 'package:qulip/view/case_list/case_signature.dart';
 import 'package:qulip/view/case_list/horizontal_view_form.dart';
+import 'package:qulip/view/case_list/pdf_viewer_screen.dart';
 import 'package:qulip/view/case_list/survey_view_form.dart';
 import 'package:qulip/view/case_list/vertical_view_form.dart';
 import 'package:qulip/view/home_flow/home_screen.dart';
@@ -114,6 +116,5 @@ class AppPages {
       name: AppRoutes.viewCanvasImage,
       page: () => ViewCanvas(),
     ),
-
   ];
 }

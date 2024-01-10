@@ -105,7 +105,8 @@ class HorizontalMeasurement2 extends StatelessWidget {
                   verticalMSDataList: [],
                   horizontalMSDataList: [],
                   isPdfExported: false,
-                  signatureUrl: "");
+                  signatureUrl: "",
+                  pdfUrl: "");
               debugPrint("Himadri Final data :: ${caseModel.toJson()}");
               controller.createCase(caseModel);
             },
