@@ -18,6 +18,7 @@ class AppRoutes {
   static const horizontalViewScreen = '/horizontalViewScreen';
   static const signatureScreen = '/signatureScreen';
   static const pdfPreview = '/PDFPreview';
+  static const pdfView = '/pdfView';
   static const surveyCanvasView = '/surveyCanvasView';
   static const verticalCanvas1View = '/verticalCanvas1View';
   static const viewCanvasImage = '/viewCanvasImage';

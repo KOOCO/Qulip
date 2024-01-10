@@ -9,6 +9,7 @@ import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/controller/case_list_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
 import 'package:qulip/models/createcase/weential/weential_data_model.dart';
+import 'package:qulip/routes/app_routes.dart';
 
 class SurveyViewForm extends StatelessWidget {
   SurveyViewForm({super.key});
@@ -41,7 +42,10 @@ class SurveyViewForm extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 MyButton(
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(AppRoutes.pdfView,
+                        arguments: modelData.pdfUrl!);
+                  },
                   label: WordStrings.lblCivilAffairsGuide,
                   style: const TextStyle(
                     color: whiteTxt,

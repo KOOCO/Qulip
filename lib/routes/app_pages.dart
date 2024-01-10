@@ -14,7 +14,7 @@ import 'package:qulip/view/case_list/case_detail_screen.dart';
 import 'package:qulip/view/case_list/case_list_screen.dart';
 import 'package:qulip/view/case_list/case_signature.dart';
 import 'package:qulip/view/case_list/horizontal_view_form.dart';
-import 'package:qulip/view/case_list/pdf_viewer_screen.dart';
+import 'package:qulip/view/case_list/pdf_view_screen.dart';
 import 'package:qulip/view/case_list/survey_view_form.dart';
 import 'package:qulip/view/case_list/vertical_view_form.dart';
 import 'package:qulip/view/home_flow/home_screen.dart';
@@ -103,6 +103,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.pdfPreview,
       page: () => PdfPreviewPage(),
+    ),
+    GetPage(
+      name: AppRoutes.pdfView,
+      page: () => PdfViewPage(),
     ),
     GetPage(
       name: AppRoutes.surveyCanvasView,

@@ -97,25 +97,6 @@ class CaseListController extends BaseController {
     }
   }
 
-  Future<bool> getPoints(String mobile, String caseId) async {
-    setLoading(true);
-    ApiRepo.getPoints(
-      phone: mobile,
-      onComplete: (success, response) async {
-        setLoading(false);
-        if (success) {
-          // isExportUpdate(caseId);
-          // MySnackBar.successSnackbar(response['message']);
-          return true;
-        } else {
-          setLoading(false);
-          return false;
-        }
-      },
-    );
-    return false;
-  }
-
   void setSignature(String caseId, String signUrlTemp) async {
     await _db
         .collection("case_survey")
@@ -132,6 +113,9 @@ class CaseListController extends BaseController {
         .doc(caseId)
         .update({'pdfUrl': pdfURL, 'isPdfExported': true}).whenComplete(() {
       pdfUrl.value = pdfURL;
+      isPDFExported.value = true;
+      setLoading(false);
+      MySnackBar.successSnackbar("PDF Exported succefully");
     });
   }
 

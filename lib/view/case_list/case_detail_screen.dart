@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:printing/printing.dart';
+import 'package:qulip/apis/api_repository.dart';
 import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
+import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_button_with_icon.dart';
@@ -38,6 +39,7 @@ class CaseDetailScreen extends StatelessWidget {
     var modelData = controller.caseListNew[index];
     controller.isPDFExported.value = modelData.isPdfExported ?? false;
     controller.signUrl.value = modelData.signatureUrl ?? "";
+    debugPrint("Exported >> ${controller.isPDFExported.value}");
 
     return Scaffold(
       appBar: AppBar(
@@ -347,9 +349,9 @@ class CaseDetailScreen extends StatelessWidget {
                   height: Get.height * 0.05,
                   borderRadius: 2,
                   onTap: () async {
-                    Get.toNamed(AppRoutes.pdfPreview, arguments: newIndex);
-                    // showWarningForExport(
-                    //     context, WordStrings.viewExportDialogMsg, modelData);
+                    // Get.toNamed(AppRoutes.pdfPreview, arguments: newIndex);
+                    showWarningForExport(
+                        context, WordStrings.viewExportDialogMsg, modelData);
                   },
                 ).paddingAll(40),
               ),
@@ -363,74 +365,101 @@ class CaseDetailScreen extends StatelessWidget {
   Future showWarningForExport(BuildContext context, String message,
           EstablishCaseModel modelData) async =>
       showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: const MyText(
-                  WordStrings.exitAppTitle,
-                  fontSize: 18,
-                  fontColor: yasRed,
-                  fontWeight: FontWeight.bold,
-                ),
-                content: MyText(
-                  message,
-                  fontSize: 14,
-                  fontColor: stdBlack,
-                ),
-                actions: [
-                  Row(
-                    children: [
-                      MyButton(
-                        label: WordStrings.btnYes,
-                        style: const TextStyle(
-                          color: whiteTxt,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        height: Get.height * 0.03,
-                        width: Get.width * 0.2,
-                        borderRadius: 2,
-                        onTap: () async {
-                          Get.back();
-                          Get.toNamed(AppRoutes.pdfPreview,
-                              arguments: modelData.pdfUrl!);
-                          // controller.setLoading(true);
-                          // StorageHelper.read(StorageKeys.phoneNumber)
-                          //     .then((value) {
-                          //   controller
-                          //       .getPoints(value, modelData.caseLable!)
-                          //       .then((value) {
-                          //     createPDF(modelData).then((value) {
-                          //       controller.setLoading(false);
-                          //       controller
-                          //           .uploadPdf(
-                          //               value, "${modelData.caseLable}.pdf")
-                          //           .then((value) {
-                          //         controller.setpdfurl(
-                          //             modelData.caseLable!, value!);
-                          //       });
-                          //     });
-                          //   });
-                          // });
-                        },
-                      )..paddingOnly(left: 4, right: 4),
-                      const Spacer(),
-                      MyButton(
-                        label: WordStrings.btnNo,
-                        style: const TextStyle(
-                          color: whiteTxt,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        height: Get.height * 0.03,
-                        width: Get.width * 0.2,
-                        borderRadius: 2,
-                        onTap: () {
-                          controller.isPDFExported.value = false;
-                          Get.back();
-                        },
-                      ).paddingOnly(left: 4, right: 4),
-                    ],
-                  ).paddingOnly(left: 10, right: 10, top: 4, bottom: 10),
-                ],
-              ));
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const MyText(
+            WordStrings.exitAppTitle,
+            fontSize: 18,
+            fontColor: yasRed,
+            fontWeight: FontWeight.bold,
+          ),
+          content: MyText(
+            message,
+            fontSize: 14,
+            fontColor: stdBlack,
+          ),
+          actions: [
+            Row(
+              children: [
+                MyButton(
+                  label: WordStrings.btnYes,
+                  style: const TextStyle(
+                    color: whiteTxt,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  height: Get.height * 0.03,
+                  width: Get.width * 0.2,
+                  borderRadius: 2,
+                  onTap: () async {
+                    Get.back();
+                    controller.setLoading(true);
+                    StorageHelper.read(StorageKeys.phoneNumber).then((value) {
+                      getPoints(value, modelData.caseLable!, modelData);
+                    });
+
+                    // StorageHelper.read(StorageKeys.phoneNumber)
+                    //     .then((value) {
+                    //   controller
+                    //       .getPoints(value, modelData.caseLable!)
+                    //       .then((value) {
+                    //     debugPrint("Msg >> $value");
+                    //     if (value) {
+                    //       createPDF(modelData).then((value) {
+                    //         controller.setLoading(false);
+                    //         controller
+                    //             .uploadPdf(
+                    //                 value, "${modelData.caseLable}.pdf")
+                    //             .then((value) {
+                    //           controller.setpdfurl(
+                    //               modelData.caseLable!, value!);
+                    //         });
+                    //       });
+                    //     }
+                    //   });
+                    // });
+                  },
+                )..paddingOnly(left: 4, right: 4),
+                const Spacer(),
+                MyButton(
+                  label: WordStrings.btnNo,
+                  style: const TextStyle(
+                    color: whiteTxt,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  height: Get.height * 0.03,
+                  width: Get.width * 0.2,
+                  borderRadius: 2,
+                  onTap: () {
+                    controller.isPDFExported.value = false;
+                    Get.back();
+                  },
+                ).paddingOnly(left: 4, right: 4),
+              ],
+            ).paddingOnly(left: 10, right: 10, top: 4, bottom: 10),
+          ],
+        ),
+      );
+
+  getPoints(String mobile, String caseId, EstablishCaseModel modelData) async {
+    ApiRepo.getPoints(
+      phone: mobile,
+      onComplete: (success, response) async {
+        controller.setLoading(false);
+        if (success) {
+          // MySnackBar.successSnackbar(response['message']);
+          createPDF(modelData).then((value) {
+            controller
+                .uploadPdf(value, "${modelData.caseLable}.pdf")
+                .then((value) {
+              controller.setpdfurl(modelData.caseLable!, value!);
+            });
+          });
+        } else {
+          controller.setLoading(false);
+        }
+      },
+    );
+  }
 }
 
 Future<File> createPDF(EstablishCaseModel modelData) async {

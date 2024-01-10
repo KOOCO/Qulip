@@ -9,6 +9,7 @@ import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/controller/case_list_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
 import 'package:qulip/models/createcase/vertical/vertical_form_model.dart';
+import 'package:qulip/routes/app_routes.dart';
 
 class VerticalViewScreen extends StatelessWidget {
   VerticalViewScreen({super.key});
@@ -42,7 +43,10 @@ class VerticalViewScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 MyButton(
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(AppRoutes.pdfView,
+                        arguments: modelData.pdfUrl!);
+                  },
                   label: WordStrings.lblCivilAffairsGuide,
                   style: const TextStyle(
                     color: whiteTxt,
