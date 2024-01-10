@@ -9,14 +9,12 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:qulip/common/assests.dart';
-import 'package:qulip/common/colors.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/controller/case_list_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
 import 'package:qulip/models/createcase/horizontal/horizontal_form_model.dart';
 import 'package:qulip/models/createcase/vertical/vertical_form_model.dart';
 // import 'package:printing/printing.dart';
-import 'package:http/http.dart' as http;
 
 class PdfPreviewPage extends StatelessWidget {
   PdfPreviewPage({super.key});

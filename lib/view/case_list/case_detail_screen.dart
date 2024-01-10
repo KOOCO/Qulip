@@ -327,7 +327,7 @@ class CaseDetailScreen extends StatelessWidget {
             ).marginOnly(bottom: 15),
             Obx(
               () => Visibility(
-                visible: controller.isPDFExported.value ? false : true,
+                visible: controller.isPDFExported.value ? true : true,
                 child: MyButton(
                   label: WordStrings.btnExprotLbl,
                   style: const TextStyle(
@@ -347,9 +347,9 @@ class CaseDetailScreen extends StatelessWidget {
                   height: Get.height * 0.05,
                   borderRadius: 2,
                   onTap: () async {
-                    // Get.toNamed(AppRoutes.pdfPreview, arguments: newIndex);
-                    showWarningForExport(
-                        context, WordStrings.viewExportDialogMsg, modelData);
+                    Get.toNamed(AppRoutes.pdfPreview, arguments: newIndex);
+                    // showWarningForExport(
+                    //     context, WordStrings.viewExportDialogMsg, modelData);
                   },
                 ).paddingAll(40),
               ),
