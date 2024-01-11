@@ -109,7 +109,7 @@ class _VerticalCanvas2State extends State<VerticalCanvas2> {
                         initialStrokeWidth: 2,
                         textDelegate: TextDelegate(),
                         initialColor: Colors.black,
-                        initialPaintMode: PaintMode.rect,
+                        initialPaintMode: PaintMode.arrow,
                       ),
               ),
               MyButton(
