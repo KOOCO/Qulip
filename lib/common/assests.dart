@@ -16,4 +16,5 @@ class AssetImages {
   static const String horizontalLogo = 'assets/images/vertical_measurement.png';
   static const String verticalLogo = 'assets/images/horizontal_measurement.png';
   static const String pdfIcon = 'assets/icons/pdf_header.png';
+  static const String defaultImage = 'assets/images/default_image.png';
 }

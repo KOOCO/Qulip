@@ -141,7 +141,7 @@ class SystemInfoScreen extends StatelessWidget {
                           fontColor: stdgrey,
                         ),
                         trailing: MyText(
-                          '8.0 above versions',
+                          '8.0版本以上',
                           fontWeight: FontWeight.normal,
                           fontFamily: FontFamilyConstant.sinkinSansMedium,
                           fontSize: 12,
@@ -162,7 +162,7 @@ class SystemInfoScreen extends StatelessWidget {
                           fontColor: stdgrey,
                         ),
                         trailing: MyText(
-                          'Above 10 inches',
+                          '推薦十吋以上',
                           fontWeight: FontWeight.normal,
                           fontFamily: FontFamilyConstant.sinkinSansMedium,
                           fontSize: 12,

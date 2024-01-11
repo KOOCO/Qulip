@@ -179,6 +179,11 @@ class HorizontalMeasurement1 extends StatelessWidget {
                 tempList[index].backView = value;
               }
             },
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                tempList[index].backView = value;
+              }
+            },
             fullBorder: true,
             hasFloatingLabel: false,
             maxLength: 6,
@@ -192,6 +197,23 @@ class HorizontalMeasurement1 extends StatelessWidget {
           ),
           MyTextField(
             onSubmit: (value) {
+              if (value.isNotEmpty) {
+                tempList[index].forwardView = value;
+                if (index >= 1) {
+                  tempList[index].levelElevation =
+                      tempList[index - 1].levelElevation;
+                  tempList[index].hypothesis =
+                      calculateHypo(tempList[index]).toString();
+                  tempList[index] = dataObj;
+                }
+                if (index > 2) {
+                  tempList[index].levelElevation =
+                      calculateLevelElevation(tempList[index]);
+                  tempList[index] = dataObj;
+                }
+              }
+            },
+            onChanged: (value) {
               if (value.isNotEmpty) {
                 tempList[index].forwardView = value;
                 if (index >= 1) {
@@ -224,6 +246,17 @@ class HorizontalMeasurement1 extends StatelessWidget {
             visible: (index < 1) ? true : false,
             child: MyTextField(
               onSubmit: (value) {
+                if (value.isNotEmpty) {
+                  tempList[index].hypothesis = value;
+                  // levelElv.value = calculateLevelElevation(tempList[index]);
+                  tempList[index].levelElevation =
+                      calculateLevelElevation(tempList[index]);
+                  tempList[index] = dataObj;
+                  // debugPrint(
+                  // "Himadri >> Level Elevation ${tempList[index].levelElevation} >>${tempList[index].mesuringPoint} >> $index");
+                }
+              },
+              onChanged: (value) {
                 if (value.isNotEmpty) {
                   tempList[index].hypothesis = value;
                   // levelElv.value = calculateLevelElevation(tempList[index]);

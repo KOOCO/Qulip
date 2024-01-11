@@ -9,6 +9,7 @@ import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_dropdown_area.dart';
+import 'package:qulip/common/widgets/my_image.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
@@ -173,9 +174,13 @@ class VerticalMeasurement1 extends StatelessWidget {
               tempList[index].upperPoint = value;
               calculateHighDifference(index);
             },
+            onChanged: (value) {
+              tempList[index].upperPoint = value;
+              calculateHighDifference(index);
+            },
             fullBorder: true,
             hasFloatingLabel: false,
-            controller: TextEditingController(text: tempList[index].upperPoint),
+            //controller: TextEditingController(text: tempList[index].upperPoint),
             keyboard: TextInputType.number,
             maxLength: 6,
             labelText: WordStrings.upperPointLbl,
@@ -190,10 +195,18 @@ class VerticalMeasurement1 extends StatelessWidget {
               calculateHighDifference(index);
               tempList[index] = dataObj;
             },
+            onChanged: (value) {
+              print("Point : ${tempList[index].lowerPoint}");
+              if (tempList[index].lowerPoint != "" || value != "") {
+                tempList[index].lowerPoint = value;
+                calculateHighDifference(index);
+                tempList[index] = dataObj;
+              }
+            },
             fullBorder: true,
             hasFloatingLabel: false,
             maxLength: 6,
-            controller: TextEditingController(text: tempList[index].lowerPoint),
+            //controller: TextEditingController(text: tempList[index].lowerPoint),
             keyboard: TextInputType.number,
             labelText: WordStrings.lowerPointLbl,
             hintText: WordStrings.lowerPointLbl,
@@ -273,6 +286,10 @@ class VerticalMeasurement1 extends StatelessWidget {
               calculateTiltValue(index);
               // tempList[index] = dataObj;
             },
+            onChanged: (value) {
+              tempList[index].leftPoint = value;
+              calculateTiltValue(index);
+            },
             maxLength: 6,
             fullBorder: true,
             hasFloatingLabel: false,
@@ -287,11 +304,16 @@ class VerticalMeasurement1 extends StatelessWidget {
           MyTextField(
             fullBorder: true,
             hasFloatingLabel: false,
-            controller: TextEditingController(text: tempList[index].rightPoint),
+            //controller: TextEditingController(text: tempList[index].rightPoint),
             keyboard: TextInputType.number,
             maxLength: 6,
             labelText: WordStrings.rightPointLbl,
             hintText: WordStrings.rightPointLbl,
+            onChanged: (value) {
+              tempList[index].rightPoint = value;
+              calculateTiltValue(index);
+              tempList[index] = dataObj;
+            },
             onSubmit: (value) {
               tempList[index].rightPoint = value;
               calculateTiltValue(index);
@@ -395,15 +417,15 @@ class VerticalMeasurement1 extends StatelessWidget {
                     },
                     child: Visibility(
                       child: Align(
-                        alignment: tempList[index].filePath!.isEmpty
+                        alignment: tempList[index].filePath.isEmpty
                             ? Alignment.center
                             : Alignment.topRight,
                         heightFactor:
-                            tempList[index].filePath!.isEmpty ? 4.0 : 1.0,
+                            tempList[index].filePath.isEmpty ? 4.0 : 1.0,
                         child: Icon(
                           Icons.add_a_photo,
                           color: yasRed,
-                          size: tempList[index].filePath!.isEmpty ? 50 : 25,
+                          size: tempList[index].filePath.isEmpty ? 50 : 25,
                         ).paddingAll(4),
                       ),
                     ),
@@ -411,9 +433,8 @@ class VerticalMeasurement1 extends StatelessWidget {
                 ),
                 Obx(
                   () => Visibility(
-                    visible:
-                        tempList[index].filePath!.isNotEmpty ? true : false,
-                    child: _buildImageList(tempList[index].filePath!, index),
+                    visible: tempList[index].filePath.isNotEmpty ? true : false,
+                    child: _buildImageList(tempList[index].filePath, index),
                   ),
                 )
               ],
@@ -440,6 +461,7 @@ class VerticalMeasurement1 extends StatelessWidget {
       BuildContext context, int imageIndex, int tempListIndex) {
     return Container(
       height: double.infinity,
+      width: Get.width * 0.30,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: stdwhite,
@@ -456,20 +478,23 @@ class VerticalMeasurement1 extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(5)),
                 child: Image.network(
+                  height: Get.height,
+                  width: Get.width * 0.30,
                   fit: BoxFit.contain,
-                  tempList[tempListIndex].filePath![imageIndex],
+                  tempList[tempListIndex].filePath[imageIndex],
                   loadingBuilder: (BuildContext context, Widget child,
                       ImageChunkEvent? loadingProgress) {
                     if (loadingProgress == null) return child;
                     return SizedBox(
-                      width: Get.width * 0.25,
+                      width: Get.width * 0.30,
                       child: Center(
-                        child: CircularProgressIndicator(
-                          color: yasRed,
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: MyImage(
+                            height: Get.height,
+                            image: AssetImages.defaultImage,
+                            width: Get.width * 0.30,
+                          ),
                         ),
                       ),
                     );

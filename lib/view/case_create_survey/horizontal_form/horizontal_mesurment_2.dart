@@ -221,7 +221,9 @@ class HorizontalMeasurement2 extends StatelessWidget {
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(5)),
                             child: Image.network(
-                                fit: BoxFit.contain,
+                                height: Get.height * 0.296,
+                                width: Get.width,
+                                fit: BoxFit.cover,
                                 controller.photoList[index])),
                       ),
                       Positioned(

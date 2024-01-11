@@ -9,6 +9,7 @@ import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_dropdown_area.dart';
+import 'package:qulip/common/widgets/my_image.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/common/widgets/my_textfield.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
@@ -17,9 +18,14 @@ import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/dailog_helper.dart';
 import 'package:qulip/utils/text_style_helper.dart';
 
-class SurveyFormStep2 extends StatelessWidget {
+class SurveyFormStep2 extends StatefulWidget {
   SurveyFormStep2({super.key});
 
+  @override
+  State<SurveyFormStep2> createState() => _SurveyFormStep2State();
+}
+
+class _SurveyFormStep2State extends State<SurveyFormStep2> {
   final controller = Get.find<EstablishCaseController>();
 
   var dataObj = WeentialDataModel(
@@ -31,6 +37,7 @@ class SurveyFormStep2 extends StatelessWidget {
     wsTechDescr: "",
     wsImagesList: [],
   );
+
   final tempList = <WeentialDataModel>[].obs;
 
   @override
@@ -466,6 +473,7 @@ class SurveyFormStep2 extends StatelessWidget {
       BuildContext context, int imageIndex, int tempListIndex) {
     return Container(
       height: double.infinity,
+      width: Get.width * 0.30,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: stdwhite,
@@ -483,21 +491,23 @@ class SurveyFormStep2 extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(5)),
                   child: Image.network(
-                    // width: Get.width * 0.25,
+                    height: Get.height,
+                    width: Get.width * 0.30,
                     fit: BoxFit.fill,
-                    tempList[tempListIndex].wsImagesList![imageIndex],
+                    tempList[tempListIndex].wsImagesList[imageIndex],
                     loadingBuilder: (BuildContext context, Widget child,
                         ImageChunkEvent? loadingProgress) {
                       if (loadingProgress == null) return child;
                       return SizedBox(
-                        width: Get.width * 0.25,
+                        width: Get.width * 0.30,
                         child: Center(
-                          child: CircularProgressIndicator(
-                            color: yasRed,
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: MyImage(
+                              height: Get.height,
+                              image: AssetImages.defaultImage,
+                              width: Get.width * 0.30,
+                            ),
                           ),
                         ),
                       );
@@ -515,20 +525,21 @@ class SurveyFormStep2 extends StatelessWidget {
                       controller.setLoading(true);
                       controller
                           .deleteImage(
-                              tempList[tempListIndex].wsImagesList![imageIndex])
+                              tempList[tempListIndex].wsImagesList[imageIndex])
                           .then(
                         (_) {
                           tempList[tempListIndex]
-                              .wsImagesList!
+                              .wsImagesList
                               .removeAt(imageIndex);
                           // tempList.remove(dataObj);
                           controller.setLoading(false);
+                          setState(() {});
                         },
                       );
                     },
                     child: Visibility(
                       visible: tempList[tempListIndex]
-                              .wsImagesList![imageIndex]
+                              .wsImagesList[imageIndex]
                               .isNotEmpty
                           ? true
                           : false,
