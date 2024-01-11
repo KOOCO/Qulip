@@ -41,29 +41,33 @@ class SurveyViewForm extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                MyButton(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.pdfView,
-                        arguments: modelData.pdfUrl!);
-                  },
-                  label: WordStrings.lblCivilAffairsGuide,
-                  style: const TextStyle(
-                    color: whiteTxt,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  decoration: const BoxDecoration(
-                    color: yasRed,
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 6,
-                        color: Colors.black54,
-                      )
-                    ],
-                  ),
-                  height: Get.height * 0.05,
-                  borderRadius: 2,
-                ).paddingAll(10),
+                Visibility(
+                  visible: modelData.pdfUrl!.isEmpty? false : true,
+                  child: MyButton(
+                    onTap: () {
+                      debugPrint("PDF URL ${modelData.pdfUrl!}");
+                      Get.toNamed(AppRoutes.pdfView,
+                          arguments: modelData.pdfUrl!);
+                    },
+                    label: WordStrings.lblCivilAffairsGuide,
+                    style: const TextStyle(
+                      color: whiteTxt,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    decoration: const BoxDecoration(
+                      color: yasRed,
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 6,
+                          color: Colors.black54,
+                        )
+                      ],
+                    ),
+                    height: Get.height * 0.05,
+                    borderRadius: 2,
+                  ).paddingAll(10),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [

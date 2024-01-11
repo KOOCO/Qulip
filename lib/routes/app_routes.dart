@@ -21,5 +21,7 @@ class AppRoutes {
   static const pdfView = '/pdfView';
   static const surveyCanvasView = '/surveyCanvasView';
   static const verticalCanvas1View = '/verticalCanvas1View';
+  static const verticalCanvas2View = '/verticalCanvas2View';
+  static const horizontalCanvasView = '/horizontalCanvasView';
   static const viewCanvasImage = '/viewCanvasImage';
 }

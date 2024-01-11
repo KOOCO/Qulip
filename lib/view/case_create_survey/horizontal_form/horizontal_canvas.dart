@@ -15,14 +15,14 @@ import 'package:qulip/controller/establish_case_controller.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/dailog_helper.dart';
 
-class VerticalCanvas1 extends StatefulWidget {
-  const VerticalCanvas1({super.key});
+class HorizontalCanvas1 extends StatefulWidget {
+  const HorizontalCanvas1({super.key});
 
   @override
-  State<VerticalCanvas1> createState() => _VerticalCanvas1State();
+  State<HorizontalCanvas1> createState() => _HorizontalCanvas1State();
 }
 
-class _VerticalCanvas1State extends State<VerticalCanvas1> {
+class _HorizontalCanvas1State extends State<HorizontalCanvas1> {
   final controller = Get.put(EstablishCaseController());
 
   DateTime sDate = DateTime.now();
@@ -41,7 +41,7 @@ class _VerticalCanvas1State extends State<VerticalCanvas1> {
           foregroundColor: yasRed,
           centerTitle: true,
           title: MyText(
-            "${controller.txtCaseName.text}_${WordStrings.surveyFormVerticallLbl}",
+            "${controller.txtCaseName.text}_${WordStrings.surveyFormHorizonatllLbl}",
             fontFamily: FontFamilyConstant.sinkinSans,
             fontSize: 18,
             fontColor: yasRed,
@@ -134,11 +134,11 @@ class _VerticalCanvas1State extends State<VerticalCanvas1> {
                   controller.setLoading(true);
                   saveImage().then((value) {
                     controller.setLoading(false);
-                    controller.canvasVertical1Url.value = value!;
+                    controller.canvasHorizontalUrl.value = value!;
                     setState(() {
                       file = null;
                     });
-                    Get.toNamed(AppRoutes.surveyFormVerticalScreen);
+                    Get.toNamed(AppRoutes.horizontalCase1Screen);
                   });
                 },
               ).paddingOnly(top: 30.h).paddingSymmetric(horizontal: 14.w)
@@ -152,7 +152,7 @@ class _VerticalCanvas1State extends State<VerticalCanvas1> {
       final data = await _imageKey.currentState!.exportImage();
       final tempDir = await getApplicationDocumentsDirectory();
       File file = File(
-          "${tempDir.path}/VM_CANVAS_1${DateTime.now().millisecondsSinceEpoch}.png");
+          "${tempDir.path}/HM_CANVAS_${DateTime.now().millisecondsSinceEpoch}.png");
 
       debugPrint("Test >> Path $data");
       if (data != null) {
@@ -161,7 +161,7 @@ class _VerticalCanvas1State extends State<VerticalCanvas1> {
         var ref = FirebaseStorage.instance
             .ref()
             .child('canvas')
-            .child("VM_CANVAS_1${DateTime.now().millisecondsSinceEpoch}.png");
+            .child("HM_CANVAS_${DateTime.now().millisecondsSinceEpoch}.png");
         await ref.putFile(file);
         return await ref.getDownloadURL();
       }
@@ -169,7 +169,7 @@ class _VerticalCanvas1State extends State<VerticalCanvas1> {
       final data = await _fileImageKey.currentState!.exportImage();
       final tempDir = await getApplicationDocumentsDirectory();
       File file = File(
-          "${tempDir.path}/VM_CANVAS_1${DateTime.now().millisecondsSinceEpoch}.png");
+          "${tempDir.path}/HM_CANVAS_${DateTime.now().millisecondsSinceEpoch}.png");
 
       debugPrint("Test >> Path $data");
       if (data != null) {
@@ -178,7 +178,7 @@ class _VerticalCanvas1State extends State<VerticalCanvas1> {
         var ref = FirebaseStorage.instance
             .ref()
             .child('canvas')
-            .child("VM_CANVAS_1${DateTime.now().millisecondsSinceEpoch}.png");
+            .child("HM_CANVAS_${DateTime.now().millisecondsSinceEpoch}.png");
         await ref.putFile(file);
         return await ref.getDownloadURL();
       }

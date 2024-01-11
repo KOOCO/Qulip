@@ -297,7 +297,8 @@ class EstablishCaseController extends BaseController {
       MySnackBar.errorSnackbar(WordStrings.errRightPointEmpty);
       return;
     }
-    Get.toNamed(AppRoutes.horizontalCase1Screen);
+    
+    Get.toNamed(AppRoutes.verticalCanvas2View);
   }
 
   Future<void> takePhotoHS(BuildContext context, int index) async {

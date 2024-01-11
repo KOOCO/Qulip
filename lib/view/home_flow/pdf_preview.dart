@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/controller/case_list_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
@@ -67,12 +68,18 @@ class PdfPreviewPage extends StatelessWidget {
 
     final wsCanvasImage = await networkImage(modelData.wsCanvas!);
     final verticalCanvas1Image = await networkImage(modelData.vertical1Canvas!);
+    final verticalCanvas2Image = await networkImage(modelData.vertical2Canvas!);
+    final horizontalCanvasImage =
+        await networkImage(modelData.horizontalCanvas!);
 
     final chineseBold = await rootBundle.load("assets/fonts/chinese.ttf");
     final chineseRegular =
         await rootBundle.load("assets/fonts/chinese-regular.ttf");
     final ttf = pw.Font.ttf(chineseBold);
     final ttfRegular = pw.Font.ttf(chineseRegular);
+
+    final ByteData bytes = await rootBundle.load(AssetImages.pdfIcon);
+    final Uint8List byteList = bytes.buffer.asUint8List();
 
     pdf.addPage(pw.MultiPage(
       maxPages: 100,
@@ -85,9 +92,10 @@ class PdfPreviewPage extends StatelessWidget {
       // header: (context) => _buildHeader(context, modelData, byteList),
       // footer: _buildFooter,
       build: (context) => [
-        _buildSurveyContent(context, modelData, wsCanvasImage),
-        _buildVMSData(context, modelData, verticalCanvas1Image),
-        _buildHMSData(context, modelData, verticalCanvas1Image)
+        _buildSurveyContent(context, modelData, wsCanvasImage, byteList),
+        _buildVMSData(
+            context, modelData, verticalCanvas1Image, verticalCanvas2Image),
+        _buildHMSData(context, modelData, horizontalCanvasImage)
       ],
     ));
 
@@ -143,14 +151,8 @@ pw.Widget _buildFooter(
   );
 }
 
-pw.Widget _buildSurveyContent(
-  pw.Context context,
-  EstablishCaseModel modelData,
-  pw.ImageProvider image,
-) {
-  // final ByteData bytes = await rootBundle.load(AssetImages.pdfIcon);
-  // final Uint8List byteList = bytes.buffer.asUint8List();
-
+pw.Widget _buildSurveyContent(pw.Context context, EstablishCaseModel modelData,
+    pw.ImageProvider image, Uint8List byteList) {
   return pw.Column(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     mainAxisAlignment: pw.MainAxisAlignment.center,
@@ -257,13 +259,13 @@ pw.Widget _buildSurveyContent(
                 ),
               ],
             ),
-            // pw.Align(
-            //   alignment: pw.Alignment.topRight,
-            //   child: pw.Image(
-            //     pw.MemoryImage(byteList),
-            //     // fit: pw.BoxFit.fitHeight,
-            //   ),
-            // ),
+            pw.Align(
+              alignment: pw.Alignment.topRight,
+              child: pw.Image(
+                pw.MemoryImage(byteList),
+                // fit: pw.BoxFit.fitHeight,
+              ),
+            ),
           ],
         ),
       ]),
@@ -412,7 +414,10 @@ pw.Widget _buildSurveyContent(
               context, modelData.wsWeentileDataList[index], index);
         },
       ),
-      pw.Image(image, height: 180, alignment: pw.Alignment.topLeft),
+      pw.Align(
+        alignment: pw.Alignment.topLeft,
+        child: pw.Image(image, height: 200),
+      ),
     ],
   );
 }
@@ -596,8 +601,8 @@ pw.Widget _buildWSNumber(
   );
 }
 
-pw.Widget _buildVMSData(
-    pw.Context context, EstablishCaseModel modelData, pw.ImageProvider image) {
+pw.Widget _buildVMSData(pw.Context context, EstablishCaseModel modelData,
+    pw.ImageProvider image1, pw.ImageProvider image2) {
   final tableHeaders = [
     WordStrings.viewNoLbl,
     WordStrings.viewMesuringPointLbl,
@@ -659,7 +664,19 @@ pw.Widget _buildVMSData(
               context, modelData.verticalMSDataList[index], index);
         },
       ),
-      pw.Image(image, height: 200),
+      pw.Row(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
+          children: [
+            pw.Align(
+              alignment: pw.Alignment.topCenter,
+              child: pw.Image(image1, height: 200),
+            ),
+            pw.Align(
+              alignment: pw.Alignment.topCenter,
+              child: pw.Image(image2, height: 200),
+            ),
+          ])
     ],
   );
 }
@@ -760,10 +777,6 @@ pw.Widget _buildVSNumber(
       ));
 }
 
-Future<pw.ImageProvider> imageUri(HorizontalDataModel data) async {
-  return await networkImage(data.imageUri!);
-}
-
 pw.Widget _buildHMSData(
     pw.Context context, EstablishCaseModel modelData, pw.ImageProvider image) {
   final tableHeaders = [
@@ -772,7 +785,6 @@ pw.Widget _buildHMSData(
     WordStrings.viewHoriAheadLbl,
     WordStrings.viewHoriAssuHighLbl,
   ];
-  pw.ImageProvider dummyProvider = image;
 
   return pw.Column(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -822,17 +834,18 @@ pw.Widget _buildHMSData(
           ),
         ),
       ),
-      pw.ListView.builder(
-        itemCount: modelData.horizontalMSDataList.length,
-        itemBuilder: (context, index) {
-          // imageUri(modelData.horizontalMSDataList[index])
-          //     .then((value) => dummyProvider = value);
-          return _builHSNumber(context, modelData.horizontalMSDataList[index],
-              dummyProvider, index);
-        },
+      pw.Align(
+        alignment: pw.Alignment.topLeft,
+        child: pw.Image(image, height: 200),
       ),
-      // pw.Center(
-      //   child: pw.Image(image, height: 250, alignment: pw.Alignment.center),
+      // pw.ListView.builder(
+      //   itemCount: modelData.horizontalMSDataList.length,
+      //   itemBuilder: (context, index) {
+      //     // imageUri(modelData.horizontalMSDataList[index])
+      //     //     .then((value) => dummyProvider = value);
+      //     return _builHSNumber(context, modelData.horizontalMSDataList[index],
+      //         dummyProvider, index);
+      //   },
       // ),
     ],
   );

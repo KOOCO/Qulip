@@ -2,9 +2,11 @@ import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 import 'package:get/get.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/view/case_create_survey/create_flow/suvery_canvas.dart';
+import 'package:qulip/view/case_create_survey/horizontal_form/horizontal_canvas.dart';
 import 'package:qulip/view/case_create_survey/horizontal_form/horizontal_mesurment_1.dart';
 import 'package:qulip/view/case_create_survey/horizontal_form/horizontal_mesurment_2.dart';
 import 'package:qulip/view/case_create_survey/vertical_form/vertical_canvas_1.dart';
+import 'package:qulip/view/case_create_survey/vertical_form/vertical_canvas_2.dart';
 import 'package:qulip/view/case_create_survey/vertical_form/vertical_mesurment_1.dart';
 import 'package:qulip/view/case_create_survey/create_flow/establish_case.dart';
 import 'package:qulip/view/case_create_survey/create_flow/survey_form_step1.dart';
@@ -114,7 +116,15 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.verticalCanvas1View,
-      page: () => VerticalCanvas1(),
+      page: () => const VerticalCanvas1(),
+    ),
+    GetPage(
+      name: AppRoutes.verticalCanvas2View,
+      page: () => const VerticalCanvas2(),
+    ),
+    GetPage(
+      name: AppRoutes.horizontalCanvasView,
+      page: () => const HorizontalCanvas1(),
     ),
     GetPage(
       name: AppRoutes.viewCanvasImage,

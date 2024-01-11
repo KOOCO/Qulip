@@ -42,29 +42,32 @@ class VerticalViewScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                MyButton(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.pdfView,
-                        arguments: modelData.pdfUrl!);
-                  },
-                  label: WordStrings.lblCivilAffairsGuide,
-                  style: const TextStyle(
-                    color: whiteTxt,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  decoration: const BoxDecoration(
-                    color: yasRed,
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 6,
-                        color: Colors.black54,
-                      )
-                    ],
-                  ),
-                  height: Get.height * 0.05,
-                  borderRadius: 2,
-                ).paddingAll(10),
+                Visibility(
+                  visible: modelData.pdfUrl!.isEmpty ? false : true,
+                  child: MyButton(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.pdfView,
+                          arguments: modelData.pdfUrl!);
+                    },
+                    label: WordStrings.lblCivilAffairsGuide,
+                    style: const TextStyle(
+                      color: whiteTxt,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    decoration: const BoxDecoration(
+                      color: yasRed,
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 6,
+                          color: Colors.black54,
+                        )
+                      ],
+                    ),
+                    height: Get.height * 0.05,
+                    borderRadius: 2,
+                  ).paddingAll(10),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -576,56 +579,91 @@ class VerticalViewScreen extends StatelessWidget {
                     fontColor: stdDarkGray,
                     textAlign: TextAlign.center,
                   ).paddingSymmetric(horizontal: 4, vertical: 4),
-                  MyText(
-                    modelData.wsTechDescription!,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontColor: stdDarkGray,
-                    textAlign: TextAlign.center,
-                  ).paddingSymmetric(horizontal: 4, vertical: 4),
+                  Flexible(
+                    child: MyText(
+                      modelData.wsTechDescription!,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      fontColor: stdDarkGray,
+                      textAlign: TextAlign.center,
+                    ).paddingSymmetric(horizontal: 4, vertical: 4),
+                  ),
                 ],
               ),
             ).paddingOnly(bottom: 10),
-            const MyText(
-              WordStrings.viewDiagramLbl,
-              fontWeight: FontWeight.w600,
-              fontFamily: FontFamilyConstant.sinkinSansMedium,
-              fontColor: stdBlack,
-            ).paddingOnly(left: 2, right: 2, bottom: 4),
-            const SizedBox(
-              height: 200,
-            ),
-            Center(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(5)),
-                child: Image.network(
-                  width: Get.width,
-                  height: 400,
-                  fit: BoxFit.fill,
-                  "https://firebasestorage.googleapis.com/v0/b/qulip-6cd34.appspot.com/o/weential_survey%2FWS_1704439002705.jpg?alt=media&token=71aeb6a8-1fef-41dc-82bc-7ef5a42a8b8d",
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return SizedBox(
-                      width: Get.width,
-                      height: 100,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: yasRed,
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
+            // const MyText(
+            //   WordStrings.viewDiagramLbl,
+            //   fontWeight: FontWeight.w600,
+            //   fontFamily: FontFamilyConstant.sinkinSansMedium,
+            //   fontColor: stdBlack,
+            // ).paddingOnly(left: 2, right: 2, bottom: 4),
+            // const SizedBox(
+            //   height: 200,
+            // ),
+            Visibility(
+                visible: data.filePath.isNotEmpty ? true : false,
+                child: buildImageList(data.filePath))
           ],
         ).paddingAll(6),
       ),
     );
+  }
+
+  Widget buildImageList(List<String> imageList) {
+    return SizedBox(
+      height: 200,
+      child: ListView.builder(
+        shrinkWrap: true,
+        // physics: const NeverScrollableScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        itemCount: imageList.length,
+        itemBuilder: (BuildContext context, int imageIndex) {
+          return _buildImageItem(context, imageList, imageIndex);
+        },
+      ),
+    );
+  }
+
+  Widget _buildImageItem(
+    BuildContext context,
+    List<String> imageList,
+    int imageIndex,
+  ) {
+    return Container(
+      height: double.infinity,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: stdwhite,
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        border: Border.all(
+          width: 1,
+          color: transparentGrey,
+        ),
+      ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        child: Image.network(
+          width: Get.width * 0.40,
+          fit: BoxFit.fill,
+          imageList[imageIndex],
+          loadingBuilder: (BuildContext context, Widget child,
+              ImageChunkEvent? loadingProgress) {
+            if (loadingProgress == null) return child;
+            return SizedBox(
+              width: Get.width * 0.40,
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: yasRed,
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    ).paddingAll(6);
   }
 }

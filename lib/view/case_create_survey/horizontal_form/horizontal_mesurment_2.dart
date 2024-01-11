@@ -42,7 +42,7 @@ class HorizontalMeasurement2 extends StatelessWidget {
             ),
             onPressed: () {
               Get.toNamed(AppRoutes.viewCanvasImage,
-                  arguments: controller.canvasVertical1Url);
+                  arguments: controller.canvasHorizontalUrl);
             },
           )
         ],

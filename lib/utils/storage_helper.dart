@@ -26,6 +26,8 @@ class StorageHelper {
     remove(StorageKeys.isLogin);
     remove(StorageKeys.userData);
     remove(StorageKeys.userId);
+    remove(StorageKeys.point);
+    // remove(StorageKeys.phoneNumber);
   }
 
   static Future<void> remove(String key) async {
@@ -47,5 +49,6 @@ class StorageKeys {
   static const String authToken = 'Authorization';
   static const String userData = 'userData';
   static const String point = 'points';
+  static const String userName = "userName";
   static const String profileLink = 'profileLink';
 }

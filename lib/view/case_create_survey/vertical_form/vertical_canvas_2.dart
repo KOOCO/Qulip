@@ -15,14 +15,14 @@ import 'package:qulip/controller/establish_case_controller.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/dailog_helper.dart';
 
-class VerticalCanvas1 extends StatefulWidget {
-  const VerticalCanvas1({super.key});
+class VerticalCanvas2 extends StatefulWidget {
+  const VerticalCanvas2({super.key});
 
   @override
-  State<VerticalCanvas1> createState() => _VerticalCanvas1State();
+  State<VerticalCanvas2> createState() => _VerticalCanvas2State();
 }
 
-class _VerticalCanvas1State extends State<VerticalCanvas1> {
+class _VerticalCanvas2State extends State<VerticalCanvas2> {
   final controller = Get.put(EstablishCaseController());
 
   DateTime sDate = DateTime.now();
@@ -134,11 +134,12 @@ class _VerticalCanvas1State extends State<VerticalCanvas1> {
                   controller.setLoading(true);
                   saveImage().then((value) {
                     controller.setLoading(false);
-                    controller.canvasVertical1Url.value = value!;
+                    controller.canvasVertical2Url.value = value!;
                     setState(() {
                       file = null;
                     });
-                    Get.toNamed(AppRoutes.surveyFormVerticalScreen);
+                    Get.toNamed(AppRoutes
+                        .horizontalCanvasView);
                   });
                 },
               ).paddingOnly(top: 30.h).paddingSymmetric(horizontal: 14.w)
@@ -152,7 +153,7 @@ class _VerticalCanvas1State extends State<VerticalCanvas1> {
       final data = await _imageKey.currentState!.exportImage();
       final tempDir = await getApplicationDocumentsDirectory();
       File file = File(
-          "${tempDir.path}/VM_CANVAS_1${DateTime.now().millisecondsSinceEpoch}.png");
+          "${tempDir.path}/VM_CANVAS_2${DateTime.now().millisecondsSinceEpoch}.png");
 
       debugPrint("Test >> Path $data");
       if (data != null) {
@@ -161,7 +162,7 @@ class _VerticalCanvas1State extends State<VerticalCanvas1> {
         var ref = FirebaseStorage.instance
             .ref()
             .child('canvas')
-            .child("VM_CANVAS_1${DateTime.now().millisecondsSinceEpoch}.png");
+            .child("VM_CANVAS_2${DateTime.now().millisecondsSinceEpoch}.png");
         await ref.putFile(file);
         return await ref.getDownloadURL();
       }
@@ -169,7 +170,7 @@ class _VerticalCanvas1State extends State<VerticalCanvas1> {
       final data = await _fileImageKey.currentState!.exportImage();
       final tempDir = await getApplicationDocumentsDirectory();
       File file = File(
-          "${tempDir.path}/VM_CANVAS_1${DateTime.now().millisecondsSinceEpoch}.png");
+          "${tempDir.path}/VM_CANVAS_2${DateTime.now().millisecondsSinceEpoch}.png");
 
       debugPrint("Test >> Path $data");
       if (data != null) {
@@ -178,7 +179,7 @@ class _VerticalCanvas1State extends State<VerticalCanvas1> {
         var ref = FirebaseStorage.instance
             .ref()
             .child('canvas')
-            .child("VM_CANVAS_1${DateTime.now().millisecondsSinceEpoch}.png");
+            .child("VM_CANVAS_2${DateTime.now().millisecondsSinceEpoch}.png");
         await ref.putFile(file);
         return await ref.getDownloadURL();
       }

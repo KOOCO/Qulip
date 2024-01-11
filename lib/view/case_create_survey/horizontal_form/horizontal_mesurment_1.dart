@@ -187,7 +187,7 @@ class HorizontalMeasurement1 extends StatelessWidget {
             fullBorder: true,
             hasFloatingLabel: false,
             maxLength: 6,
-            controller: TextEditingController(text: tempList[index].backView),
+            //  controller: TextEditingController(text: tempList[index].backView),
             keyboard: TextInputType.number,
             labelText: WordStrings.sfBackwardViewLbl,
             hintText: WordStrings.sfBackwardViewLbl,
@@ -232,8 +232,7 @@ class HorizontalMeasurement1 extends StatelessWidget {
             },
             fullBorder: true,
             hasFloatingLabel: false,
-            controller:
-                TextEditingController(text: tempList[index].forwardView),
+            //controller: TextEditingController(text: tempList[index].forwardView),
             keyboard: TextInputType.number,
             maxLength: 6,
             labelText: WordStrings.sfForwardViewLbl,
@@ -263,14 +262,11 @@ class HorizontalMeasurement1 extends StatelessWidget {
                   tempList[index].levelElevation =
                       calculateLevelElevation(tempList[index]);
                   tempList[index] = dataObj;
-                  // debugPrint(
-                  // "Himadri >> Level Elevation ${tempList[index].levelElevation} >>${tempList[index].mesuringPoint} >> $index");
                 }
               },
               fullBorder: true,
               hasFloatingLabel: false,
-              controller: TextEditingController(
-                  text: tempList[index].hypothesis.toString()),
+              //controller: TextEditingController(text: tempList[index].hypothesis.toString()),
               keyboard: TextInputType.number,
               maxLength: 6,
               labelText: WordStrings.sfHypothesisLbl,

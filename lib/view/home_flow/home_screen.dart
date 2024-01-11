@@ -22,6 +22,7 @@ class HomeScreen extends StatelessWidget {
   final controller = Get.find<LoginController>();
   final points = 0.obs;
   final link = "".obs;
+  final username = "".obs;
 
   Future showWarning(
           BuildContext context, String message, bool isLogout) async =>
@@ -91,6 +92,9 @@ class HomeScreen extends StatelessWidget {
     StorageHelper.read(StorageKeys.point)
         .then((value) => {points.value = value});
 
+    StorageHelper.read(StorageKeys.userName)
+        .then((value) => {username.value = value});
+
     StorageHelper.read(StorageKeys.profileLink).then((value) {
       link.value = value;
     });
@@ -140,23 +144,23 @@ class HomeScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Column(
+                  Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        MyText(
+                        const MyText(
                           WordStrings.userLblHome,
                           fontWeight: FontWeight.normal,
                           fontFamily: FontFamilyConstant.sinkinSansMedium,
                           fontSize: 12,
                           fontColor: stdgrey,
                         ),
-                        MyText(
-                          '測試員',
-                          fontWeight: FontWeight.w600,
-                          fontFamily: FontFamilyConstant.sinkinSansMedium,
-                          fontSize: 14,
-                          fontColor: yasRed,
-                        ),
+                        Obx(() => MyText(
+                              username.value,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: FontFamilyConstant.sinkinSansMedium,
+                              fontSize: 14,
+                              fontColor: yasRed,
+                            )),
                       ]).paddingSymmetric(horizontal: 20.w),
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.center,

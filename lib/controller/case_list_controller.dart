@@ -25,7 +25,7 @@ class CaseListController extends BaseController {
     // setLoading(true);
     await _db
         .collection('case_survey')
-        .orderBy('createdAt', descending: false)
+        .orderBy('createdAt', descending: true)
         .get()
         .then((value) {
       final result = (value.docs)
@@ -46,7 +46,7 @@ class CaseListController extends BaseController {
 
       await _db
           .collection('case_survey')
-          .orderBy('createdAt', descending: false)
+          .orderBy('createdAt', descending: true)
           .get()
           .then((value) {
         final result = (value.docs)
@@ -71,7 +71,7 @@ class CaseListController extends BaseController {
     } else if (selectedFilter == WordStrings.threeMonthLbl) {
       await _db
           .collection('case_survey')
-          .orderBy('createdAt', descending: false)
+          .orderBy('createdAt', descending: true)
           .get()
           .then((value) {
         final result = (value.docs)
@@ -115,7 +115,7 @@ class CaseListController extends BaseController {
       pdfUrl.value = pdfURL;
       isPDFExported.value = true;
       setLoading(false);
-      MySnackBar.successSnackbar("PDF Exported succefully");
+      MySnackBar.successSnackbar("PDF成功保存");
     });
   }
 

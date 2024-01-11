@@ -106,7 +106,7 @@ class _SurveyCanvasState extends State<SurveyCanvas> {
                         key: _fileImageKey,
                         File(file!.path),
                         scalable: true,
-                        initialStrokeWidth: 4,
+                        initialStrokeWidth: 2,
                         textDelegate: TextDelegate(),
                         initialColor: Colors.black,
                         initialPaintMode: PaintMode.rect,
