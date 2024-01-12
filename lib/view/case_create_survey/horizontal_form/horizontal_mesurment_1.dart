@@ -26,6 +26,9 @@ class HorizontalMeasurement1 extends StatelessWidget {
   final tempList = <HorizontalDataModel>[].obs;
   // var levelElv = 0.obs;
 
+  var _isExpanded = false;
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     tempList.add(dataObj);
@@ -114,6 +117,7 @@ class HorizontalMeasurement1 extends StatelessWidget {
   Widget _buildListView(BuildContext context) {
     return Expanded(
       child: ListView.builder(
+        controller: _scrollController,
         itemCount: tempList.length,
         itemBuilder: (context, index) {
           return _buildList(context, index);
@@ -345,6 +349,8 @@ class HorizontalMeasurement1 extends StatelessWidget {
         imageUri: "");
     debugPrint("Himadri >> NewObj >> ${dataObj.toJson()}");
     tempList.add(dataObj);
+    _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 1), curve: Curves.fastOutSlowIn);
   }
 
   double calculateHypo(HorizontalDataModel data) {

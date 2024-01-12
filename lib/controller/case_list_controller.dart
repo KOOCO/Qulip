@@ -2,10 +2,8 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:qulip/apis/api_repository.dart';
 import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/controller/base_controller.dart';
@@ -21,11 +19,12 @@ class CaseListController extends BaseController {
   final signUrl = "".obs;
   final pdfUrl = "".obs;
 
-  Future getData() async {
+  Future getData(String userid) async {
     // setLoading(true);
     await _db
         .collection('case_survey')
         .orderBy('createdAt', descending: true)
+        .where("userId", isEqualTo: userid)
         .get()
         .then((value) {
       final result = (value.docs)
@@ -36,7 +35,7 @@ class CaseListController extends BaseController {
     }).whenComplete(() => isProcessComplete = true);
   }
 
-  Future filterData(String selectedFilter) async {
+  Future filterData(String selectedFilter, String userid) async {
     DateTime now = DateTime.now();
     var now_6m = DateTime(now.year, now.month - 6, now.day);
     var now_3m = DateTime(now.year, now.month - 3, now.day);
@@ -47,6 +46,7 @@ class CaseListController extends BaseController {
       await _db
           .collection('case_survey')
           .orderBy('createdAt', descending: true)
+          .where("userId", isEqualTo: userid)
           .get()
           .then((value) {
         final result = (value.docs)
@@ -72,6 +72,7 @@ class CaseListController extends BaseController {
       await _db
           .collection('case_survey')
           .orderBy('createdAt', descending: true)
+          .where("userId", isEqualTo: userid)
           .get()
           .then((value) {
         final result = (value.docs)
@@ -93,7 +94,7 @@ class CaseListController extends BaseController {
         caseListNew.addAll(filteredList);
       });
     } else {
-      getData();
+      getData(userid);
     }
   }
 

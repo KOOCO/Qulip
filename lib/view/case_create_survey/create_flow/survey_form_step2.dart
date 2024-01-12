@@ -39,6 +39,7 @@ class _SurveyFormStep2State extends State<SurveyFormStep2> {
   );
 
   final tempList = <WeentialDataModel>[].obs;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +132,7 @@ class _SurveyFormStep2State extends State<SurveyFormStep2> {
   Widget _buildListView(BuildContext context) {
     return Expanded(
       child: ListView.builder(
+        controller: _scrollController,
         itemCount: tempList.length,
         itemBuilder: (context, index) {
           return _buildList(context, index);
@@ -567,10 +569,10 @@ class _SurveyFormStep2State extends State<SurveyFormStep2> {
       return;
     }
 
-    if (tempList[index].wsSituation!.isEmpty) {
-      MySnackBar.errorSnackbar(WordStrings.errSituation);
-      return;
-    }
+    // if (tempList[index].wsSituation!.isEmpty) {
+    //   MySnackBar.errorSnackbar(WordStrings.errSituation);
+    //   return;
+    // }
 
     if (tempList[index].wsFlaw!.isEmpty ||
         tempList[index].wsFlaw! == WordStrings.selectFlaw.toString()) {
@@ -592,5 +594,8 @@ class _SurveyFormStep2State extends State<SurveyFormStep2> {
     // controller.photoList.clear();
     debugPrint("Himadri >> NewObj >> ${dataObj.toJson()}");
     tempList.add(dataObj);
+
+    _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 1), curve: Curves.fastOutSlowIn);
   }
 }

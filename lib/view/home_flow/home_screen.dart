@@ -23,6 +23,7 @@ class HomeScreen extends StatelessWidget {
   final points = 0.obs;
   final link = "".obs;
   final username = "".obs;
+  final userid = "".obs;
 
   Future showWarning(
           BuildContext context, String message, bool isLogout) async =>
@@ -94,6 +95,9 @@ class HomeScreen extends StatelessWidget {
 
     StorageHelper.read(StorageKeys.userName)
         .then((value) => {username.value = value});
+
+    StorageHelper.read(StorageKeys.userId)
+        .then((value) => {userid.value = value.toString()});
 
     StorageHelper.read(StorageKeys.profileLink).then((value) {
       link.value = value;
@@ -255,7 +259,8 @@ class HomeScreen extends StatelessWidget {
                 height: Get.height * 0.06,
                 borderRadius: 2,
                 onTap: () async {
-                  Get.toNamed(AppRoutes.caseListScreen);
+                  Get.toNamed(AppRoutes.caseListScreen,
+                      arguments: userid.value);
                 },
               ).paddingSymmetric(horizontal: 20, vertical: 5),
               MyButtonWithIcon(

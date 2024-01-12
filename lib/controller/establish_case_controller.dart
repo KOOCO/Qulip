@@ -253,10 +253,10 @@ class EstablishCaseController extends BaseController {
       return;
     }
 
-    if (surveyModelFinalList[index].wsSituation!.isEmpty) {
-      MySnackBar.errorSnackbar(WordStrings.errSituation);
-      return;
-    }
+    // if (surveyModelFinalList[index].wsSituation!.isEmpty) {
+    //   MySnackBar.errorSnackbar(WordStrings.errSituation);
+    //   return;
+    // }
 
     if (surveyModelFinalList[index].wsFlaw!.isEmpty ||
         surveyModelFinalList[index].wsFlaw! ==
@@ -297,7 +297,7 @@ class EstablishCaseController extends BaseController {
       MySnackBar.errorSnackbar(WordStrings.errRightPointEmpty);
       return;
     }
-    
+
     Get.toNamed(AppRoutes.verticalCanvas2View);
   }
 
@@ -377,7 +377,7 @@ class EstablishCaseController extends BaseController {
             debugPrint("Himadri Horizontal Stored final}");
             setLoading(false);
             clearTextField();
-            MySnackBar.successSnackbar("Data saved successfully");
+            MySnackBar.successSnackbar("檔案保存");
             Get.toNamed(AppRoutes.homeScreen);
           });
         });

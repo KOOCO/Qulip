@@ -16,7 +16,7 @@ class HorizontalMeasurement2 extends StatelessWidget {
   HorizontalMeasurement2({super.key});
 
   final controller = Get.find<EstablishCaseController>();
-  // Get.put(EstablishCaseController()); //
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +119,7 @@ class HorizontalMeasurement2 extends StatelessWidget {
   Widget _buildListView(BuildContext context) {
     return Expanded(
       child: ListView.builder(
+        controller: _scrollController,
         itemCount: controller.horizontalfinalList.length,
         itemBuilder: (context, index) {
           return _buildList(context, index);

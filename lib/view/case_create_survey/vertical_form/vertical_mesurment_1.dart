@@ -35,6 +35,7 @@ class VerticalMeasurement1 extends StatelessWidget {
       description: "",
       filePath: []);
   final tempList = <VerticalFormModel>[].obs;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +126,7 @@ class VerticalMeasurement1 extends StatelessWidget {
   Widget _buildListView(BuildContext context) {
     return Expanded(
       child: ListView.builder(
+        controller: _scrollController,
         itemCount: tempList.length,
         itemBuilder: (context, index) {
           return _buildList(context, index);
@@ -666,5 +668,8 @@ class VerticalMeasurement1 extends StatelessWidget {
 
     debugPrint("Himadri >> NewObj >> ${dataObj.toJson()}");
     tempList.add(dataObj);
+
+    _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 1), curve: Curves.fastOutSlowIn);
   }
 }

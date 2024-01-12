@@ -508,7 +508,9 @@ Future<File> createPDF(EstablishCaseModel modelData) async {
   if (status != PermissionStatus.granted) {
     await permission.request();
     if (await permission.status.isGranted) {
-      directory = await getExternalStorageDirectory();
+      directory =
+          await Directory("/storage/emulated/0/Download/Qulip").create();
+      //await getExternalStorageDirectory();
 
       ///perform other stuff to download file
     } else if (status == PermissionStatus.permanentlyDenied) {
@@ -519,7 +521,8 @@ Future<File> createPDF(EstablishCaseModel modelData) async {
     debugPrint('>>> ${await permission.status}');
   }
 
-  directory = await getExternalStorageDirectory();
+  directory = await Directory("/storage/emulated/0/Download/Qulip")
+      .create(); //await getExternalStorageDirectory();
 
   // if (directory != null) {
   final saveFile = File(
