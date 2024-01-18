@@ -267,7 +267,7 @@ class EstablishCaseControllerOld extends BaseController {
           final uFile = File(filePath);
           uploadImage(uFile, tempListIndex).then((url) {
             setLoading(false);
-            data.wsImagesList!.add(url!);
+            data.wsImagesList.add(url!);
             // tempList[tempListIndex].wsImagesList!.add(url!);
             // tempList[tempListIndex] = dataObj;
           });

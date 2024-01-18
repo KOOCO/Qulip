@@ -9,6 +9,7 @@ import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/controller/case_list_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
 import 'package:qulip/models/createcase/weential/weential_data_model.dart';
+import 'package:qulip/routes/app_routes.dart';
 
 class SurveyViewForm extends StatelessWidget {
   SurveyViewForm({super.key});
@@ -40,26 +41,33 @@ class SurveyViewForm extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                MyButton(
-                  onTap: () {},
-                  label: WordStrings.lblCivilAffairsGuide,
-                  style: const TextStyle(
-                    color: whiteTxt,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  decoration: const BoxDecoration(
-                    color: yasRed,
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 6,
-                        color: Colors.black54,
-                      )
-                    ],
-                  ),
-                  height: Get.height * 0.05,
-                  borderRadius: 2,
-                ).paddingAll(10),
+                Visibility(
+                  visible: modelData.pdfUrl!.isEmpty? false : true,
+                  child: MyButton(
+                    onTap: () {
+                      debugPrint("PDF URL ${modelData.pdfUrl!}");
+                      Get.toNamed(AppRoutes.pdfView,
+                          arguments: modelData.pdfUrl!);
+                    },
+                    label: WordStrings.lblCivilAffairsGuide,
+                    style: const TextStyle(
+                      color: whiteTxt,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    decoration: const BoxDecoration(
+                      color: yasRed,
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 6,
+                          color: Colors.black54,
+                        )
+                      ],
+                    ),
+                    height: Get.height * 0.05,
+                    borderRadius: 2,
+                  ).paddingAll(10),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [

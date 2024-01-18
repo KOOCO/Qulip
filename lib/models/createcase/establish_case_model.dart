@@ -32,6 +32,7 @@ class EstablishCaseModel {
     required this.horizontalMSDataList,
     required this.isPdfExported,
     required this.signatureUrl,
+    required this.pdfUrl,
   });
 
   EstablishCaseModel.fromJson(Map<String, dynamic> json) {
@@ -56,6 +57,7 @@ class EstablishCaseModel {
     horizontalCanvas = json['horizontalCanvas'];
     isPdfExported = json['isPdfExported'];
     signatureUrl = json['signatureUrl'];
+    pdfUrl = json['pdfUrl'];
 
     if (json['weentialList'] != null) {
       for (var i in json['weentialList']) {
@@ -101,6 +103,7 @@ class EstablishCaseModel {
     data['horizontalMSDataList'] = horizontalMSDataList;
     data['isPdfExported'] = isPdfExported;
     data['signatureUrl'] = signatureUrl;
+    data['pdfUrl'] = pdfUrl;
     return data;
   }
 
@@ -124,6 +127,7 @@ class EstablishCaseModel {
   String? vertical2Canvas;
   String? horizontalCanvas;
   String? signatureUrl;
+  String? pdfUrl;
   bool? isPdfExported;
   List<WeentialDataModel> wsWeentileDataList = [];
   List<VerticalFormModel> verticalMSDataList = [];

@@ -1,11 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
 import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
 import 'package:qulip/common/strings.dart';

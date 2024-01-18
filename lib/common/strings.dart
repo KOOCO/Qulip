@@ -276,6 +276,7 @@ class WordStrings {
 
   static const String logoutAppMsg = "你確定要登出帳號?";
   static const String verticalMesurementTabCsDetails = "垂直測量成果表";
+  static const String horiaontalMesurementTabCsDetails = "水準測量成果表";
   static const String surveyCsDetails = "建物現況調查表";
 
   static const String viewMesuringPointLbl = "測點高(M)";
@@ -317,6 +318,8 @@ class WordStrings {
   //     "Are you sure you want to logout from app?";
   // static const String verticalMesurementTabCsDetails =
   //     "Vertical Measurment Tab";
+  // static const String horiaontalMesurementTabCsDetails =
+  //     "Strategic Measurment Tab";
   // static const String surveyCsDetails = "Survey Form for Building";
 
   // static const String viewMesuringPointLbl = "High Mesu.(m)";

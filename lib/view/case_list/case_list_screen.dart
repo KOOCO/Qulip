@@ -20,11 +20,13 @@ class CaseListScreen extends StatelessWidget {
     WordStrings.sixMonthLbl,
     WordStrings.threeMonthLbl
   ];
+  var userid = "";
 
   @override
   Widget build(BuildContext context) {
     // controller.setLoading(true);
-    controller.getData();
+    userid = Get.arguments;
+    controller.getData(userid);
 
     return Scaffold(
       appBar: AppBar(
@@ -69,7 +71,7 @@ class CaseListScreen extends StatelessWidget {
       labels: listOfFilterToggle,
       onToggle: (index) {
         debugPrint("Selected Filter: ${listOfFilterToggle[index!]}");
-        controller.filterData(listOfFilterToggle[index]);
+        controller.filterData(listOfFilterToggle[index], "25");
       },
     );
   }
