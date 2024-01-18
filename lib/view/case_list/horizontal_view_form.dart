@@ -9,7 +9,7 @@ import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/controller/case_list_controller.dart';
 import 'package:qulip/models/createcase/establish_case_model.dart';
 import 'package:qulip/models/createcase/horizontal/horizontal_form_model.dart';
-import 'package:qulip/models/createcase/vertical/vertical_form_model.dart';
+import 'package:qulip/routes/app_routes.dart';
 
 class HorizontalViewScreen extends StatelessWidget {
   HorizontalViewScreen({super.key});
@@ -42,26 +42,32 @@ class HorizontalViewScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                MyButton(
-                  onTap: () {},
-                  label: WordStrings.lblCivilAffairsGuide,
-                  style: const TextStyle(
-                    color: whiteTxt,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  decoration: const BoxDecoration(
-                    color: yasRed,
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 6,
-                        color: Colors.black54,
-                      )
-                    ],
-                  ),
-                  height: Get.height * 0.05,
-                  borderRadius: 2,
-                ).paddingAll(10),
+                Visibility(
+                  visible: modelData.pdfUrl!.isEmpty ? false : true,
+                  child: MyButton(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.pdfView,
+                          arguments: modelData.pdfUrl!);
+                    },
+                    label: WordStrings.lblCivilAffairsGuide,
+                    style: const TextStyle(
+                      color: whiteTxt,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    decoration: const BoxDecoration(
+                      color: yasRed,
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 6,
+                          color: Colors.black54,
+                        )
+                      ],
+                    ),
+                    height: Get.height * 0.05,
+                    borderRadius: 2,
+                  ).paddingAll(10),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -81,7 +87,7 @@ class HorizontalViewScreen extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: MyText(
-                          WordStrings.verticalMesurementTabCsDetails,
+                          WordStrings.horiaontalMesurementTabCsDetails,
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                           fontColor: stdBlack,
@@ -93,7 +99,7 @@ class HorizontalViewScreen extends StatelessWidget {
                 ).paddingOnly(top: 10, bottom: 10),
                 buildTopFormView(modelData),
                 buildBmTable().paddingOnly(bottom: 15),
-                buildOutDoorPlan().paddingOnly(bottom: 15),
+                buildOutDoorPlan(modelData).paddingOnly(bottom: 15),
                 buildNumberList(modelData)
               ],
             ),
@@ -304,7 +310,7 @@ class HorizontalViewScreen extends StatelessWidget {
     ).paddingOnly(bottom: 15);
   }
 
-  Widget buildOutDoorPlan() {
+  Widget buildOutDoorPlan(EstablishCaseModel modelData) {
     return Container(
       width: Get.width,
       height: 250.h,
@@ -317,13 +323,26 @@ class HorizontalViewScreen extends StatelessWidget {
         ),
       ),
       child: Center(
-        child: const MyText(
-          WordStrings.viewOutdoorkLbl,
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          fontColor: stdDarkGray,
-          textAlign: TextAlign.center,
-        ).paddingSymmetric(horizontal: 4, vertical: 4),
+        child: Image.network(
+          width: double.infinity,
+          fit: BoxFit.fill,
+          modelData.horizontalCanvas.toString(),
+          loadingBuilder: (BuildContext context, Widget child,
+              ImageChunkEvent? loadingProgress) {
+            if (loadingProgress == null) return child;
+            return SizedBox(
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: yasRed,
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

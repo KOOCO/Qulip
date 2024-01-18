@@ -3,7 +3,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:image_painter/image_painter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qulip/common/assests.dart';
@@ -12,6 +11,8 @@ import 'package:qulip/common/strings.dart';
 import 'package:qulip/common/widgets/my_button.dart';
 import 'package:qulip/common/widgets/my_text.dart';
 import 'package:qulip/controller/establish_case_controller.dart';
+import 'package:qulip/image_painter/_paint_over_image.dart';
+import 'package:qulip/image_painter/delegates/text_delegate.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/dailog_helper.dart';
 
@@ -101,15 +102,17 @@ class _SurveyCanvasState extends State<SurveyCanvas> {
                         textDelegate: TextDelegate(),
                         initialColor: Colors.black,
                         initialPaintMode: PaintMode.rect,
+                        strMode: "SUR",
                       )
                     : ImagePainter.file(
                         key: _fileImageKey,
                         File(file!.path),
                         scalable: true,
-                        initialStrokeWidth: 4,
+                        initialStrokeWidth: 2,
                         textDelegate: TextDelegate(),
                         initialColor: Colors.black,
                         initialPaintMode: PaintMode.rect,
+                        strMode: "SUR",
                       ),
               ),
               MyButton(

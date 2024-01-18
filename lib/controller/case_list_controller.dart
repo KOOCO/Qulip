@@ -1,8 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:qulip/apis/api_repository.dart';
 import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/controller/base_controller.dart';
@@ -16,12 +16,14 @@ class CaseListController extends BaseController {
   var isProcessComplete = false;
   final isPDFExported = false.obs;
   final signUrl = "".obs;
+  final pdfUrl = "".obs;
 
-  Future getData() async {
+  Future getData(String userid) async {
     // setLoading(true);
     await _db
         .collection('case_survey')
-        .orderBy('createdAt', descending: false)
+        .orderBy('createdAt', descending: true)
+        .where("userId", isEqualTo: userid)
         .get()
         .then((value) {
       final result = (value.docs)
@@ -32,7 +34,7 @@ class CaseListController extends BaseController {
     }).whenComplete(() => isProcessComplete = true);
   }
 
-  Future filterData(String selectedFilter) async {
+  Future filterData(String selectedFilter, String userid) async {
     DateTime now = DateTime.now();
     var now_6m = DateTime(now.year, now.month - 6, now.day);
     var now_3m = DateTime(now.year, now.month - 3, now.day);
@@ -42,7 +44,8 @@ class CaseListController extends BaseController {
 
       await _db
           .collection('case_survey')
-          .orderBy('createdAt', descending: false)
+          .orderBy('createdAt', descending: true)
+          .where("userId", isEqualTo: userid)
           .get()
           .then((value) {
         final result = (value.docs)
@@ -67,7 +70,8 @@ class CaseListController extends BaseController {
     } else if (selectedFilter == WordStrings.threeMonthLbl) {
       await _db
           .collection('case_survey')
-          .orderBy('createdAt', descending: false)
+          .orderBy('createdAt', descending: true)
+          .where("userId", isEqualTo: userid)
           .get()
           .then((value) {
         final result = (value.docs)
@@ -89,34 +93,8 @@ class CaseListController extends BaseController {
         caseListNew.addAll(filteredList);
       });
     } else {
-      getData();
+      getData(userid);
     }
-  }
-
-  void getPoints(String mobile, String caseId) {
-    setLoading(true);
-    ApiRepo.getPoints(
-      phone: mobile,
-      onComplete: (success, response) async {
-        setLoading(false);
-        if (success) {
-          isExportUpdate(caseId);
-          MySnackBar.successSnackbar(response['message']);
-        } else {
-          setLoading(false);
-        }
-      },
-    );
-  }
-
-  void isExportUpdate(String caseId) async {
-    await _db
-        .collection("case_survey")
-        .doc(caseId)
-        .update({'isPdfExported': true}).whenComplete(() {
-      isPDFExported.value = true;
-      setLoading(false);
-    });
   }
 
   void setSignature(String caseId, String signUrlTemp) async {
@@ -127,5 +105,23 @@ class CaseListController extends BaseController {
       setLoading(false);
       signUrl.value = signUrlTemp;
     });
+  }
+
+  void setpdfurl(String caseId, String pdfURL) async {
+    await _db
+        .collection("case_survey")
+        .doc(caseId)
+        .update({'pdfUrl': pdfURL, 'isPdfExported': true}).whenComplete(() {
+      pdfUrl.value = pdfURL;
+      isPDFExported.value = true;
+      setLoading(false);
+      MySnackBar.successSnackbar("PDF成功保存");
+    });
+  }
+
+  Future<String?> uploadPdf(File pdfFile, String filename) async {
+    var ref = FirebaseStorage.instance.ref().child('casepdf').child(filename);
+    await ref.putFile(pdfFile);
+    return await ref.getDownloadURL();
   }
 }

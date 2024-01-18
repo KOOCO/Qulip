@@ -19,7 +19,8 @@ class SurveyFormStep1 extends StatelessWidget {
   var userId = "";
   @override
   Widget build(BuildContext context) {
-    StorageHelper.read(StorageKeys.userId).then((value) => {userId = value.toString()});
+    StorageHelper.read(StorageKeys.userId)
+        .then((value) => {userId = value.toString()});
     return Scaffold(
       appBar: AppBar(
         backgroundColor: stdwhite,

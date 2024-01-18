@@ -26,6 +26,9 @@ class HorizontalMeasurement1 extends StatelessWidget {
   final tempList = <HorizontalDataModel>[].obs;
   // var levelElv = 0.obs;
 
+  var _isExpanded = false;
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     tempList.add(dataObj);
@@ -114,6 +117,7 @@ class HorizontalMeasurement1 extends StatelessWidget {
   Widget _buildListView(BuildContext context) {
     return Expanded(
       child: ListView.builder(
+        controller: _scrollController,
         itemCount: tempList.length,
         itemBuilder: (context, index) {
           return _buildList(context, index);
@@ -179,10 +183,15 @@ class HorizontalMeasurement1 extends StatelessWidget {
                 tempList[index].backView = value;
               }
             },
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                tempList[index].backView = value;
+              }
+            },
             fullBorder: true,
             hasFloatingLabel: false,
             maxLength: 6,
-            controller: TextEditingController(text: tempList[index].backView),
+            //  controller: TextEditingController(text: tempList[index].backView),
             keyboard: TextInputType.number,
             labelText: WordStrings.sfBackwardViewLbl,
             hintText: WordStrings.sfBackwardViewLbl,
@@ -208,10 +217,26 @@ class HorizontalMeasurement1 extends StatelessWidget {
                 }
               }
             },
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                tempList[index].forwardView = value;
+                if (index >= 1) {
+                  tempList[index].levelElevation =
+                      tempList[index - 1].levelElevation;
+                  tempList[index].hypothesis =
+                      calculateHypo(tempList[index]).toString();
+                  tempList[index] = dataObj;
+                }
+                if (index > 2) {
+                  tempList[index].levelElevation =
+                      calculateLevelElevation(tempList[index]);
+                  tempList[index] = dataObj;
+                }
+              }
+            },
             fullBorder: true,
             hasFloatingLabel: false,
-            controller:
-                TextEditingController(text: tempList[index].forwardView),
+            //controller: TextEditingController(text: tempList[index].forwardView),
             keyboard: TextInputType.number,
             maxLength: 6,
             labelText: WordStrings.sfForwardViewLbl,
@@ -234,10 +259,18 @@ class HorizontalMeasurement1 extends StatelessWidget {
                   // "Himadri >> Level Elevation ${tempList[index].levelElevation} >>${tempList[index].mesuringPoint} >> $index");
                 }
               },
+              onChanged: (value) {
+                if (value.isNotEmpty) {
+                  tempList[index].hypothesis = value;
+                  // levelElv.value = calculateLevelElevation(tempList[index]);
+                  tempList[index].levelElevation =
+                      calculateLevelElevation(tempList[index]);
+                  tempList[index] = dataObj;
+                }
+              },
               fullBorder: true,
               hasFloatingLabel: false,
-              controller: TextEditingController(
-                  text: tempList[index].hypothesis.toString()),
+              //controller: TextEditingController(text: tempList[index].hypothesis.toString()),
               keyboard: TextInputType.number,
               maxLength: 6,
               labelText: WordStrings.sfHypothesisLbl,
@@ -316,6 +349,8 @@ class HorizontalMeasurement1 extends StatelessWidget {
         imageUri: "");
     debugPrint("Himadri >> NewObj >> ${dataObj.toJson()}");
     tempList.add(dataObj);
+    _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 1), curve: Curves.fastOutSlowIn);
   }
 
   double calculateHypo(HorizontalDataModel data) {

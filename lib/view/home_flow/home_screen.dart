@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:qulip/common/assests.dart';
 import 'package:qulip/common/colors.dart';
 import 'package:qulip/common/strings.dart';
@@ -22,6 +21,8 @@ class HomeScreen extends StatelessWidget {
   final controller = Get.find<LoginController>();
   final points = 0.obs;
   final link = "".obs;
+  final username = "".obs;
+  final userid = "".obs;
 
   Future showWarning(
           BuildContext context, String message, bool isLogout) async =>
@@ -91,6 +92,12 @@ class HomeScreen extends StatelessWidget {
     StorageHelper.read(StorageKeys.point)
         .then((value) => {points.value = value});
 
+    StorageHelper.read(StorageKeys.userName)
+        .then((value) => {username.value = value});
+
+    StorageHelper.read(StorageKeys.userId)
+        .then((value) => {userid.value = value.toString()});
+
     StorageHelper.read(StorageKeys.profileLink).then((value) {
       link.value = value;
     });
@@ -140,23 +147,23 @@ class HomeScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Column(
+                  Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        MyText(
+                        const MyText(
                           WordStrings.userLblHome,
                           fontWeight: FontWeight.normal,
                           fontFamily: FontFamilyConstant.sinkinSansMedium,
                           fontSize: 12,
                           fontColor: stdgrey,
                         ),
-                        MyText(
-                          '測試員',
-                          fontWeight: FontWeight.w600,
-                          fontFamily: FontFamilyConstant.sinkinSansMedium,
-                          fontSize: 14,
-                          fontColor: yasRed,
-                        ),
+                        Obx(() => MyText(
+                              username.value,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: FontFamilyConstant.sinkinSansMedium,
+                              fontSize: 14,
+                              fontColor: yasRed,
+                            )),
                       ]).paddingSymmetric(horizontal: 20.w),
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -251,7 +258,8 @@ class HomeScreen extends StatelessWidget {
                 height: Get.height * 0.06,
                 borderRadius: 2,
                 onTap: () async {
-                  Get.toNamed(AppRoutes.caseListScreen);
+                  Get.toNamed(AppRoutes.caseListScreen,
+                      arguments: userid.value);
                 },
               ).paddingSymmetric(horizontal: 20, vertical: 5),
               MyButtonWithIcon(

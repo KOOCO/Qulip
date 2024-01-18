@@ -16,7 +16,7 @@ class HorizontalMeasurement2 extends StatelessWidget {
   HorizontalMeasurement2({super.key});
 
   final controller = Get.find<EstablishCaseController>();
-  // Get.put(EstablishCaseController()); //
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class HorizontalMeasurement2 extends StatelessWidget {
             ),
             onPressed: () {
               Get.toNamed(AppRoutes.viewCanvasImage,
-                  arguments: controller.canvasVertical1Url);
+                  arguments: controller.canvasHorizontalUrl);
             },
           )
         ],
@@ -105,7 +105,8 @@ class HorizontalMeasurement2 extends StatelessWidget {
                   verticalMSDataList: [],
                   horizontalMSDataList: [],
                   isPdfExported: false,
-                  signatureUrl: "");
+                  signatureUrl: "",
+                  pdfUrl: "");
               debugPrint("Himadri Final data :: ${caseModel.toJson()}");
               controller.createCase(caseModel);
             },
@@ -118,6 +119,7 @@ class HorizontalMeasurement2 extends StatelessWidget {
   Widget _buildListView(BuildContext context) {
     return Expanded(
       child: ListView.builder(
+        controller: _scrollController,
         itemCount: controller.horizontalfinalList.length,
         itemBuilder: (context, index) {
           return _buildList(context, index);
@@ -220,7 +222,9 @@ class HorizontalMeasurement2 extends StatelessWidget {
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(5)),
                             child: Image.network(
-                                fit: BoxFit.contain,
+                                height: Get.height * 0.296,
+                                width: Get.width,
+                                fit: BoxFit.cover,
                                 controller.photoList[index])),
                       ),
                       Positioned(
