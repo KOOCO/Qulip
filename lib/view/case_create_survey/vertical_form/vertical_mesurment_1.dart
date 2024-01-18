@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -349,12 +350,20 @@ class VerticalMeasurement1 extends StatelessWidget {
           const SizedBox(
             height: 15,
           ),
-          // const MyText(
-          //   WordStrings.diagramLbl,
-          //   fontWeight: FontWeight.w400,
-          //   fontFamily: FontFamilyConstant.sinkinSansMedium,
-          //   fontColor: stdBlack,
-          // ).paddingOnly(left: 2, right: 2, bottom: 4),
+          const MyText(
+            WordStrings.diagramLbl,
+            fontWeight: FontWeight.w400,
+            fontFamily: FontFamilyConstant.sinkinSansMedium,
+            fontColor: stdBlack,
+          ).paddingOnly(left: 2, right: 2, bottom: 4),
+          Center(
+            child: CustomPaint(
+              painter: TiltSlopePainter(
+                  tilt: tempList[index].tiltValue!,
+                  slope: tempList[index].slope!),
+              size: const Size(200, 200), // Adjust size as needed
+            ),
+          ),
           // const SizedBox(
           //   height: 200,
           // ),
@@ -513,12 +522,10 @@ class VerticalMeasurement1 extends StatelessWidget {
                       caseController.setLoading(true);
                       caseController
                           .deleteImage(
-                              tempList[tempListIndex].filePath![imageIndex])
+                              tempList[tempListIndex].filePath[imageIndex])
                           .then(
                         (_) {
-                          tempList[tempListIndex]
-                              .filePath!
-                              .removeAt(imageIndex);
+                          tempList[tempListIndex].filePath.removeAt(imageIndex);
                           tempList.add(dataObj);
                           caseController.setLoading(false);
                         },
@@ -526,7 +533,7 @@ class VerticalMeasurement1 extends StatelessWidget {
                     },
                     child: Visibility(
                       visible: tempList[tempListIndex]
-                              .filePath![imageIndex]
+                              .filePath[imageIndex]
                               .isNotEmpty
                           ? true
                           : false,
@@ -552,7 +559,7 @@ class VerticalMeasurement1 extends StatelessWidget {
           caseController.setLoading(true);
           final uFile = File(filePath);
           caseController.uploadVMSImage(uFile, tempListIndex).then((url) {
-            tempList[tempListIndex].filePath!.add(url!);
+            tempList[tempListIndex].filePath.add(url!);
             tempList[tempListIndex] = dataObj;
             caseController.setLoading(false);
           });
@@ -671,5 +678,36 @@ class VerticalMeasurement1 extends StatelessWidget {
 
     _scrollController.animateTo(_scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 1), curve: Curves.fastOutSlowIn);
+  }
+}
+
+class TiltSlopePainter extends CustomPainter {
+  final double tilt;
+  final double slope;
+
+  const TiltSlopePainter({required this.tilt, required this.slope});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Apply transformations to visualize tilt and slope
+    canvas.translate(size.width / 2, size.height / 2); // Move to center
+    canvas.rotate(tilt * pi / 180); // Rotate based on tilt
+    canvas.skew(slope, slope); // Skew based on slope
+
+    // Draw the square box
+    Paint boxPaint = Paint()
+      ..color = yasRed
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
+    canvas.drawRect(
+      Rect.fromCenter(
+          center: Offset.zero, width: size.width, height: size.height),
+      boxPaint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(TiltSlopePainter oldDelegate) {
+    return tilt != oldDelegate.tilt || slope != oldDelegate.slope;
   }
 }

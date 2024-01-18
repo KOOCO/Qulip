@@ -51,8 +51,8 @@ class ApiRepo {
       if (response['message'] == "success") {
         onComplete?.call(true, response);
       } else {
-        onComplete?.call(false, null);
-        MySnackBar.errorSnackbar(response['message']);
+        onComplete?.call(false, "");
+        
       }
     } catch (e) {
       onComplete?.call(false, null);

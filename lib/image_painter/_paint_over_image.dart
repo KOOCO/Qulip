@@ -1070,7 +1070,7 @@ class ImagePainterState extends State<ImagePainter> {
                       },
                     ),
                     Text(
-                      'Fill',
+                      '填滿',
                       style: Theme.of(context).textTheme.bodyMedium,
                     )
                   ],
@@ -1178,7 +1178,7 @@ class ImagePainterState extends State<ImagePainter> {
                       },
                     ),
                     Text(
-                      'Fill',
+                      '填滿',
                       style: Theme.of(context).textTheme.bodyMedium,
                     )
                   ],
@@ -1286,7 +1286,7 @@ class ImagePainterState extends State<ImagePainter> {
                       },
                     ),
                     Text(
-                      'Fill',
+                      '填滿',
                       style: Theme.of(context).textTheme.bodyMedium,
                     )
                   ],

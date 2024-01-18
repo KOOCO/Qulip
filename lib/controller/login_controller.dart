@@ -7,7 +7,6 @@ import 'package:qulip/common/snack.dart';
 import 'package:qulip/common/strings.dart';
 import 'package:qulip/controller/base_controller.dart';
 import 'package:qulip/models/login/login_model.dart';
-import 'package:qulip/models/login/user_db_model_.dart';
 import 'package:qulip/routes/app_routes.dart';
 import 'package:qulip/utils/storage_helper.dart';
 
@@ -84,8 +83,7 @@ class LoginController extends BaseController {
 
     setLoading(true);
     if (isRemember.value == true) {
-      await StorageHelper.write(
-          StorageKeys.phoneNumber, txtPhone.text);
+      await StorageHelper.write(StorageKeys.phoneNumber, txtPhone.text);
       await StorageHelper.write(StorageKeys.password, txtPassword.text);
       await StorageHelper.write(StorageKeys.isRemember, isRemember.value);
     } else {
@@ -100,6 +98,7 @@ class LoginController extends BaseController {
         if (success) {
           userData.value.points = response['points'];
           userData.value.link = response['link'];
+          await StorageHelper.write(StorageKeys.phoneNumber, txtPhone.text);
           StorageHelper.write(StorageKeys.isLogin, true);
           StorageHelper.write(StorageKeys.userData, userData);
           StorageHelper.write(StorageKeys.point, response['points']);
